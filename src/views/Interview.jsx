@@ -31,13 +31,14 @@ function GenerateProblems() {
   async function handleEvaluateResponse(event)
   {
     event.preventDefault();
+    const uid = sessionStorage.getItem('uid'); 
     try{
       const response = await fetch('/api/evaluateResponse', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ problem, userResponse }),
+          body: JSON.stringify({ problem, userResponse, uid }),
         });
         const data = await response.json();
         setEvaluation(data.evaluation);
