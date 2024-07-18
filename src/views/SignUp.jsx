@@ -12,7 +12,7 @@ function SignUp() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [uid, setUid] = useState('');
-  const [levelDescription, setLevelDescription] = useState('');
+  //const [levelDescription, setLevelDescription] = useState('');
   const [leetcodeUsername, setLeetcodeUsername] = useState('');
 
   useEffect(() => {
@@ -39,7 +39,7 @@ function SignUp() {
       setEmail('');
       setPassword('');
       setConfirmPassword('');
-      setLevelDescription('');
+      //setLevelDescription('');
       setLeetcodeUsername('');
     } catch (error) {
       console.log(error.message);
@@ -55,7 +55,7 @@ function SignUp() {
       body: JSON.stringify({
         uid,
         email,
-        levelDescription,
+        //levelDescription,
         leetcodeUsername
       }),
     });
