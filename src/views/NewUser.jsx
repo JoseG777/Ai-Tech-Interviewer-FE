@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/NewUser.css';
 
@@ -61,6 +61,10 @@ function NewUser() {
       newResponses[questionIndex] = event.target.value;
       setResponses(newResponses);
     };
+
+    useEffect(() => {
+      console.log(responses);
+    },[responses]);
   
     return (
       <div className="new-user-container">

@@ -12,15 +12,14 @@ function SignUp() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [uid, setUid] = useState('');
-  //const [levelDescription, setLevelDescription] = useState('');
-  const [leetcodeUsername, setLeetcodeUsername] = useState('');
+  const [loading, setLoading] = useState(false); 
 
   useEffect(() => {
     if (sessionStorage.getItem('uid')) {
         // redirect to home page
         navigate('/');
     }
-  }, []);
+  }, [navigate]);
 
   async function handleSignUp(event) {
     event.preventDefault();
@@ -28,85 +27,77 @@ function SignUp() {
       console.log('Passwords do not match');
       return;
     }
+
+    setLoading(true); 
+
     try {
-      try{  
-        const user = await createUserWithEmailAndPassword(auth, email, password);
-        setUid(user.user.uid); 
-      }
-      catch(error){
-        console.log(error.message);
-        return;
-      }
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userUid = userCredential.user.uid;
+      setUid(userUid); 
 
-      await saveUserToDatabase(uid);
+      await saveUserToDatabase(userUid); 
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+      setLoading(false); 
+    }
+  }
 
-      setEmail('');
-      setPassword('');
-      setConfirmPassword('');
-      setUid('');
+  async function saveUserToDatabase(uid) {
+    try {
+      const response = await fetch('/api/createUser', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          uid,
+          email,
+        }),
+      });
 
+      const data = await response.json();
+      console.log(data); 
 
-      // navigate('/newuser');
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      sessionStorage.setItem('uid', userCredential.user.uid);
+      console.log(userCredential);
+
+      navigate('/newuser');
     } catch (error) {
       console.log(error.message);
     }
   }
 
-  async function saveUserToDatabase(uid) {
-    const response = await fetch('/api/createUser', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        uid,
-        email,
-      }),
-    });
-
-    try{
-      const user = await signInWithEmailAndPassword(auth, email, password);
-      sessionStorage.setItem('uid', user.user.uid);
-      console.log(user);
-    }
-    catch(error){
-      console.log(error.message);
-    }
-  
-    const data = await response.json();
-    console.log(data); 
-    navigate('/newuser');
-  }
-  
-
   return (
     <form onSubmit={handleSignUp}>
-
       <input
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Email"
+        disabled={loading}
       />
       <br />
-
       <input
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Password"
+        disabled={loading}
       />
       <br />
-
       <input
         type="password"
         value={confirmPassword}
         onChange={(e) => setConfirmPassword(e.target.value)}
         placeholder="Confirm Password"
+        disabled={loading}
       />
       <br/>
-
-      <button type="submit">Sign Up</button>
+      <button type="submit" disabled={loading}>
+        {loading ? 'Signing Up...' : 'Sign Up'}
+      </button>
     </form>
   );
 }
