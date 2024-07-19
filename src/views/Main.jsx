@@ -7,7 +7,7 @@ function Main() {
 
   const handleStartInterview = () => {
     // Handle the "Start Interview" button click
-    navigate('/GenerateProblems'); // Example route change
+    navigate('/generate'); // Example route change
   };
 
   const handleDifficultyClick = (difficulty) => {
