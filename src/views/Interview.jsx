@@ -12,7 +12,8 @@ function GenerateProblems() {
     setLoading(true);
     const uid = sessionStorage.getItem('uid'); 
     try {
-      const response = await fetch('/api/generateProblem', {
+      const apiEndpoint = `${import.meta.env.VITE_APP_API_ENDPOINT}/api/generateProblem`;
+      const response = await fetch(apiEndpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -33,7 +34,8 @@ function GenerateProblems() {
     event.preventDefault();
     const uid = sessionStorage.getItem('uid'); 
     try{
-      const response = await fetch('/api/evaluateResponse', {
+      const apiEndpoint = `${import.meta.env.VITE_APP_API_ENDPOINT}/api/evaluateResponse`;
+      const response = await fetch(apiEndpoint, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
