@@ -1,6 +1,6 @@
 // src/views/SignUp.jsx
 import React, { useEffect, useState } from 'react';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebaseConfig';
 
@@ -63,6 +63,15 @@ function SignUp() {
         email,
       }),
     });
+
+    try{
+      const user = await signInWithEmailAndPassword(auth, email, password);
+      sessionStorage.setItem('uid', user.user.uid);
+      console.log(user);
+    }
+    catch(error){
+      console.log(error.message);
+    }
   
     const data = await response.json();
     console.log(data); 
@@ -80,7 +89,7 @@ function SignUp() {
         placeholder="Email"
       />
       <br />
-      
+
       <input
         type="password"
         value={password}

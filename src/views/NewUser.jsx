@@ -4,18 +4,19 @@ import '../styles/NewUser.css';
 
 function NewUser() {
     const [questionIndex, setQuestionIndex] = useState(0);
-    const [responses, setResponses] = useState(["", "", ""]); // Array to store responses
-    const [errorMessage, setErrorMessage] = useState(""); // State to store error messages
+    const [responses, setResponses] = useState(["", "", "", ""]); 
+    const [errorMessage, setErrorMessage] = useState(""); 
     const navigate = useNavigate();
   
     const questions = [
+      "What is your LeetCode username? (If you don't have one, type 'N/A')",
       "Describe your coding level",
       "Describe your goal",
-      "Any upcoming interviews? If yes, which company?"
+      "Any upcoming interviews? If yes, which company? (If no, type 'N/A')"
     ];
   
     const handleNextClick = () => {
-      if (responses[questionIndex].trim() === "") {
+      if (questionIndex > 0 && responses[questionIndex].trim() === "") {
         setErrorMessage("This field is required.");
       } else {
         setErrorMessage("");
@@ -28,29 +29,32 @@ function NewUser() {
         setErrorMessage("This field is required.");
         return;
       }
-  
-    // try {
-      //  const response = await fetch('/api/saveUserDetails', {
-        //  method: 'POST',
-          //headers: {
-            //'Content-Type': 'application/json',
-          //},
-          //body: JSON.stringify({
-            //uid: sessionStorage.getItem('uid'),
-            //responses
-          //}),
-        //});
-        //const data = await response.json();
-        //console.log(data); // Handle response from the backend
-        //navigate('/main');
-      //} catch (error) {
-        //console.error('Error saving user details:', error);
-      //}
-    //};
-    sessionStorage.setItem('userResponses', JSON.stringify(responses));
 
-    navigate('/main');
-};
+      const uid = sessionStorage.getItem('uid');
+      const leetcode_username = responses[0];
+      const coding_level = responses[1];
+      const goal = responses[2];
+      const upcoming_interview = responses[3];
+
+      console.log(uid, leetcode_username, coding_level, goal, upcoming_interview);
+
+      const response = await fetch('/api/newUser', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ uid, leetcode_username, coding_level, goal, upcoming_interview }),
+      });
+
+      const data = await response.json();
+      console.log(data);
+
+      console.log(responses);
+
+      setResponses(["", "", "", ""]);
+      setQuestionIndex(0);
+      navigate('/main');
+    };
   
     const handleResponseChange = (event) => {
       const newResponses = [...responses];
