@@ -31,6 +31,7 @@ function App() {
   };
 
   return (
+    
     <Router>
       <NavBar isSignedIn={isSignedIn} handleLogout={handleLogout} />
       
