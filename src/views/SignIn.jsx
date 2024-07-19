@@ -14,7 +14,7 @@ function SignIn({ setIsSignedIn }) {
   useEffect(() => {
     if (sessionStorage.getItem('uid')) {
         // redirect to home page
-        navigate('/');
+        navigate('/main');
     }
   }, []);
 
@@ -28,7 +28,7 @@ function SignIn({ setIsSignedIn }) {
       sessionStorage.setItem('uid', user.user.uid);
       setEmailSignIn('');
       setPasswordSignIn('');
-      navigate('/');
+      navigate('/main');
     } catch (error) {
       console.log(error.message);
     }

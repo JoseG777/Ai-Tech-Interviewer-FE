@@ -41,6 +41,7 @@ function SignUp() {
       setConfirmPassword('');
       //setLevelDescription('');
       setLeetcodeUsername('');
+      navigate('/newuser');
     } catch (error) {
       console.log(error.message);
     }
@@ -62,7 +63,7 @@ function SignUp() {
   
     const data = await response.json();
     console.log(data); // Handle response from the backend
-    navigate('/signin');
+    navigate('/newuser');
   }
   
 
@@ -88,13 +89,7 @@ function SignUp() {
         onChange={(e) => setConfirmPassword(e.target.value)}
         placeholder="Confirm Password"
       />
-      <br />
-      <input
-        type="text"
-        value={levelDescription}
-        onChange={(e) => setLevelDescription(e.target.value)}
-        placeholder="Describe your level"
-      />
+
       <br />
       <input
         type="text"

@@ -1,3 +1,5 @@
+//This is the landing page
+
 import React from 'react';
 //import Laptop from '../components/laptop';
 

@@ -5,8 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import Home from './views/Home';
 import SignUp from './views/SignUp';
 import SignIn from './views/SignIn';
+import Main from './views/Main';
+import NewUser from './views/NewUser';
 import GenerateProblems from './views/GenerateProblems';
 import NavBar from './components/NavBar';
+import Resources from './views/Resources'; 
+import Profile from './views/Profile'; 
 import './App.css';
 
 function App() {
@@ -29,11 +33,16 @@ function App() {
   return (
     <Router>
       <NavBar isSignedIn={isSignedIn} handleLogout={handleLogout} />
+      
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn setIsSignedIn={setIsSignedIn} />} />
+        <Route path="/main" element={<Main />} />
+        <Route path="/newuser" element={<NewUser />} />
         <Route path="/generate" element={<GenerateProblems />} />
+        <Route path="/resources" element={<Resources />} /> 
+        <Route path="/profile" element={<Profile />} /> 
       </Routes>
     </Router>
   );
