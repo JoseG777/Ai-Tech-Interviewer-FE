@@ -29,19 +29,24 @@ function SignUp() {
       return;
     }
     try {
-      const user = await createUserWithEmailAndPassword(auth, email, password);
-      setUid(user.user.uid); // save uid to state
-      
-      // Send data to backend
-      await saveUserToDatabase(user.user.uid);
+      try{  
+        const user = await createUserWithEmailAndPassword(auth, email, password);
+        setUid(user.user.uid); 
+      }
+      catch(error){
+        console.log(error.message);
+        return;
+      }
 
-      // Always set states back to original when done
+      await saveUserToDatabase(uid);
+
       setEmail('');
       setPassword('');
       setConfirmPassword('');
-      //setLevelDescription('');
-      setLeetcodeUsername('');
-      navigate('/newuser');
+      setUid('');
+
+
+      // navigate('/newuser');
     } catch (error) {
       console.log(error.message);
     }
@@ -56,19 +61,18 @@ function SignUp() {
       body: JSON.stringify({
         uid,
         email,
-        //levelDescription,
-        leetcodeUsername
       }),
     });
   
     const data = await response.json();
-    console.log(data); // Handle response from the backend
+    console.log(data); 
     navigate('/newuser');
   }
   
 
   return (
     <form onSubmit={handleSignUp}>
+
       <input
         type="email"
         value={email}
@@ -76,6 +80,7 @@ function SignUp() {
         placeholder="Email"
       />
       <br />
+      
       <input
         type="password"
         value={password}
@@ -83,21 +88,15 @@ function SignUp() {
         placeholder="Password"
       />
       <br />
+
       <input
         type="password"
         value={confirmPassword}
         onChange={(e) => setConfirmPassword(e.target.value)}
         placeholder="Confirm Password"
       />
+      <br/>
 
-      <br />
-      <input
-        type="text"
-        value={leetcodeUsername}
-        onChange={(e) => setLeetcodeUsername(e.target.value)}
-        placeholder="LeetCode Username"
-      />
-      <br />
       <button type="submit">Sign Up</button>
     </form>
   );
