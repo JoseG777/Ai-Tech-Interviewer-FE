@@ -4,9 +4,13 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './views/Home';
 import SignUp from './views/SignUp';
 import SignIn from './views/SignIn';
+<<<<<<< HEAD
 import Main from './views/Main';
 import NewUser from './views/NewUser';
 import GenerateProblems from './views/GenerateProblems';
+=======
+import GenerateProblems from './views/Interview';
+>>>>>>> main
 import NavBar from './components/NavBar';
 import Resources from './views/Resources';
 import Profile from './views/Profile';

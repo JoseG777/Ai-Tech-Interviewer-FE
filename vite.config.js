@@ -9,4 +9,3 @@ export default defineConfig({
     }
   }
 })
-//will come back for the api name
