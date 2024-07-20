@@ -1,21 +1,19 @@
+// Components are essentially reusable functions that return JSX
+// Another example would be if we made a "card" to hold dynamic data that we want to display
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/NavBar.css';
 
-// Components are essentially reusable functions that return JSX
-// Another example would be if we made a "card" to hold dynamic data that we want to display
 function NavBar({ isSignedIn, handleLogout }) {
   return (
     <nav>
       <div className="nav-left">
-        <Link to="/main">Home</Link>
-      </div>
-      <div className="nav-right">
+        <Link to="/main">Home</Link> |
         {isSignedIn ? (
           <>
             <Link to="/resources">Resources</Link> |
             <Link to="/profile">Profile</Link> |
-            <span onClick={handleLogout} style={{ cursor: 'pointer', textDecoration: 'underline' }}>Logout</span>
+            <span onClick={handleLogout}>Logout</span>
           </>
         ) : (
           <>
