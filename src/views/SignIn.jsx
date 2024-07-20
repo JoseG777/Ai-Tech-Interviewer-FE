@@ -4,7 +4,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebaseConfig';
 
-function SignIn({ setIsSignedIn }) {
+function SignIn() {
   const navigate = useNavigate();
 
   // Signing In
@@ -16,7 +16,7 @@ function SignIn({ setIsSignedIn }) {
         // redirect to home page
         navigate('/main');
     }
-  }, []);
+  }, [navigate]);
 
   async function handleSignIn(event) {
     event.preventDefault();
@@ -24,7 +24,6 @@ function SignIn({ setIsSignedIn }) {
       const user = await signInWithEmailAndPassword(auth, emailSignIn, passwordSignIn);
       console.log(user);
 
-      setIsSignedIn(true);
       sessionStorage.setItem('uid', user.user.uid);
       setEmailSignIn('');
       setPasswordSignIn('');
