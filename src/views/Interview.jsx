@@ -13,10 +13,11 @@ function Interview() {
   const [evaluation, setEvaluation] = useState(null);
   const [loading, setLoading] = useState(true); 
   const [isEvaluating, setIsEvaluating] = useState(false);
+  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
     if (!sessionStorage.getItem('uid')) {
-        navigate('/');
+      navigate('/');
     }
   }, [navigate]);
 
@@ -40,17 +41,16 @@ function Interview() {
       const { formattedProblem, functionSignature } = parseProblem(data.problem);
       setProblem(formattedProblem);
       setUserResponse(functionSignature);
-
     } catch (error) {
       console.error('Error generating problem:', error);
     } finally {
-      setLoading(false); // Set loading to false after fetching problem
+      setLoading(false);
     }
   }
 
   async function handleEvaluateResponse(event) {
     event.preventDefault();
-    setIsEvaluating(true); // Set evaluating to true
+    setIsEvaluating(true);
     const uid = sessionStorage.getItem('uid');
     try {
       const apiEndpoint = `${import.meta.env.VITE_APP_API_ENDPOINT}/api/evaluateResponse`;
@@ -67,7 +67,7 @@ function Interview() {
     } catch (error) {
       console.error('Error evaluating response:', error);
     } finally {
-      setIsEvaluating(false); // Set evaluating to false
+      setIsEvaluating(false);
     }
   }
 
@@ -90,6 +90,56 @@ function Interview() {
     return { formattedProblem, functionSignature: functionSignaturePart };
   };
 
+  const handleStartSpeaking = () => {
+    if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+      alert("Speech Recognition API not supported in this browser.");
+      return;
+    }
+
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.start();
+
+    recognition.onresult = (event) => {
+      const speechResult = event.results[0][0].transcript;
+      console.log('Speech received: ' + speechResult);
+
+      setMessages((prevMessages) => [...prevMessages, { sender: 'User', text: speechResult }]);
+
+      fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/user_message`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: speechResult }),
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        setMessages((prevMessages) => [...prevMessages, { sender: 'AI', text: data.ai_response }]);
+        if ('speechSynthesis' in window) {
+          const utterance = new SpeechSynthesisUtterance(data.ai_response);
+          window.speechSynthesis.speak(utterance);
+        } else {
+          console.error("Speech Synthesis API not supported in this browser.");
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+    };
+
+    recognition.onspeechend = () => {
+      recognition.stop();
+    };
+
+    recognition.onerror = (event) => {
+      console.error('Error occurred in recognition: ' + event.error);
+    };
+  };
+
   return (
     <div className="generate-problems-container">
       {loading && (
@@ -99,6 +149,7 @@ function Interview() {
       )}
       {!loading && (
         <>
+          <button id="start-btn" onClick={handleStartSpeaking}>Start Speaking</button>
           <div className="chat-box">
             {problem && (
               <div className="chat-message left">
@@ -116,7 +167,13 @@ function Interview() {
               </button>
             </div>
           </div>
-
+          <ul id="messages">
+            {messages.map((msg, index) => (
+              <li key={index} className={msg.sender === 'User' ? 'user-message' : 'ai-message'}>
+                <strong>{msg.sender}:</strong> {msg.text}
+              </li>
+            ))}
+          </ul>
           {evaluation && (
             <div className="evaluation-container">
               <h2>Evaluation</h2>
