@@ -1,16 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import '../styles/Interview.css';
 
-function GenerateProblems() { 
+function GenerateProblems() {
+  const location = useLocation();
+  const { language } = location.state || { language: 'python' };
   const [problem, setProblem] = useState(null);
-  const [userResponse, setUserResponse] = useState(null);
+  const [userResponse, setUserResponse] = useState('');
   const [evaluation, setEvaluation] = useState(null);
-
   const [loading, setLoading] = useState(false);
 
-  async function handleGenerateProblem() 
-  {
+  useEffect(() => {
+    handleGenerateProblem();
+  }, []); // Call handleGenerateProblem when the component mounts
+
+  async function handleGenerateProblem() {
     setLoading(true);
-    const uid = sessionStorage.getItem('uid'); 
+    const uid = sessionStorage.getItem('uid');
     try {
       const apiEndpoint = `${import.meta.env.VITE_APP_API_ENDPOINT}/api/generateProblem`;
       const response = await fetch(apiEndpoint, {
@@ -18,10 +24,14 @@ function GenerateProblems() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ uid }),
+        body: JSON.stringify({ uid, language }),
       });
+
       const data = await response.json();
-      setProblem(data.problem);
+      const { formattedProblem, functionSignature } = parseProblem(data.problem);
+      setProblem(formattedProblem);
+      setUserResponse(functionSignature);
+
     } catch (error) {
       console.error('Error generating problem:', error);
     } finally {
@@ -29,59 +39,71 @@ function GenerateProblems() {
     }
   }
 
-  async function handleEvaluateResponse(event)
-  {
+  async function handleEvaluateResponse(event) {
     event.preventDefault();
-    const uid = sessionStorage.getItem('uid'); 
-    try{
+    const uid = sessionStorage.getItem('uid');
+    try {
       const apiEndpoint = `${import.meta.env.VITE_APP_API_ENDPOINT}/api/evaluateResponse`;
       const response = await fetch(apiEndpoint, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ problem, userResponse, uid }),
-        });
-        const data = await response.json();
-        setEvaluation(data.evaluation);
-        console.log(data)
-    }
-    catch (error) {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ problem, userResponse, uid }),
+      });
+      const data = await response.json();
+      setEvaluation(data.evaluation);
+      console.log(data);
+    } catch (error) {
       console.error('Error evaluating response:', error);
     }
   }
 
-  return (
-    <>
-      <h1>Generate a Coding Problem</h1>
-      <button onClick={handleGenerateProblem} disabled={loading}>
-        {loading ? 'Generating...' : 'Generate Problem'}
-      </button>
-      {problem && (
-        <>
-          <div>
-            <h2>Generated Problem</h2>
-            <pre>{problem}</pre>
-          </div>
+  const parseProblem = (problem) => {
+    if (!problem) return '';
 
-          <form onSubmit={handleEvaluateResponse}>
-            <input
-              type="text"
-              onChange={(e) => setUserResponse(e.target.value)}
-            />
-            <button type="submit">Evaluate Response</button>
-          </form>
-          
-        </>
-      )}
+    const descriptionPart = problem.match(/Problem Description:.*?(?=(Example|Constraints|Function Signature:|$))/s)?.[0]?.replace('Problem Description:', '').trim() || '';
+    const examplesPart = problem.match(/Example \d+:.*?(?=(Example|Constraints|Function Signature:|$))/gs)?.map(example => example.trim()).join('\n\n') || '';
+    const constraintsPart = problem.match(/Constraints:.*?(?=(Example|Function Signature:|$))/s)?.[0]?.trim() || '';
+    const functionSignaturePart = problem.match(/Function Signature:.*$/s)?.[0]?.replace('Function Signature:', '').trim() || '';
+
+    const formattedProblem = (
+      <>
+        <p><strong>Problem Description:</strong><br />{descriptionPart}</p>
+        <p>{examplesPart.split('\n').map((example, idx) => <span key={idx}>{example}<br /></span>)}</p>
+        <p><strong>Constraints:</strong><br />{constraintsPart}</p>
+      </>
+    );
+
+    return { formattedProblem, functionSignature: functionSignaturePart };
+  };
+
+  return (
+    <div className="generate-problems-container">
+      <h1 style={{ fontSize: '24px' }}>Interviewer</h1>
+      <div className="chat-box">
+        {problem && (
+          <div className="chat-message left">
+            {problem}
+          </div>
+        )}
+        <div className="chat-message right">
+          <textarea
+            value={userResponse}
+            onChange={(e) => setUserResponse(e.target.value)}
+            placeholder="Type your response here..."
+          />
+          <button onClick={handleEvaluateResponse}>Submit</button>
+        </div>
+      </div>
 
       {evaluation && (
-        <div>
+        <div className="evaluation-container">
           <h2>Evaluation</h2>
-          <pre>{evaluation}</pre>
+          <p>{evaluation}</p>
         </div>
       )}
-    </>
+    </div>
   );
 }
 

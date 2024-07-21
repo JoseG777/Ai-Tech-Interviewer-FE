@@ -1,0 +1,104 @@
+/* src/styles/GenerateProblems.css */
+@font-face {
+  font-family: 'DS-Digital';
+  src: url('src/assets/fonts/DS-DIGI.TTF') format('truetype');
+}
+
+.generate-problems-container {
+  padding: 2rem;
+  position: relative; /* Needed for absolute positioning of children */
+}
+
+.top-bar {
+  display: flex;
+  justify-content: center; /* Center content horizontally */
+  align-items: center;
+  margin-bottom: 20px; /* Add space below the bar */
+}
+
+.interviewer-icon {
+  width: 200px;
+  height: 200px;
+  display: block; /* Ensures that the icon is treated as a block level element */
+  margin: 0 auto; /* Center the icon horizontally */
+}
+
+.timer {
+  font-size: 48px;
+  font-family: 'DS-Digital', sans-serif;
+  color: #f8f8f8;
+  position: absolute;
+  left: 50%;
+  top: -50px;
+  transform: translateX(-50%);
+}
+
+.chat-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%; /* Full width within the chat box */
+  max-width: 1200px; /* Ensures that the chat box does not get too wide on larger screens */
+  margin: 20px auto; /* Center the chat box horizontally */
+  padding: 20px;
+  background-color: transparent;
+  overflow: hidden; /* Prevent content overflow */
+  word-wrap: break-word; /* Ensure long words break to fit within the container */
+}
+
+.chat-message {
+  width: 100%; /* Full width within the chat box */
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #020000; /* Lighter grey border for messages */
+  border-radius: 10px;
+  background-color: transparent; /* This is off-white; change it if you want no color */
+}
+
+.chat-message.left {
+  text-align: left;
+}
+
+.chat-message.right {
+  text-align: right;
+  background-color: #292626; /* Light blue for user messages, change as desired */
+}
+
+textarea {
+  width: 100%;
+  height: 200px; /* Increase the height for better visibility */
+  margin-bottom: 5px;
+  border: 1px solid #ccc;
+  background-color: transparent;  /* If this is unwanted, change or remove it */
+  font-size: 16px; /* Increase font size as needed */
+  padding: 8px;
+}
+
+button {
+  display: block;
+  margin: 0 auto;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.evaluation-container {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #292626;
+  color: white;
+  max-width: 800px;
+  margin: 20px auto; /* Center the evaluation container */
+  word-wrap: break-word; /* Ensure long words break to fit within the container */
+}

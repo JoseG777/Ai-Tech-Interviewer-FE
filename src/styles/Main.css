@@ -1,14 +1,11 @@
-/* src/styles/Main.css */
-
 .main-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    text-align: center;
-    
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+}
 
 .start-button {
   display: inline-flex;
@@ -17,11 +14,12 @@
   padding: 10px 20px;
   font-size: 22px;
   color: #fff;
-  background-color: #007bff;
+  background-color: #48bf3f; /* Green background color */
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
+  margin-top: 20px;
 }
 
 .start-button svg {
@@ -40,6 +38,7 @@
   display: flex;
   justify-content: center;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .difficulty-button {
@@ -48,44 +47,29 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  background-color: #008cba; /* Blue background color */
+  color: white;
   transition: background-color 0.3s;
 }
 
 .difficulty-button:hover {
-  background-color: #6284e2;
+  background-color: #005f7f; /* Darker blue on hover */
 }
 
-  .start-button {
-    margin: 20px 0;
-    padding: 10px 20px;
-    font-size: 18px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: #48bf3f; /* Green background color */
-    color: white;
-  }
-  
-  .difficulty-section {
-    margin-top: 20px;
-  }
-  
-  .difficulty-buttons {
-    display: flex;
-    gap: 10px; /* Spacing between buttons */
-  }
-  
-  .difficulty-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: #008cba; /* Blue background color */
-    color: white;
-  }
-  
-  .difficulty-button:hover {
-    background-color: #005f7f; /* Darker blue on hover */
-  }
-  
+.custom-language {
+  margin-top: 20px;
+}
+
+.custom-language-input {
+  width: 300px; /* Increase the width of the input box */
+  padding: 15px; /* Increase padding for a larger input box */
+  font-size: 16px;
+  border: 2px solid #008cba;
+  border-radius: 5px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.custom-language-input:focus {
+  border-color: #005f7f; /* Darker blue on focus */
+}

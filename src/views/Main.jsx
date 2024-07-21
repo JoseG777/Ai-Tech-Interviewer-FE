@@ -1,38 +1,78 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/Main.css'; // Import the CSS file for styling
+import '../styles/Main.css'; 
 
 function Main() {
   const navigate = useNavigate();
+  const [selectedLanguage, setSelectedLanguage] = useState('');
+  const [customLanguage, setCustomLanguage] = useState('');
+
+  const languages = [
+    'Python',
+    'JavaScript',
+    'Java',
+    'C++',
+    'C#',
+    'Ruby',
+    'Go',
+    'Swift',
+    'TypeScript',
+    'Kotlin',
+    'PHP',
+    'Rust',
+    'Perl',
+    'Scala'
+  ];
 
   const handleStartInterview = () => {
-    // Handle the "Start Interview" button click
-    navigate('/generate'); // Example route change
+    const language = customLanguage || selectedLanguage;
+    navigate('/generate', { state: { language } });
   };
 
-  const handleDifficultyClick = (difficulty) => {
-    // Handle difficulty button click
-    console.log(`Selected difficulty: ${difficulty}`);
-    // Perform any action based on selected difficulty
+  const handleLanguageClick = (language) => {
+    setSelectedLanguage(language);
+    setCustomLanguage('');
+  };
+
+  const handleCustomLanguageChange = (event) => {
+    setCustomLanguage(event.target.value);
+    setSelectedLanguage('');
   };
 
   return (
     <div className="main-container">
       <h1>Home Page</h1>
-      <button className="start-button" onClick={handleStartInterview}>
-      <svg width="24" height="24" viewBox="0 0 24 24">
-          <path d="M8 5v14l11-7z" />
-        </svg>
-        Start Interview
-      </button>
       <div className="difficulty-section">
-        <h2>Choose Your Difficulty</h2>
+        <h2>Choose Your Coding Language</h2>
         <div className="difficulty-buttons">
-          <button className="difficulty-button" onClick={() => handleDifficultyClick('Easy')}>Easy</button>
-          <button className="difficulty-button" onClick={() => handleDifficultyClick('Medium')}>Medium</button>
-          <button className="difficulty-button" onClick={() => handleDifficultyClick('Hard')}>Hard</button>
+          {languages.map((language) => (
+            <button
+              key={language}
+              className={`difficulty-button ${selectedLanguage === language ? 'selected' : ''}`}
+              onClick={() => handleLanguageClick(language)}
+            >
+              {language}
+            </button>
+          ))}
+        </div>
+        <div className="custom-language">
+          <input
+            type="text"
+            value={customLanguage}
+            onChange={handleCustomLanguageChange}
+            placeholder="Type your language if not listed..."
+            className="custom-language-input"
+          />
         </div>
       </div>
+      {(selectedLanguage || customLanguage) && (
+        <button className="start-button" onClick={handleStartInterview}>
+          <svg width="24" height="24" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+          Start Interview
+        </button>
+      )}
     </div>
   );
 }
