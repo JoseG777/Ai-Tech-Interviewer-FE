@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../styles/Interview.css';
 
@@ -14,6 +14,7 @@ function Interview() {
   const [loading, setLoading] = useState(true); 
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [timer, setTimer] = useState(time * 60);
+  const countdownRef = useRef(null);
 
   useEffect(() => {
     if (!sessionStorage.getItem('uid')) {
@@ -52,6 +53,12 @@ function Interview() {
   async function handleEvaluateResponse(event) {
     if (event) event.preventDefault();
     setIsEvaluating(true); // Set evaluating to true
+
+    // Clear the countdown if the user submits manually
+    if (countdownRef.current) {
+      clearInterval(countdownRef.current);
+    }
+
     const uid = sessionStorage.getItem('uid');
     try {
       const apiEndpoint = `${import.meta.env.VITE_APP_API_ENDPOINT}/api/evaluateResponse`;
@@ -76,10 +83,10 @@ function Interview() {
     if (timer === 0) {
       handleEvaluateResponse(); // Automatically submit when timer reaches 0
     } else {
-      const countdown = setInterval(() => {
+      countdownRef.current = setInterval(() => {
         setTimer((prevTimer) => (prevTimer > 0 ? prevTimer - 1 : 0));
       }, 1000);
-      return () => clearInterval(countdown);
+      return () => clearInterval(countdownRef.current);
     }
   }, [timer]);
 
