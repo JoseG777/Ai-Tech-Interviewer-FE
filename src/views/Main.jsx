@@ -26,7 +26,7 @@ function Main() {
 
   const handleStartInterview = () => {
     const language = customLanguage || selectedLanguage;
-    navigate('/generate', { state: { language } });
+    navigate('/interview', { state: { language } });
   };
 
   const handleLanguageClick = (language) => {

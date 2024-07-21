@@ -2,20 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import '../styles/Interview.css';
 
-function GenerateProblems() {
+function Interview() {
   const location = useLocation();
   const { language } = location.state || { language: 'python' };
   const [problem, setProblem] = useState(null);
   const [userResponse, setUserResponse] = useState('');
   const [evaluation, setEvaluation] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); 
+  const [isEvaluating, setIsEvaluating] = useState(false);
 
   useEffect(() => {
     handleGenerateProblem();
-  }, []); // Call handleGenerateProblem when the component mounts
+  }, []); 
 
   async function handleGenerateProblem() {
-    setLoading(true);
     const uid = sessionStorage.getItem('uid');
     try {
       const apiEndpoint = `${import.meta.env.VITE_APP_API_ENDPOINT}/api/generateProblem`;
@@ -35,12 +35,13 @@ function GenerateProblems() {
     } catch (error) {
       console.error('Error generating problem:', error);
     } finally {
-      setLoading(false);
+      setLoading(false); // Set loading to false after fetching problem
     }
   }
 
   async function handleEvaluateResponse(event) {
     event.preventDefault();
+    setIsEvaluating(true); // Set evaluating to true
     const uid = sessionStorage.getItem('uid');
     try {
       const apiEndpoint = `${import.meta.env.VITE_APP_API_ENDPOINT}/api/evaluateResponse`;
@@ -56,6 +57,8 @@ function GenerateProblems() {
       console.log(data);
     } catch (error) {
       console.error('Error evaluating response:', error);
+    } finally {
+      setIsEvaluating(false); // Set evaluating to false
     }
   }
 
@@ -80,31 +83,41 @@ function GenerateProblems() {
 
   return (
     <div className="generate-problems-container">
-      <h1 style={{ fontSize: '24px' }}>Interviewer</h1>
-      <div className="chat-box">
-        {problem && (
-          <div className="chat-message left">
-            {problem}
+      {loading && (
+        <div className="loading-container">
+          <div className="spinner"></div>
+        </div>
+      )}
+      {!loading && (
+        <>
+          <div className="chat-box">
+            {problem && (
+              <div className="chat-message left">
+                {problem}
+              </div>
+            )}
+            <div className="chat-message right">
+              <textarea
+                value={userResponse}
+                onChange={(e) => setUserResponse(e.target.value)}
+                placeholder="Type your response here..."
+              />
+              <button onClick={handleEvaluateResponse} disabled={isEvaluating}>
+                {isEvaluating ? 'Evaluating...' : 'Submit'}
+              </button>
+            </div>
           </div>
-        )}
-        <div className="chat-message right">
-          <textarea
-            value={userResponse}
-            onChange={(e) => setUserResponse(e.target.value)}
-            placeholder="Type your response here..."
-          />
-          <button onClick={handleEvaluateResponse}>Submit</button>
-        </div>
-      </div>
 
-      {evaluation && (
-        <div className="evaluation-container">
-          <h2>Evaluation</h2>
-          <p>{evaluation}</p>
-        </div>
+          {evaluation && (
+            <div className="evaluation-container">
+              <h2>Evaluation</h2>
+              <p>{evaluation}</p>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
 }
 
-export default GenerateProblems;
+export default Interview;
