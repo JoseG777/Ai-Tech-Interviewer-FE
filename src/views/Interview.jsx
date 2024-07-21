@@ -1,15 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import '../styles/Interview.css';
 
 function Interview() {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  // STATES
   const { language } = location.state || { language: 'python' };
   const [problem, setProblem] = useState(null);
   const [userResponse, setUserResponse] = useState('');
   const [evaluation, setEvaluation] = useState(null);
   const [loading, setLoading] = useState(true); 
   const [isEvaluating, setIsEvaluating] = useState(false);
+
+  useEffect(() => {
+    if (!sessionStorage.getItem('uid')) {
+        navigate('/');
+    }
+  }, [navigate]);
 
   useEffect(() => {
     handleGenerateProblem();

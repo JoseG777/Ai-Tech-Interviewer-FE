@@ -1,9 +1,18 @@
 // src/views/Resources.jsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/Resources.css';
 
 
 function Resources() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!sessionStorage.getItem('uid')) {
+        navigate('/');
+    }
+  }, [navigate]);
+
   return (
     <div className="resources-container">
       <h1>Resources</h1>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Main.css'; 
 
@@ -6,6 +6,12 @@ function Main() {
   const navigate = useNavigate();
   const [selectedLanguage, setSelectedLanguage] = useState('');
   const [customLanguage, setCustomLanguage] = useState('');
+
+  useEffect(() => {
+    if (!sessionStorage.getItem('uid')) {
+        navigate('/');
+    }
+  }, [navigate]);
 
   const languages = [
     'Python',

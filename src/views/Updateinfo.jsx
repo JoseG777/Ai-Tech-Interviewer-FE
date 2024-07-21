@@ -12,6 +12,12 @@ function UpdateInfo() {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
+    if (!sessionStorage.getItem('uid')) {
+        navigate('/');
+    }
+  }, [navigate]);
+
+  useEffect(() => {
     // Fetch current value of the field to display
     const fetchCurrentValue = async () => {
       try {

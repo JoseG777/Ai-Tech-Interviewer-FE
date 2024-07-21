@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getAuth, reauthenticateWithCredential, EmailAuthProvider, deleteUser } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
 // edit the styles that you want to use
@@ -10,6 +10,12 @@ function DeleteAccount() {
     const navigate = useNavigate();
     const auth = getAuth();
 
+    useEffect(() => {
+        if (!sessionStorage.getItem('uid')) {
+            navigate('/');
+        }
+      }, [navigate]);
+      
     // make sures user exists
     const reauthenticate = (currentPassword) => {
         const user = auth.currentUser;

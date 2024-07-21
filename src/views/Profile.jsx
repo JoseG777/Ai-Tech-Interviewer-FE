@@ -8,6 +8,12 @@ function Profile() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!sessionStorage.getItem('uid')) {
+        navigate('/');
+    }
+  }, [navigate]);
+
+  useEffect(() => {
     // Fetch user info from the API or session storage
     const fetchUsers = async () => {
       try {
