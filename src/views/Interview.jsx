@@ -5,27 +5,31 @@ import '../styles/Interview.css';
 function Interview() {
   const location = useLocation();
   const navigate = useNavigate();
+  const leaveAttemptsRef = useRef(0); // Ref to keep track of leave attempts
 
   // STATES
   const { language, time } = location.state || { language: 'python', time: 15 };
   const [problem, setProblem] = useState(null);
-  const [userResponse, setUserResponse] = useState('');
+  const [userResponse, setUserResponse] = useState(sessionStorage.getItem('userResponse') || '');
   const [evaluation, setEvaluation] = useState(null);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [timer, setTimer] = useState(time * 60);
   const countdownRef = useRef(null);
 
+  // Redirect to home if uid is not set
   useEffect(() => {
     if (!sessionStorage.getItem('uid')) {
       navigate('/');
     }
   }, [navigate]);
 
+  // Generate problem on component mount
   useEffect(() => {
     handleGenerateProblem();
-  }, []); 
+  }, []);
 
+  // Generate a problem for the user to solve
   async function handleGenerateProblem() {
     const uid = sessionStorage.getItem('uid');
     try {
@@ -38,10 +42,17 @@ function Interview() {
         body: JSON.stringify({ uid, language }),
       });
 
+      if (!response.ok) {
+        console.error(`HTTP error! status: ${response.status}`);
+        return;
+      }
+
       const data = await response.json();
       const { formattedProblem, functionSignature } = parseProblem(data.problem);
       setProblem(formattedProblem);
       setUserResponse(functionSignature);
+      sessionStorage.setItem('problem', JSON.stringify(data.problem));
+      sessionStorage.setItem('userResponse', functionSignature); // Initialize user response in session storage
     } catch (error) {
       console.error('Error generating problem:', error);
     } finally {
@@ -49,16 +60,19 @@ function Interview() {
     }
   }
 
-  async function handleEvaluateResponse(event) {
-    if (event) event.preventDefault();
-    setIsEvaluating(true); // Set evaluating to true
+  // Evaluate the user's response
+  async function handleEvaluateResponse() {
+    console.log('Evaluating response...');
+    setIsEvaluating(true);
 
-    // Clear the countdown if the user submits manually
     if (countdownRef.current) {
       clearInterval(countdownRef.current);
     }
 
     const uid = sessionStorage.getItem('uid');
+    const problemFromSession = JSON.parse(sessionStorage.getItem('problem'));
+    const userResponseFromSession = sessionStorage.getItem('userResponse');
+
     try {
       const apiEndpoint = `${import.meta.env.VITE_APP_API_ENDPOINT}/api/evaluateResponse`;
       const response = await fetch(apiEndpoint, {
@@ -66,21 +80,35 @@ function Interview() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ problem, userResponse, uid }),
+        body: JSON.stringify({
+          problem: problemFromSession,
+          userResponse: userResponseFromSession,
+          uid
+        }),
       });
+
+      if (!response.ok) {
+        console.error(`HTTP error! status: ${response.status}`);
+        setEvaluation('An error occurred during evaluation.');
+        setIsEvaluating(false);
+        return;
+      }
+
       const data = await response.json();
       setEvaluation(data.evaluation);
       console.log(data);
     } catch (error) {
       console.error('Error evaluating response:', error);
+      setEvaluation('An error occurred during evaluation.');
     } finally {
       setIsEvaluating(false);
     }
   }
 
+  // Timer function
   useEffect(() => {
     if (timer === 0) {
-      handleEvaluateResponse(); // Automatically submit when timer reaches 0
+      handleEvaluateResponse();
     } else {
       countdownRef.current = setInterval(() => {
         setTimer((prevTimer) => (prevTimer > 0 ? prevTimer - 1 : 0));
@@ -95,6 +123,7 @@ function Interview() {
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
 
+  // Parse function
   const parseProblem = (problem) => {
     if (!problem) return '';
 
@@ -114,55 +143,51 @@ function Interview() {
     return { formattedProblem, functionSignature: functionSignaturePart };
   };
 
-  const handleStartSpeaking = () => {
-    if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
-      alert("Speech Recognition API not supported in this browser.");
-      return;
+  // Navigation handler
+  const handleNavigation = () => {
+    leaveAttemptsRef.current += 1;
+    console.log('Leave attempts:', leaveAttemptsRef.current);
+    sessionStorage.setItem('userResponse', userResponse); // Store the latest user response in session storage
+    if (leaveAttemptsRef.current === 1) {
+      alert('Leaving this page will result in your work being automatically submitted! You will not be able to make changes to this submission');
+    } else if (leaveAttemptsRef.current >= 2) {
+      document.querySelectorAll('textarea').forEach(input => input.disabled = true);
+      handleEvaluateResponse();
     }
-
-    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-    recognition.lang = 'en-US';
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-
-    recognition.start();
-
-    recognition.onresult = (event) => {
-      const speechResult = event.results[0][0].transcript;
-      console.log('Speech received: ' + speechResult);
-
-      setMessages((prevMessages) => [...prevMessages, { sender: 'User', text: speechResult }]);
-
-      fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/user_message`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ message: speechResult }),
-      })
-      .then((response) => response.json())
-      .then((data) => {
-        setMessages((prevMessages) => [...prevMessages, { sender: 'AI', text: data.ai_response }]);
-        if ('speechSynthesis' in window) {
-          const utterance = new SpeechSynthesisUtterance(data.ai_response);
-          window.speechSynthesis.speak(utterance);
-        } else {
-          console.error("Speech Synthesis API not supported in this browser.");
-        }
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-    };
-
-    recognition.onspeechend = () => {
-      recognition.stop();
-    };
-
-    recognition.onerror = (event) => {
-      console.error('Error occurred in recognition: ' + event.error);
-    };
   };
+
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      console.log('Before unload event');
+      handleNavigation();
+      if (leaveAttemptsRef.current < 2) {
+        event.returnValue = 'Leaving this page will result in your work being automatically submitted!';
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        console.log("You have navigated away from the page");
+        handleNavigation();
+      }
+    };
+
+    const handleWindowBlur = () => {
+      if (document.visibilityState === 'hidden') {
+        handleNavigation();
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('blur', handleWindowBlur);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('blur', handleWindowBlur);
+    };
+  }, []);
 
   return (
     <div className="generate-problems-container">
@@ -185,8 +210,12 @@ function Interview() {
             <div className="chat-message right">
               <textarea
                 value={userResponse}
-                onChange={(e) => setUserResponse(e.target.value)}
+                onChange={(e) => {
+                  setUserResponse(e.target.value);
+                  sessionStorage.setItem('userResponse', e.target.value); // Update user response in session storage
+                }}
                 placeholder="Type your response here..."
+                disabled={isEvaluating} // Disable textarea when evaluating
               />
               <button onClick={handleEvaluateResponse} disabled={isEvaluating}>
                 {isEvaluating ? 'Evaluating...' : 'Submit'}
