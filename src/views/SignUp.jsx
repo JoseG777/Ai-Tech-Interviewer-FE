@@ -35,6 +35,8 @@ function SignUp() {
       // Send data to backend
       await saveUserToDatabase(user.user.uid);
 
+      await sendWelcomeEmail(email);
+
       // Always set states back to original when done
       setEmail('');
       setPassword('');
@@ -65,6 +67,26 @@ function SignUp() {
     navigate('/signin');
   }
   
+
+  async function sendWelcomeEmail(toEmail) {
+    const response = await fetch('/api/sendEmail', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        to_email: toEmail,
+        subject: 'Welcome to Our Service!',
+        body: 'Thank you for signing up. We are excited to have you with us!'
+      }),
+    });
+ 
+ 
+    const data = await response.json();
+    console.log(data); // Handle response from the backend
+  }
+ 
+
 
   return (
     <form onSubmit={handleSignUp}>
