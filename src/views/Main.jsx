@@ -34,7 +34,7 @@ function Main() {
   ];
 
   const times = [
-    { label: 'Short', minutes: 1 },
+    { label: 'Short', minutes: 0.5 },
     { label: 'Standard', minutes: 15 },
     { label: 'Extended', minutes: 30 }
   ];
