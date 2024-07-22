@@ -24,14 +24,14 @@ function Interview() {
   const [userSpeechInputs, setUserSpeechInputs] = useState([]); // New state variable for user speech inputs
 
   // Evaluation variables
-  const [evaluation, setEvaluation] = useState(null);
+  const [codeEvaluation, setCodeEvaluation] = useState(null);
+  const [speechEvaluation, setSpeechEvaluation] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isEvaluating, setIsEvaluating] = useState(false);
 
   // Timer variables
   const [timer, setTimer] = useState(time * 60);
   const countdownRef = useRef(null);
-
 
   // ***************************** Redirect to home if uid is not set *****************************
   useEffect(() => {
@@ -166,18 +166,20 @@ function Interview() {
 
       if (!response.ok) {
         console.error(`HTTP error! status: ${response.status}`);
-        setEvaluation('An error occurred during evaluation.');
+        setCodeEvaluation('An error occurred during evaluation.');
+        setSpeechEvaluation('An error occurred during evaluation.');
         setIsEvaluating(false);
         return;
       }
 
       const data = await response.json();
-      setEvaluation(data.evaluation);
+      setCodeEvaluation(data.code_evaluation);
+      setSpeechEvaluation(data.speech_evaluation);
       console.log(data);
-      console.log(speechInputs);
     } catch (error) {
       console.error('Error evaluating response:', error);
-      setEvaluation('An error occurred during evaluation.');
+      setCodeEvaluation('An error occurred during evaluation.');
+      setSpeechEvaluation('An error occurred during evaluation.');
     } finally {
       setIsEvaluating(false);
     }
@@ -312,29 +314,24 @@ function Interview() {
               </button>
             </div>
           </div>
-          <ul id="messages">
-            {messages.map((msg, index) => (
-              <li key={index} className={msg.sender === 'User' ? 'user-message' : 'ai-message'}>
-                <strong>{msg.sender}:</strong> {msg.text}
-              </li>
-            ))}
-          </ul>
-          {evaluation && (
+          {codeEvaluation && (
             <div className="evaluation-container">
-              <h2>Evaluation</h2>
-              <p>{evaluation}</p>
+              <h2>Code Evaluation</h2>
+              <p>Evaluation: {codeEvaluation.evaluation}</p>
+              <p>Feedback: {codeEvaluation.feedback}</p>
+              <p>Final Grade: {codeEvaluation.final_grade}</p>
+            </div>
+          )}
+          {speechEvaluation && (
+            <div className="evaluation-container">
+              <h2>Speech Evaluation</h2>
+              <p>Evaluation: {speechEvaluation.evaluation}</p>
+              <p>Feedback: {speechEvaluation.feedback}</p>
+              <p>Final Grade: {speechEvaluation.final_grade}</p>
             </div>
           )}
           <button id="start-btn" onClick={() => recognition.start()}>Start Speaking</button>
           <button id="stop-btn" onClick={() => speechSynthesis.cancel()}>Stop Speaking</button>
-          <div>
-            <h2>Speech Inputs</h2>
-            <ul>
-              {speechInputs.map((input, index) => (
-                <li key={index}>{input}</li>
-              ))}
-            </ul>
-          </div>
         </>
       )}
     </div>
