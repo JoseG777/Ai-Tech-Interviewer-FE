@@ -5,7 +5,7 @@ import '../styles/Interview.css';
 function Interview() {
   const location = useLocation();
   const navigate = useNavigate();
-  const leaveAttemptsRef = useRef(0); // Ref to keep track of leave attempts
+  const leaveAttemptsRef = useRef(0);
 
   const { language, time } = location.state || { language: 'python', time: 15 };
   const [problem, setProblem] = useState(null);
@@ -121,6 +121,8 @@ function Interview() {
     const problemFromSession = JSON.parse(sessionStorage.getItem('problem'));
     const userResponseFromSession = sessionStorage.getItem('userResponse');
 
+    console.log(uid, problemFromSession, userResponseFromSession);
+
     try {
       const apiEndpoint = `${import.meta.env.VITE_APP_API_ENDPOINT}/api/evaluateResponse`;
       const response = await fetch(apiEndpoint, {
@@ -222,19 +224,25 @@ function Interview() {
     };
 
     const handleWindowBlur = () => {
-      if (document.visibilityState === 'hidden') {
-        handleNavigation();
-      }
+      console.log("Window lost focus");
+      handleNavigation();
+    };
+
+    const handleWindowFocus = () => {
+      console.log("Window gained focus");
+      // Add any specific logic you want to handle when the window gains focus again
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);
     document.addEventListener('visibilitychange', handleVisibilityChange);
     window.addEventListener('blur', handleWindowBlur);
+    window.addEventListener('focus', handleWindowFocus);
 
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('blur', handleWindowBlur);
+      window.removeEventListener('focus', handleWindowFocus);
     };
   }, []);
 
