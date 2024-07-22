@@ -7,15 +7,18 @@ function Interview() {
   const navigate = useNavigate();
   const leaveAttemptsRef = useRef(0); // Ref to keep track of leave attempts
 
-  // STATES
   const { language, time } = location.state || { language: 'python', time: 15 };
   const [problem, setProblem] = useState(null);
   const [userResponse, setUserResponse] = useState(sessionStorage.getItem('userResponse') || '');
+  const [speechInput, setSpeechInput] = useState('');
+  const [speechInputs, setSpeechInputs] = useState([]); 
   const [evaluation, setEvaluation] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [timer, setTimer] = useState(time * 60);
   const countdownRef = useRef(null);
+  const [messages, setMessages] = useState([]);
+  const [recognition, setRecognition] = useState(null);
 
   // Redirect to home if uid is not set
   useEffect(() => {
@@ -27,6 +30,51 @@ function Interview() {
   // Generate problem on component mount
   useEffect(() => {
     handleGenerateProblem();
+  }, []);
+
+  // Initialize speech recognition
+  useEffect(() => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onresult = (event) => {
+      const speechResult = event.results[0][0].transcript;
+      console.log('Speech received: ' + speechResult);
+
+      setMessages(prevMessages => [...prevMessages, { sender: 'User', text: speechResult }]);
+      setSpeechInput(speechResult); 
+      setSpeechInputs(prevInputs => [...prevInputs, speechResult]); 
+
+      fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/chat`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: speechResult, problem: JSON.parse(sessionStorage.getItem('problem')) }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          const aiResponse = data.ai_response;
+          setMessages(prevMessages => [...prevMessages, { sender: 'AI', text: aiResponse }]);
+
+          const utterance = new SpeechSynthesisUtterance(aiResponse);
+          speechSynthesis.speak(utterance);
+        })
+        .catch(error => console.error('Error:', error));
+    };
+
+    recognition.onspeechend = () => {
+      recognition.stop();
+    };
+
+    recognition.onerror = (event) => {
+      console.error('Error occurred in recognition: ' + event.error);
+    };
+
+    setRecognition(recognition);
   }, []);
 
   // Generate a problem for the user to solve
@@ -97,6 +145,7 @@ function Interview() {
       const data = await response.json();
       setEvaluation(data.evaluation);
       console.log(data);
+      console.log(speechInputs);
     } catch (error) {
       console.error('Error evaluating response:', error);
       setEvaluation('An error occurred during evaluation.');
@@ -147,7 +196,7 @@ function Interview() {
   const handleNavigation = () => {
     leaveAttemptsRef.current += 1;
     console.log('Leave attempts:', leaveAttemptsRef.current);
-    sessionStorage.setItem('userResponse', userResponse); // Store the latest user response in session storage
+    sessionStorage.setItem('userResponse', userResponse); 
     if (leaveAttemptsRef.current === 1) {
       alert('Leaving this page will result in your work being automatically submitted! You will not be able to make changes to this submission');
     } else if (leaveAttemptsRef.current >= 2) {
@@ -212,10 +261,10 @@ function Interview() {
                 value={userResponse}
                 onChange={(e) => {
                   setUserResponse(e.target.value);
-                  sessionStorage.setItem('userResponse', e.target.value); // Update user response in session storage
+                  sessionStorage.setItem('userResponse', e.target.value); 
                 }}
                 placeholder="Type your response here..."
-                disabled={isEvaluating} // Disable textarea when evaluating
+                disabled={isEvaluating}
               />
               <button onClick={handleEvaluateResponse} disabled={isEvaluating}>
                 {isEvaluating ? 'Evaluating...' : 'Submit'}
@@ -235,6 +284,16 @@ function Interview() {
               <p>{evaluation}</p>
             </div>
           )}
+          <button id="start-btn" onClick={() => recognition.start()}>Start Speaking</button>
+          <button id="stop-btn" onClick={() => speechSynthesis.cancel()}>Stop Speaking</button>
+          <div>
+            <h2>Speech Inputs</h2>
+            <ul>
+              {speechInputs.map((input, index) => (
+                <li key={index}>{input}</li>
+              ))}
+            </ul>
+          </div>
         </>
       )}
     </div>
