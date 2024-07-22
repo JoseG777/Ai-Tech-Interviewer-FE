@@ -100,12 +100,17 @@ function Profile() {
         <div className="charts-container">
           <div className="chart">
             <h3>Grades Progress</h3>
-            <Line data={lineData} />
+            <Line data={lineData}/>
           </div>
           <div className="chart">
             <h3>Attempts Per Date</h3>
-            <Bar data={barData} />
+            <Bar data={barData}/>
           </div>
+        </div>
+
+        <div className="profile-item">
+          <label>Delete Account</label>
+          <button onClick={() => navigate('/delete-account')}>Change Password</button>
         </div>
       </div>
   );

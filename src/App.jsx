@@ -13,6 +13,7 @@ import UpdateGoal from "./views/UpdateGoal.jsx";
 import UpdateInterview from "./views/UpdateInterview.jsx";
 import UpdateLevel from "./views/UpdateLevel.jsx";
 import UpdatePassword from "./views/UpdatePassword.jsx";
+import DeleteAccount from "./views/DeleteUser.jsx";
 import './App.css';
 
 
@@ -46,6 +47,7 @@ function MainLayout() {
         <Route path="/update-current-goal" element={<UpdateGoal />} />
         <Route path="/update-upcoming-interview" element={<UpdateInterview />} />
         <Route path="/update-level-description" element={<UpdateLevel />} />
+        <Route path="/delete-account" element={<DeleteAccount />} />
       </Routes>
     </>
   );

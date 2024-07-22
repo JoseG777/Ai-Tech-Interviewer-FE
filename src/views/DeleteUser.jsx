@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { getAuth, reauthenticateWithCredential, EmailAuthProvider, deleteUser } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
 // edit the styles that you want to use
-import '../styles/UserFiles.css';
-import backgroundImage from '../assets/destination.png';
+//import '../styles/UserFiles.css';
+//import backgroundImage from '../assets/destination.png';
 
 function DeleteAccount() {
     const [password, setPassword] = useState('');

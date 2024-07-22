@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function UpdateLevel() {
     const [description, setDescription] = useState('');
     const [message, setMessage] = useState('');
+    const navigate = useNavigate();
 
     const handleUpdateLevelDescription = async () => {
         const uid = sessionStorage.getItem('uid');
@@ -14,6 +16,7 @@ function UpdateLevel() {
             });
             const data = await response.json();
             setMessage(data.message);
+            navigate('/profile');
         } catch (error) {
             console.error('Error updating level description:', error);
         }

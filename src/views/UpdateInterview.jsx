@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function UpdateInterview() {
     const [interview, setInterview] = useState('');
     const [message, setMessage] = useState('');
+    const navigate = useNavigate();
 
     const handleUpdateInterview = async () => {
         const uid = sessionStorage.getItem('uid');
@@ -14,6 +16,7 @@ function UpdateInterview() {
             });
             const data = await response.json();
             setMessage(data.message);
+            navigate('/profile');
         } catch (error) {
             console.error('Error updating interview:', error);
         }
@@ -26,7 +29,7 @@ function UpdateInterview() {
                 type="text"
                 value={interview}
                 onChange={(e) => setInterview(e.target.value)}
-                placeholder="Enter new interview"
+                placeholder="Enter new upcoming interview"
             />
             <button onClick={handleUpdateInterview}>Update</button>
             {message && <p>{message}</p>}
