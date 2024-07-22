@@ -9,31 +9,43 @@ function Interview() {
   const tabLeaveRef = useRef(0); // Ref to keep track of tab leaves
 
   const { language, time } = location.state || { language: 'python', time: 15 };
+
+  // ***************************** State variables *****************************
+  // 
   const [problem, setProblem] = useState(null);
   const [userResponse, setUserResponse] = useState(sessionStorage.getItem('userResponse') || '');
+
+  // Speech Variables
   const [speechInput, setSpeechInput] = useState('');
   const [speechInputs, setSpeechInputs] = useState([]); 
+  const [messages, setMessages] = useState([]);
+  const [recognition, setRecognition] = useState(null);
+  const [finalSpeech, setFinalSpeech] = useState('N/A');
+  const [userSpeechInputs, setUserSpeechInputs] = useState([]); // New state variable for user speech inputs
+
+  // Evaluation variables
   const [evaluation, setEvaluation] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isEvaluating, setIsEvaluating] = useState(false);
+
+  // Timer variables
   const [timer, setTimer] = useState(time * 60);
   const countdownRef = useRef(null);
-  const [messages, setMessages] = useState([]);
-  const [recognition, setRecognition] = useState(null);
 
-  // Redirect to home if uid is not set
+
+  // ***************************** Redirect to home if uid is not set *****************************
   useEffect(() => {
     if (!sessionStorage.getItem('uid')) {
       navigate('/');
     }
   }, [navigate]);
 
-  // Generate problem on component mount
+  // ***************************** Generate problem on component mount *****************************
   useEffect(() => {
     handleGenerateProblem();
   }, []);
 
-  // Initialize speech recognition
+  // ***************************** Initialize speech recognition *****************************
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
@@ -48,6 +60,7 @@ function Interview() {
       setMessages(prevMessages => [...prevMessages, { sender: 'User', text: speechResult }]);
       setSpeechInput(speechResult); 
       setSpeechInputs(prevInputs => [...prevInputs, speechResult]); 
+      setUserSpeechInputs(prevInputs => [...prevInputs, speechResult]); // Add user speech input to list
 
       fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/chat`, {
         method: 'POST',
@@ -78,7 +91,15 @@ function Interview() {
     setRecognition(recognition);
   }, []);
 
-  // Generate a problem for the user to solve
+  // Combine user speech inputs into a single string whenever messages change
+  useEffect(() => {
+    if (userSpeechInputs.length !== 0) {
+      const combinedUserSpeech = userSpeechInputs.join(' ');
+      setFinalSpeech(combinedUserSpeech);
+    }
+  }, [userSpeechInputs]);
+
+  // ***************************** Generate a problem for the user to solve *****************************
   async function handleGenerateProblem() {
     const uid = sessionStorage.getItem('uid');
     try {
@@ -109,7 +130,7 @@ function Interview() {
     }
   }
 
-  // Evaluate the user's response
+  // ***************************** Evaluate the user's response *****************************
   async function handleEvaluateResponse() {
     console.log('Evaluating response...');
     setIsEvaluating(true);
@@ -124,6 +145,10 @@ function Interview() {
 
     console.log(uid, problemFromSession, userResponseFromSession);
 
+    const combinedUserSpeech = userSpeechInputs.length > 0 
+    ? userSpeechInputs.map((input, index) => `${index + 1}. ${input}`).join(' ')
+    : 'N/A';
+
     try {
       const apiEndpoint = `${import.meta.env.VITE_APP_API_ENDPOINT}/api/evaluateResponse`;
       const response = await fetch(apiEndpoint, {
@@ -134,7 +159,8 @@ function Interview() {
         body: JSON.stringify({
           problem: problemFromSession,
           userResponse: userResponseFromSession,
-          uid
+          uid,
+          speechInput: combinedUserSpeech,
         }),
       });
 
@@ -157,7 +183,7 @@ function Interview() {
     }
   }
 
-  // Timer function
+  // ***************************** Timer function *****************************
   useEffect(() => {
     if (timer === 0) {
       handleEvaluateResponse();
@@ -175,7 +201,7 @@ function Interview() {
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  // Parse function
+  // ***************************** Parse function *****************************
   const parseProblem = (problem) => {
     if (!problem) return '';
 
@@ -195,7 +221,7 @@ function Interview() {
     return { formattedProblem, functionSignature: functionSignaturePart };
   };
 
-  // Navigation handler
+  // ***************************** Navigation handler *****************************
   const handleNavigation = () => {
     leaveAttemptsRef.current += 1;
     console.log('Leave attempts:', leaveAttemptsRef.current);
@@ -315,4 +341,4 @@ function Interview() {
   );
 }
 
-export default Interview; 
+export default Interview;
