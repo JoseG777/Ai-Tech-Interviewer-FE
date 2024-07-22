@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getAuth, reauthenticateWithCredential, EmailAuthProvider, deleteUser } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
-// edit the styles that you want to use
-//import '../styles/UserFiles.css';
-//import backgroundImage from '../assets/destination.png';
+
 
 function DeleteAccount() {
     const [password, setPassword] = useState('');
@@ -67,7 +65,7 @@ function DeleteAccount() {
 
     // styling
     return (
-        <div className="fullscreen-flex-container" style={{ backgroundImage: `url(${backgroundImage})` }}>
+        <div className="fullscreen-flex-container">
             <h2 className="title-text">Delete Account</h2>
             <form className="centered-form-wrapper" onSubmit={(e) => { e.preventDefault(); handleDeleteAccount(); }}>
                 <input

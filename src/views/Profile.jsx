@@ -10,7 +10,8 @@ ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, BarEleme
 
 function Profile() {
   const [userInfo, setUserInfo] = useState(null);
-  const [grades, setGrades] = useState([]);
+  const [code_grades, setCodeGrades] = useState([]);
+  const [speech_grades, setSpeechGrades] = useState([]);
   const [attempts, setAttempts] = useState([]);
   const navigate = useNavigate();
 
@@ -27,7 +28,8 @@ function Profile() {
         const response = await fetch(`/api/getUsers?uid=${uid}`);
         const data = await response.json();
         setUserInfo(data.user);
-        setGrades(data.grades);
+        setCodeGrades(data.code_grades);
+        setSpeechGrades(data.speech_grades);
         setAttempts(data.attempts);
       } catch (error) {
         console.error('Error fetching user info:', error);
@@ -37,13 +39,13 @@ function Profile() {
     fetchUserInfo();
   }, []);
 
-  // Prepare data for the line graph (grades progress)
-  const lineData = {
-    labels: grades.map(grade => grade.saved_date),
+  // Prepare data for the line graph (coding grades progress)
+  const codeLineData = {
+    labels: code_grades.map(grade => grade.saved_date),
     datasets: [
       {
         label: 'Grades Over Time',
-        data: grades.map(grade => grade.final_grade),
+        data: code_grades.map(grade => grade.final_grade),
         fill: false,
         borderColor: 'rgba(75, 192, 192, 1)',
         tension: 0.1
@@ -51,8 +53,22 @@ function Profile() {
     ]
   };
 
-  // Prepare data for the bar graph (attempts per date)
-  const barData = {
+  // Prepare data for the line graph (coding grades progress)
+  const speechData = {
+    labels: speech_grades.map(grade => grade.saved_date),
+    datasets: [
+      {
+        label: 'Grades Over Time',
+        data: speech_grades.map(grade => grade.final_grade),
+        fill: false,
+        borderColor: 'rgba(75, 192, 192, 1)',
+        tension: 0.1
+      }
+    ]
+  };
+
+  // Prepare data for the bar graph (coding attempts per date)
+  const codeBarData = {
     labels: attempts.map(attempt => attempt.saved_date),
     datasets: [
       {
@@ -99,12 +115,16 @@ function Profile() {
 
         <div className="charts-container">
           <div className="chart">
-            <h3>Grades Progress</h3>
-            <Line data={lineData}/>
+            <h3>Coding Grades Progress</h3>
+            <Line data={codeLineData}/>
           </div>
           <div className="chart">
-            <h3>Attempts Per Date</h3>
-            <Bar data={barData}/>
+            <h3>Speech Grades Progress</h3>
+            <Line data={speechData}/>
+          </div>
+          <div className="chart">
+            <h3>Coding Attempts Per Date</h3>
+            <Bar data={codeBarData}/>
           </div>
         </div>
 
