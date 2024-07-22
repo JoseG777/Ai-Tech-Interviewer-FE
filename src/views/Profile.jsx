@@ -1,6 +1,7 @@
 // src/views/Profile.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../styles/main-content.css';
 import '../styles/Profile.css';
 
 function Profile() {
@@ -38,6 +39,7 @@ function Profile() {
   }
 
   return (
+    <div className="main-content">
     <div className="profile-container">
       <h1>Profile Page</h1>
       <h2>Hello, {users.leetcodeUsername}!</h2>
@@ -58,6 +60,7 @@ function Profile() {
           <button onClick={() => handleUpdateClick('upcomingInterview')}>Update</button>
         </div>
       </div>
+    </div>
     </div>
   );
 }

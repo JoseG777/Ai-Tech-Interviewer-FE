@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebaseConfig';
+import '../styles/authform.css';
 
 function SignUp() {
   const navigate = useNavigate();
@@ -70,6 +71,8 @@ function SignUp() {
   }
 
   return (
+    <div className="auth-form-container">
+      <div className = "auth-form">
     <form onSubmit={handleSignUp}>
       <input
         type="email"
@@ -95,10 +98,15 @@ function SignUp() {
         disabled={loading}
       />
       <br/>
+      <div className="auth-form button">
       <button type="submit" disabled={loading}>
-        {loading ? 'Signing Up...' : 'Sign Up'}
+        {loading ? 'Signing Up...' : 'Register'}
       </button>
+      </div>
     </form>
+    </div>
+    </div>
+    
   );
 }
 

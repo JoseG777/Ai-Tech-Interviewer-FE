@@ -2,41 +2,23 @@
 import React from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, useGLTF } from '@react-three/drei';
-import { useNavigate } from 'react-router-dom';
-//import laptop from '../assets/laptop'; Relative path to the model
 import '../styles/Laptop.css';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { useLoader } from '@react-three/fiber';
-import laptopModel from '../assets/laptop/scene.gltf';
 
+function LaptopModel() {
+  const { scene } = useGLTF('src/assets/laptop/scene.gltf');
 
+  return <primitive object={scene} scale={0.5} />;  // Increase scale from 0.5 to 1.5 or more as needed
+}
 
-const Model = (props) => {
-  const gltf = useLoader(GLTFLoader, '/laptop/scene.gltf');
-  return <primitive object={gltf.scene} {...props} />;
-};
-
-const Laptop = () => {
-  const navigate = useNavigate();
-
+function Laptop() {
   return (
-    <div className="laptop-container">
-      <Canvas style={{ height: '40vh', width: '100%' }}>
-        <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} />
-        <Model scale={[1.5, 1.5, 1.5]} position={[0, -1.5, 0]} />
-        <OrbitControls />
-      </Canvas>
-      <div className="laptop-screen">
-        <button className="button sign-up" onClick={() => navigate('/signup')}>
-          Sign up
-        </button>
-        <button className="button sign-in" onClick={() => navigate('/signin')}>
-          Sign in
-        </button>
-      </div>
-    </div>
+    <Canvas>
+      <ambientLight intensity={0.5} />
+      <spotLight position={[10, 15, 10]} angle={0.3} penumbra={1} />
+      <LaptopModel />
+      <OrbitControls />
+    </Canvas>
   );
-};
+}
 
 export default Laptop;

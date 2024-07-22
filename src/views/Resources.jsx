@@ -1,6 +1,7 @@
 // src/views/Resources.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../styles/main-content.css';
 import '../styles/Resources.css';
 
 
@@ -14,6 +15,7 @@ function Resources() {
   }, [navigate]);
 
   return (
+    <div className="main-content">
     <div className="resources-container">
       <h1>Resources</h1>
       <div className="resources-icons">
@@ -38,6 +40,7 @@ function Resources() {
           <p>GeeksforGeeks</p>
         </a>
       </div>
+    </div>
     </div>
   );
 }

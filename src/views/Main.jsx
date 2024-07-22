@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../styles/main-content.css';
 import '../styles/Main.css'; 
 
 function Main() {
@@ -46,6 +47,7 @@ function Main() {
   };
 
   return (
+    <div className="main-content">
     <div className="main-container">
       <h1>Home Page</h1>
       <div className="difficulty-section">
@@ -79,6 +81,7 @@ function Main() {
           Start Interview
         </button>
       )}
+    </div>
     </div>
   );
 }

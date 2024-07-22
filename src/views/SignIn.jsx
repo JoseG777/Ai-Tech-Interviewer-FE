@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebaseConfig';
+import '../styles/authform.css';
 
 function SignIn() {
   const navigate = useNavigate();
@@ -34,6 +35,8 @@ function SignIn() {
   }
 
   return (
+    <div className="auth-form-container">
+      <div className = "auth-form">
     <form onSubmit={handleSignIn}>
       <input
         type="email"
@@ -49,8 +52,12 @@ function SignIn() {
         placeholder="Password"
       />
       <br />
-      <button type="submit">Sign In</button>
+      <div className="auth-form button">
+      <button type="submit">Login</button>
+    </div>  
     </form>
+    </div>
+    </div>
   );
 }
 

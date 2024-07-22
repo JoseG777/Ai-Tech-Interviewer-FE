@@ -1,0 +1,131 @@
+/* Assuming this is in src/styles/App.css or src/styles/home.css */
+
+html, body, #root {
+  height: 100%; /* Full height to the root of your React app */
+  margin: 0; /* Removes default margin provided by browsers */
+  padding: 0; /* Removes default padding */
+  background-color: #10201a; 
+  
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  align-items: center; 
+  height: 100%; 
+  text-align: center;
+  color: #f1eded; /* Sets text color */
+  font-family: 'Courier New', Courier, monospace; 
+}
+
+
+.laptop {
+  width: 320px; 
+  height: 200px;
+  border: 3px solid #008080; 
+  border-radius: 10px; 
+  position: relative;
+  margin: 40px auto;
+  box-shadow: 0 4px 8px rgba(0, 128, 128, 0.2); 
+}
+
+.laptop-screen {
+  background-color: #050101; 
+  width: 300px; 
+  height: 180px;
+  position: absolute;
+  top: 10px; 
+  left: 10px;
+  border-bottom: none; 
+  border-radius: 5px 5px 0 0; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.laptop-connect {
+  background-color: #008080; 
+  width: 100px;
+  height: 10px; 
+  position: absolute;
+  bottom: -20px; 
+  right: 100px;
+  border-radius: 0 0 5px 5px; 
+  box-shadow: inset 0 -2px 4px rgba(255, 255, 255, 0.1); }
+
+.laptop-keyboard {
+  background-color: #008080; 
+  width: 320px; 
+  height: 70px;
+  position: absolute;
+  bottom: -100px; 
+  left: px; 
+  border-radius: 3px; 
+  box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.2); 
+}
+
+
+
+
+.screen-button {
+  max-width: 90%; 
+  background-color: #008080; /* Teal background color */
+  color: white;
+  border: none;
+  margin: 5px;
+  padding: 10px 15px; 
+  cursor: pointer;
+  border-radius: 5px; /* Rounded corners for buttons */
+  font-size: 16px; 
+  font-family: 'Courier New', Courier, monospace; /* Consistent font style */
+}
+
+.screen-button:hover {
+  background-color: #006666; /* Darker teal on hover */
+}
+
+/* Typing Animation */
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: white; }
+}
+
+.p-typing {
+  border-right: 2px solid white; /* Makes the caret */
+  white-space: pre-wrap; 
+  overflow-wrap: break-word;
+  margin: 20px; 
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+  width: auto;
+  animation: typing 4s steps(40, end) forwards, /* Make sure to add 'forwards' here */
+             blink-caret 0.75s step-end infinite;
+  font-family: 'Courier New', Courier, monospace;
+  color: #f1eded;
+}
+
+
+/* Fly in */
+@keyframes fly-in {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.h1, .h2-fly-in {
+  margin: 0.5em 0;
+  animation: fly-in 1s ease-out forwards;
+}
+

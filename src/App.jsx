@@ -22,7 +22,7 @@ function App() {
 
 function MainLayout() {
   const location = useLocation();
-  const hideNavBarRoutes = ['/interview'];
+  const hideNavBarRoutes = ['/','/signin', '/signup', '/newuser', '/interview'];
 
   const shouldHideNavBar = hideNavBarRoutes.includes(location.pathname);
 

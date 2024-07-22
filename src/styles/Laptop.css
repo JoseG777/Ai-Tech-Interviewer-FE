@@ -1,36 +1,25 @@
-/* src/styles/Laptop.css */
+/* src/styles/laptop.css */
+.laptop-canvas {
+  width: 100%;
+  height: 500px; /* Increase height as needed */
+  position: relative; /* Needed for positioning child elements */
+}
 
-.laptop-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    height: 100vh; /* Full viewport height */
-    background-color: #f0f0f0;
-  }
-  
-  .laptop-screen {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-  }
-  
-  .button {
-    width: 80px;
-    height: 30px;
-    margin: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .sign-up {
-    background-color: #4CAF50;
-    color: white;
-  }
-  
-  .sign-in {
-    background-color: #008CBA;
-    color: white;
-  }
-  
+.sign-buttons {
+  position: absolute;
+  top: 50%;  /* Adjust these values based on where the screen appears in your model */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.button {
+  margin: 5px;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}

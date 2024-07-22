@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../styles/UpdateInfo.css';
+import '../styles/main-content.css';
 
 function UpdateInfo() {
   const location = useLocation();
@@ -62,6 +63,7 @@ function UpdateInfo() {
   };
 
   return (
+    <div className="main-content">
     <div className="update-info-container">
       <h1>Update Information {field}</h1>
       <h2>Update {field}</h2>
@@ -77,6 +79,7 @@ function UpdateInfo() {
         {errorMessage && <p className="error-message">{errorMessage}</p>}
         <button type="submit">Update</button>
       </form>
+    </div>
     </div>
   );
 }
