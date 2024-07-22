@@ -35,7 +35,7 @@ function SignUp() {
       // Send data to backend
       await saveUserToDatabase(user.user.uid);
 
-      await sendWelcomeEmail(email);
+      //await sendWelcomeEmail(email);
 
       // Always set states back to original when done
       setEmail('');
@@ -69,7 +69,7 @@ function SignUp() {
   }
   
 
-  async function sendWelcomeEmail(toEmail) {
+  /*async function sendWelcomeEmail(toEmail) {
     const response = await fetch('/api/sendEmail', {
       method: 'POST',
       headers: {
@@ -85,7 +85,7 @@ function SignUp() {
  
     const data = await response.json();
     console.log(data); // Handle response from the backend
-  }
+  }*/
  
 
 
