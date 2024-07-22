@@ -28,9 +28,29 @@ function SignIn({ setIsSignedIn }) {
       sessionStorage.setItem('uid', user.user.uid);
       setEmailSignIn('');
       setPasswordSignIn('');
+
+      await sendSignInEmail(emailSignIn);
+
       navigate('/');
     } catch (error) {
       console.log(error.message);
+    }
+  }
+
+  async function sendSignInEmail(email) {
+    try {
+      const response = await fetch('/api/sendSignInEmail', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ to_email: email }),
+      });
+
+      const data = await response.json();
+      console.log(data); 
+    } catch (error) {
+      console.log('Failed to send sign-in email:', error);
     }
   }
 
