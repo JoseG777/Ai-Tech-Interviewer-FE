@@ -3,7 +3,7 @@
   position: relative; 
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start; /* Changed to flex-start to align items at the top */
   align-items: center;
   height: 100vh;
   background-color: #1a1a1a; 
@@ -41,10 +41,9 @@
   display: flex;
   justify-content: center; 
   align-items: center;
-  margin-bottom: 20px;
   width: 100%; 
   z-index: 5;
-  position: absolute; 
+  position: fixed; /* Changed to fixed to make it static */
   top: 20px; 
 }
 
@@ -65,11 +64,12 @@
   align-items: center;
   width: 100%;
   max-width: 1200px; 
-  margin: 80px auto;
+  margin: 80px auto; 
   padding: 20px;
   background-color: #2a2a2a; 
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); 
+  margin-top: 80px; /* Added margin-top to make space for the fixed timer */
 }
 
 .chat-message {
