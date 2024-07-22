@@ -73,7 +73,7 @@ function Profile() {
       <div className="main-content">
         <div className="profile-container">
           <h1>Profile Page</h1>
-          <h2>Hello, {userInfo.username || 'user'}!</h2>
+          <h2>Hello, {userInfo.username || 'User'}!</h2>
           <div className="profile-info">
             <div className="profile-item">
               <label>Level Description:</label>
@@ -92,7 +92,7 @@ function Profile() {
             </div>
             <div className="profile-item">
               <label>Change Password:</label>
-              <button onClick={() => navigate('/change-password')}>Change Password</button>
+              <button onClick={() => navigate('/update-password')}>Change Password</button>
             </div>
           </div>
         </div>
