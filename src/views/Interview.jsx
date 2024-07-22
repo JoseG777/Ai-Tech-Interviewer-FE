@@ -10,14 +10,12 @@ function Interview() {
   // STATES
   const { language, time } = location.state || { language: 'python', time: 15 };
   const [problem, setProblem] = useState(null);
-  const [userResponse, setUserResponse] = useState('');
+  const [userResponse, setUserResponse] = useState(sessionStorage.getItem('userResponse') || '');
   const [evaluation, setEvaluation] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [timer, setTimer] = useState(time * 60);
   const countdownRef = useRef(null);
-
-  // ************************** USE EFFECTS **************************
 
   // Redirect to home if uid is not set
   useEffect(() => {
@@ -31,17 +29,11 @@ function Interview() {
     handleGenerateProblem();
   }, []);
 
-  // ******************************************************************
-
-
-  // ************************** FUNCTIONS **************************
-
   // Generate a problem for the user to solve
   async function handleGenerateProblem() {
     const uid = sessionStorage.getItem('uid');
     try {
       const apiEndpoint = `${import.meta.env.VITE_APP_API_ENDPOINT}/api/generateProblem`;
-      // console.log("API Endpoint:", apiEndpoint);
       const response = await fetch(apiEndpoint, {
         method: 'POST',
         headers: {
@@ -59,7 +51,8 @@ function Interview() {
       const { formattedProblem, functionSignature } = parseProblem(data.problem);
       setProblem(formattedProblem);
       setUserResponse(functionSignature);
-
+      sessionStorage.setItem('problem', JSON.stringify(data.problem));
+      sessionStorage.setItem('userResponse', functionSignature); // Initialize user response in session storage
     } catch (error) {
       console.error('Error generating problem:', error);
     } finally {
@@ -68,8 +61,8 @@ function Interview() {
   }
 
   // Evaluate the user's response
-  async function handleEvaluateResponse(event) {
-    if (event) event.preventDefault();
+  async function handleEvaluateResponse() {
+    console.log('Evaluating response...');
     setIsEvaluating(true);
 
     if (countdownRef.current) {
@@ -77,6 +70,9 @@ function Interview() {
     }
 
     const uid = sessionStorage.getItem('uid');
+    const problemFromSession = JSON.parse(sessionStorage.getItem('problem'));
+    const userResponseFromSession = sessionStorage.getItem('userResponse');
+
     try {
       const apiEndpoint = `${import.meta.env.VITE_APP_API_ENDPOINT}/api/evaluateResponse`;
       const response = await fetch(apiEndpoint, {
@@ -84,20 +80,32 @@ function Interview() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ problem, userResponse, uid }),
+        body: JSON.stringify({
+          problem: problemFromSession,
+          userResponse: userResponseFromSession,
+          uid
+        }),
       });
+
+      if (!response.ok) {
+        console.error(`HTTP error! status: ${response.status}`);
+        setEvaluation('An error occurred during evaluation.');
+        setIsEvaluating(false);
+        return;
+      }
+
       const data = await response.json();
       setEvaluation(data.evaluation);
       console.log(data);
     } catch (error) {
       console.error('Error evaluating response:', error);
+      setEvaluation('An error occurred during evaluation.');
     } finally {
       setIsEvaluating(false);
     }
   }
 
-  // ************************** TIMER FUNCTION **************************
-
+  // Timer function
   useEffect(() => {
     if (timer === 0) {
       handleEvaluateResponse();
@@ -115,8 +123,7 @@ function Interview() {
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  // ************************** PARSE FUNCTION **************************
-
+  // Parse function
   const parseProblem = (problem) => {
     if (!problem) return '';
 
@@ -136,22 +143,22 @@ function Interview() {
     return { formattedProblem, functionSignature: functionSignaturePart };
   };
 
-  // ************************** NAVIGATION HANDLER **************************
+  // Navigation handler
   const handleNavigation = () => {
     leaveAttemptsRef.current += 1;
     console.log('Leave attempts:', leaveAttemptsRef.current);
+    sessionStorage.setItem('userResponse', userResponse); // Store the latest user response in session storage
     if (leaveAttemptsRef.current === 1) {
       alert('Leaving this page will result in your work being automatically submitted! You will not be able to make changes to this submission');
     } else if (leaveAttemptsRef.current >= 2) {
       document.querySelectorAll('textarea').forEach(input => input.disabled = true);
-      console.log('Changes saved and editing disabled.');
       handleEvaluateResponse();
-      console.log("SECOND ATTEMPT", leaveAttemptsRef.current);
     }
   };
 
   useEffect(() => {
     const handleBeforeUnload = (event) => {
+      console.log('Before unload event');
       handleNavigation();
       if (leaveAttemptsRef.current < 2) {
         event.returnValue = 'Leaving this page will result in your work being automatically submitted!';
@@ -203,7 +210,10 @@ function Interview() {
             <div className="chat-message right">
               <textarea
                 value={userResponse}
-                onChange={(e) => setUserResponse(e.target.value)}
+                onChange={(e) => {
+                  setUserResponse(e.target.value);
+                  sessionStorage.setItem('userResponse', e.target.value); // Update user response in session storage
+                }}
                 placeholder="Type your response here..."
                 disabled={isEvaluating} // Disable textarea when evaluating
               />
