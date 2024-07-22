@@ -49,7 +49,8 @@ function SignUp() {
   }
 
   async function saveUserToDatabase(uid) {
-    const response = await fetch('/api/createUser', {
+    const apiEndpoint = `${import.meta.env.VITE_APP_API_ENDPOINT}/api/createUser`;
+    const response = await fetch(apiEndpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

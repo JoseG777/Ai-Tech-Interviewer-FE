@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Home from './views/Home';
 import SignUp from './views/SignUp';
 import SignIn from './views/SignIn';
-import GenerateProblems from './views/GenerateProblems';
+import GenerateProblems from './views/Interview';
 import NavBar from './components/NavBar';
 import './App.css';
 
