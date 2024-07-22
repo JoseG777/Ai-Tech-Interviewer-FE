@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../styles/Interview.css';
 
@@ -7,16 +7,18 @@ function Interview() {
   const navigate = useNavigate();
 
   // STATES
-  const { language } = location.state || { language: 'python' };
+  const { language, time } = location.state || { language: 'python', time: 15 };
   const [problem, setProblem] = useState(null);
   const [userResponse, setUserResponse] = useState('');
   const [evaluation, setEvaluation] = useState(null);
   const [loading, setLoading] = useState(true); 
   const [isEvaluating, setIsEvaluating] = useState(false);
+  const [timer, setTimer] = useState(time * 60);
+  const countdownRef = useRef(null);
 
   useEffect(() => {
     if (!sessionStorage.getItem('uid')) {
-        navigate('/');
+      navigate('/');
     }
   }, [navigate]);
 
@@ -49,8 +51,14 @@ function Interview() {
   }
 
   async function handleEvaluateResponse(event) {
-    event.preventDefault();
+    if (event) event.preventDefault();
     setIsEvaluating(true); // Set evaluating to true
+
+    // Clear the countdown if the user submits manually
+    if (countdownRef.current) {
+      clearInterval(countdownRef.current);
+    }
+
     const uid = sessionStorage.getItem('uid');
     try {
       const apiEndpoint = `${import.meta.env.VITE_APP_API_ENDPOINT}/api/evaluateResponse`;
@@ -70,6 +78,23 @@ function Interview() {
       setIsEvaluating(false); // Set evaluating to false
     }
   }
+
+  useEffect(() => {
+    if (timer === 0) {
+      handleEvaluateResponse(); // Automatically submit when timer reaches 0
+    } else {
+      countdownRef.current = setInterval(() => {
+        setTimer((prevTimer) => (prevTimer > 0 ? prevTimer - 1 : 0));
+      }, 1000);
+      return () => clearInterval(countdownRef.current);
+    }
+  }, [timer]);
+
+  const formatTime = (timeInSeconds) => {
+    const minutes = Math.floor(timeInSeconds / 60);
+    const seconds = timeInSeconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  };
 
   const parseProblem = (problem) => {
     if (!problem) return '';
@@ -99,6 +124,9 @@ function Interview() {
       )}
       {!loading && (
         <>
+          <div className="top-bar">
+            <div className="timer">{formatTime(timer)}</div>
+          </div>
           <div className="chat-box">
             {problem && (
               <div className="chat-message left">

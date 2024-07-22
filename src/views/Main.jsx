@@ -7,6 +7,8 @@ function Main() {
   const navigate = useNavigate();
   const [selectedLanguage, setSelectedLanguage] = useState('');
   const [customLanguage, setCustomLanguage] = useState('');
+  const [selectedTime, setSelectedTime] = useState('');
+
 
   useEffect(() => {
     if (!sessionStorage.getItem('uid')) {
@@ -31,9 +33,15 @@ function Main() {
     'Scala'
   ];
 
+  const times = [
+    { label: 'Short', minutes: 1 },
+    { label: 'Standard', minutes: 15 },
+    { label: 'Extended', minutes: 30 }
+  ];
+
   const handleStartInterview = () => {
     const language = customLanguage || selectedLanguage;
-    navigate('/interview', { state: { language } });
+    navigate('/interview', { state: { language, time: selectedTime } });
   };
 
   const handleLanguageClick = (language) => {
@@ -46,10 +54,15 @@ function Main() {
     setSelectedLanguage('');
   };
 
+  const handleTimeClick = (time) => {
+    setSelectedTime(time);
+  };
+
   return (
     <div className="main-content">
     <div className="main-container">
-      <h1>Home Page</h1>
+      <h1> Select Interview Settings </h1>
+
       <div className="difficulty-section">
         <h2>Choose Your Coding Language</h2>
         <div className="difficulty-buttons">
@@ -63,6 +76,7 @@ function Main() {
             </button>
           ))}
         </div>
+
         <div className="custom-language">
           <input
             type="text"
@@ -73,7 +87,23 @@ function Main() {
           />
         </div>
       </div>
-      {(selectedLanguage || customLanguage) && (
+      
+      <div className="difficulty-section">
+        <h2>Choose Your Time</h2>
+          <div className="difficulty-buttons">
+            {times.map((time) => (
+              <button
+                key={time.label}
+                className={`difficulty-buttons ${selectedTime === time.minutes ? 'selected' : ''}`}
+                onClick={() => handleTimeClick(time.minutes)}
+              >
+                {time.label}
+              </button>
+            ))}
+          </div>
+      </div>
+
+      {((selectedLanguage || customLanguage) && selectedTime) && (
         <button className="start-button" onClick={handleStartInterview}>
           <svg width="24" height="24" viewBox="0 0 24 24">
             <path d="M8 5v14l11-7z" />
