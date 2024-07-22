@@ -6,6 +6,7 @@ function Interview() {
   const location = useLocation();
   const navigate = useNavigate();
   const leaveAttemptsRef = useRef(0);
+  const tabLeaveRef = useRef(0); // Ref to keep track of tab leaves
 
   const { language, time } = location.state || { language: 'python', time: 15 };
   const [problem, setProblem] = useState(null);
@@ -219,7 +220,13 @@ function Interview() {
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'hidden') {
         console.log("You have navigated away from the page");
-        handleNavigation();
+        if (leaveAttemptsRef.current === 1) {
+          // First leave attempt, show alert
+          alert('Leaving this page will result in your work being automatically submitted! You will not be able to make changes to this submission');
+        }
+        tabLeaveRef.current += 1; // Increment tab leave count
+      } else if (document.visibilityState === 'visible') {
+        tabLeaveRef.current = 0; // Reset tab leave count on return
       }
     };
 
@@ -230,7 +237,7 @@ function Interview() {
 
     const handleWindowFocus = () => {
       console.log("Window gained focus");
-      // Add any specific logic you want to handle when the window gains focus again
+      tabLeaveRef.current = 0; // Reset tab leave count on return
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);
@@ -308,4 +315,4 @@ function Interview() {
   );
 }
 
-export default Interview;
+export default Interview; 
