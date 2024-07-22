@@ -1,7 +1,7 @@
 // src/views/ChangePassword.jsx
 import React, { useState } from 'react';
 import { getAuth, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
-import { auth } from '../firebase'; // Import auth from your firebase setup
+import { auth } from '../firebaseConfig'; // Import auth from your firebase setup
 
 function UpdatePassword() {
     const [currentPassword, setCurrentPassword] = useState('');
