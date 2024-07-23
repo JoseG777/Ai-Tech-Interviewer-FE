@@ -11,7 +11,6 @@ function Interview() {
   const { language, time } = location.state || { language: 'python', time: 15 };
 
   // ***************************** State variables *****************************
-  // 
   const [problem, setProblem] = useState(null);
   const [userResponse, setUserResponse] = useState(sessionStorage.getItem('userResponse') || '');
 
@@ -28,6 +27,7 @@ function Interview() {
   const [speechEvaluation, setSpeechEvaluation] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isEvaluating, setIsEvaluating] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false); // New state to track submission
 
   // Timer variables
   const [timer, setTimer] = useState(time * 60);
@@ -182,6 +182,7 @@ function Interview() {
       setSpeechEvaluation('An error occurred during evaluation.');
     } finally {
       setIsEvaluating(false);
+      setIsSubmitted(true); // Mark as submitted
     }
   }
 
@@ -239,14 +240,16 @@ function Interview() {
   useEffect(() => {
     const handleBeforeUnload = (event) => {
       console.log('Before unload event');
-      handleNavigation();
-      if (leaveAttemptsRef.current < 2) {
-        event.returnValue = 'Leaving this page will result in your work being automatically submitted!';
+      if (!isSubmitted) {
+        handleNavigation();
+        if (leaveAttemptsRef.current < 2) {
+          event.returnValue = 'Leaving this page will result in your work being automatically submitted!';
+        }
       }
     };
 
     const handleVisibilityChange = () => {
-      if (document.visibilityState === 'hidden') {
+      if (document.visibilityState === 'hidden' && !isSubmitted) {
         console.log("You have navigated away from the page");
         if (leaveAttemptsRef.current === 1) {
           // First leave attempt, show alert
@@ -260,7 +263,9 @@ function Interview() {
 
     const handleWindowBlur = () => {
       console.log("Window lost focus");
-      handleNavigation();
+      if (!isSubmitted) {
+        handleNavigation();
+      }
     };
 
     const handleWindowFocus = () => {
@@ -279,7 +284,7 @@ function Interview() {
       window.removeEventListener('blur', handleWindowBlur);
       window.removeEventListener('focus', handleWindowFocus);
     };
-  }, []);
+  }, [isSubmitted]);
 
   return (
     <div className="generate-problems-container">
@@ -307,9 +312,9 @@ function Interview() {
                   sessionStorage.setItem('userResponse', e.target.value); 
                 }}
                 placeholder="Type your response here..."
-                disabled={isEvaluating}
+                disabled={isEvaluating || isSubmitted} // Disable when evaluating or submitted
               />
-              <button onClick={handleEvaluateResponse} disabled={isEvaluating}>
+              <button onClick={handleEvaluateResponse} disabled={isEvaluating || isSubmitted}>
                 {isEvaluating ? 'Evaluating...' : 'Submit'}
               </button>
             </div>
@@ -330,8 +335,12 @@ function Interview() {
               <p>Final Grade: {speechEvaluation.final_grade}</p>
             </div>
           )}
-          <button id="start-btn" onClick={() => recognition.start()}>Start Speaking</button>
-          <button id="stop-btn" onClick={() => speechSynthesis.cancel()}>Stop Speaking</button>
+          {!isSubmitted ? (
+            <>
+              <button id="start-btn" onClick={() => recognition.start()}>Start Speaking</button>
+              <button id="stop-btn" onClick={() => speechSynthesis.cancel()}>Stop Speaking</button>
+            </>
+          ) : ( <button id="start-btn" onClick={() => navigate('/main')}>Go to Main</button>)}
         </>
       )}
     </div>
