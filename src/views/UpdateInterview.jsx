@@ -10,7 +10,7 @@ function UpdateInterview() {
     const handleUpdateInterview = async () => {
         const uid = sessionStorage.getItem('uid');
         try {
-            const response = await fetch('/api/updateInterview', {
+            const response = await fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/updateInterview`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ uid, upcoming_interview: interview })

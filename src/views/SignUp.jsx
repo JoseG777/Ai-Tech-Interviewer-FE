@@ -32,6 +32,7 @@ function SignUp() {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const userUid = userCredential.user.uid;
+      console.log('User signed up:', userUid);
 
       await saveUserToDatabase(userUid);
     } catch (error) {
@@ -44,39 +45,40 @@ function SignUp() {
 
   async function saveUserToDatabase(uid) {
     try {
-      const response = await fetch('/api/createUser', {
+      const response = await fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/createUser`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          uid,
-          email,
-        }),
+        body: JSON.stringify({ uid, email }),
       });
-
+  
       if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Server Error: ${errorText}`);
+        const errorText = await response.text(); // Read response as text
+        console.error('Server response was not OK:', errorText); // Log the HTML response
+        alert('An error occurred while creating your account. Please try again.');
+        return;
       }
-
+  
       const data = await response.json();
-      console.log(data);
-
-      if (response.ok) {
+      console.log('Response from server:', data);
+  
+      if (data.message === 'User created successfully') {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         sessionStorage.setItem('uid', userCredential.user.uid);
-        console.log(userCredential);
-
+        console.log('User signed in:', userCredential.user.uid);
+  
         navigate('/newuser');
       } else {
-        setError('Failed to create user in the database');
+        console.error('Server error:', data.message);
       }
     } catch (error) {
-      console.log(error.message);
-      setError('Failed to create user in the database');
+      console.error('Error saving user to database:', error.message);
+      alert('An error occurred while creating your account. Please try again.');
     }
   }
+  
+  
 
   return (
     <div className="auth-form-container">

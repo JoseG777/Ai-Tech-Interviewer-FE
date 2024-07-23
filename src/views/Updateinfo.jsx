@@ -23,7 +23,7 @@ function UpdateInfo() {
     const fetchCurrentValue = async () => {
       try {
         const uid = sessionStorage.getItem('uid');
-        const response = await fetch(`/api/getUserInfo?uid=${uid}`);
+        const response = await fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/getUserInfo?uid=${uid}`);
         const data = await response.json();
         setCurrentValue(data[field]);
       } catch (error) {

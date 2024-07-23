@@ -38,7 +38,7 @@ function NewUser() {
 
       console.log(uid, leetcode_username, coding_level, goal, upcoming_interview);
 
-      const response = await fetch('/api/newUser', {
+      const response = await fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/newUser`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

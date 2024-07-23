@@ -10,7 +10,7 @@ function UpdateGoal() {
     const handleUpdateGoal = async () => {
         const uid = sessionStorage.getItem('uid');
         try {
-            const response = await fetch('/api/updateGoal', {
+            const response = await fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/updateGoal`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ uid, current_goal: goal })

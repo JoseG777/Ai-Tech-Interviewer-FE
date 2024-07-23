@@ -10,7 +10,7 @@ function UpdateLevel() {
     const handleUpdateLevelDescription = async () => {
         const uid = sessionStorage.getItem('uid');
         try {
-            const response = await fetch('/api/updateLevel', {
+            const response = await fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/updateLevel`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ uid, level_description: description })

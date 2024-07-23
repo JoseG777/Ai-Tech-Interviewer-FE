@@ -25,7 +25,7 @@ function DeleteAccount() {
         reauthenticate(password).then(() => {
             const user = auth.currentUser;
             // Send user ID to backend before deleting the account from Firebase
-            fetch('/api/deleteUser', {
+            fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/deleteUser`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

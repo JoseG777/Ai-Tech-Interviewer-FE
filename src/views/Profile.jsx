@@ -25,7 +25,7 @@ function Profile() {
     const fetchUserInfo = async () => {
       try {
         const uid = sessionStorage.getItem('uid');
-        const response = await fetch(`/api/getUsers?uid=${uid}`);
+        const response = await fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/getUsers?uid=${uid}`);
         const data = await response.json();
         setUserInfo(data.user);
         setCodeGrades(data.code_grades);
