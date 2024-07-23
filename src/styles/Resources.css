@@ -26,8 +26,8 @@
 
 .resource-icon {
     width: 200px; 
-    height: 200px; /* Adjust the height as needed */
-    border-radius: 50%; /* Makes the image a circle */
+    height: 200px; 
+    border-radius: 50%; 
     object-fit: cover; 
    
     opacity: 0;
@@ -37,8 +37,8 @@
 .resources-icons a p {
     font-family: 'Arial', sans-serif; 
     font-size: 1rem; 
-    color: white; /* Makes text color white */
-    font-weight: bold; /* Makes text bold */
+    color: white; 
+    font-weight: bold; 
     margin-top: 0.5rem; 
 }
 

@@ -3,7 +3,7 @@
   position: relative; 
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* Changed to flex-start to align items at the top */
+  justify-content: flex-start; 
   align-items: center;
   height: 100vh;
   background-color: #1a1a1a; 
@@ -43,7 +43,7 @@
   align-items: center;
   width: 100%; 
   z-index: 5;
-  position: fixed; /* Changed to fixed to make it static */
+  position: fixed;
   top: 20px; 
 }
 
@@ -69,7 +69,7 @@
   background-color: #2a2a2a; 
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); 
-  margin-top: 80px; /* Added margin-top to make space for the fixed timer */
+  margin-top: 80px; 
 }
 
 .chat-message {

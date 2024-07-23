@@ -1,9 +1,9 @@
 /* Assuming this is in src/styles/App.css or src/styles/home.css */
 
 html, body, #root {
-  height: 100%; /* Full height to the root of your React app */
-  margin: 0; /* Removes default margin provided by browsers */
-  padding: 0; /* Removes default padding */
+  height: 100%; 
+  margin: 0;
+  padding: 0; 
   background-color: #10201a; 
   
 }
@@ -15,7 +15,7 @@ html, body, #root {
   align-items: center; 
   height: 100%; 
   text-align: center;
-  color: #f1eded; /* Sets text color */
+  color: #f1eded; 
   font-family: 'Courier New', Courier, monospace; 
 }
 
@@ -71,19 +71,19 @@ html, body, #root {
 
 .screen-button {
   max-width: 90%; 
-  background-color: #008080; /* Teal background color */
+  background-color: #008080; 
   color: white;
   border: none;
   margin: 5px;
   padding: 10px 15px; 
   cursor: pointer;
-  border-radius: 5px; /* Rounded corners for buttons */
+  border-radius: 5px; 
   font-size: 16px; 
-  font-family: 'Courier New', Courier, monospace; /* Consistent font style */
+  font-family: 'Courier New', Courier, monospace; 
 }
 
 .screen-button:hover {
-  background-color: #006666; /* Darker teal on hover */
+  background-color: #006666; 
 }
 
 /* Typing Animation */
@@ -99,13 +99,13 @@ html, body, #root {
 }
 
 .p-typing {
-  border-right: 2px solid white; /* Makes the caret */
+  border-right: 2px solid white;
   white-space: pre-wrap; 
   overflow-wrap: break-word;
   margin: 20px; 
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
   width: auto;
-  animation: typing 4s steps(40, end) forwards, /* Make sure to add 'forwards' here */
+  animation: typing 4s steps(40, end) forwards, 
              blink-caret 0.75s step-end infinite;
   font-family: 'Courier New', Courier, monospace;
   color: #f1eded;

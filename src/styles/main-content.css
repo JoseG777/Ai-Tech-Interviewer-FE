@@ -1,7 +1,7 @@
 /* General style for pages that include the navigation bar */
 .main-content {
-    margin-top: 50px; /* Same as the navigation bar height */
-    min-height: calc(100vh - 50px); /* Full viewport height minus the navigation bar */
+    margin-top: 50px;
+    min-height: calc(100vh - 50px); 
     padding: 20px;
     background-color: #10201a; 
     color: #fbf9f9;
