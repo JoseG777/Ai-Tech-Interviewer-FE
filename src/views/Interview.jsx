@@ -188,13 +188,17 @@ function Interview() {
 
   // ***************************** Timer function *****************************
   useEffect(() => {
-    if (timer === 0) {
-      handleEvaluateResponse();
-    } else {
+    if (!loading) {
       countdownRef.current = setInterval(() => {
         setTimer((prevTimer) => (prevTimer > 0 ? prevTimer - 1 : 0));
       }, 1000);
-      return () => clearInterval(countdownRef.current);
+    }
+    return () => clearInterval(countdownRef.current);
+  }, [loading]);
+  
+  useEffect(() => {
+    if (timer === 0) {
+      handleEvaluateResponse();
     }
   }, [timer]);
 
