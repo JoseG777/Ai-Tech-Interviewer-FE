@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../styles/UpdateForms.css';
 
 function UpdateInterview() {
     const [interview, setInterview] = useState('');
@@ -23,7 +24,7 @@ function UpdateInterview() {
     };
 
     return (
-        <div>
+        <div className="update-form-container">
             <h1>Update Upcoming Interview</h1>
             <input
                 type="text"

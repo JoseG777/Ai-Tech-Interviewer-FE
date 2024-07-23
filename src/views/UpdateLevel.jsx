@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../styles/UpdateForms.css';
 
 function UpdateLevel() {
     const [description, setDescription] = useState('');
@@ -23,7 +24,7 @@ function UpdateLevel() {
     };
 
     return (
-        <div>
+        <div className="update-form-container">
             <h1>Update Level Description</h1>
             <input
                 type="text"

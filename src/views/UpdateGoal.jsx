@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../styles/UpdateForms.css';
 
 function UpdateGoal() {
     const [goal, setGoal] = useState('');
@@ -23,7 +24,7 @@ function UpdateGoal() {
     };
 
     return (
-        <div>
+        <div className="update-form-container">
             <h1>Update Current Goal</h1>
             <input
                 type="text"
