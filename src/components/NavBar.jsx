@@ -22,7 +22,8 @@ function NavBar() {
         {isSignedIn ? (
           <>
             <Link to="/resources">Resources</Link> |
-            <Link to="/profile">Profile</Link> |
+            <Link to="/profile">Profile</Link> | 
+            <Link to="/history">History</Link> |
             <span onClick={handleLogout}>Logout</span>
           </>
         ) : (
