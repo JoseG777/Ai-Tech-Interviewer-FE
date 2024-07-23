@@ -30,4 +30,18 @@
   h2 {
     margin-bottom: 2rem;
   }
+
+.charts-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.chart {
+  margin: 20px 0;
+}
+
+.chart h3 {
+  text-align: center;
+}
   
