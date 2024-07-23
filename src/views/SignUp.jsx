@@ -1,4 +1,3 @@
-// src/views/SignUp.jsx
 import React, { useEffect, useState } from 'react';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
@@ -8,39 +7,38 @@ import '../styles/authform.css';
 function SignUp() {
   const navigate = useNavigate();
 
-  // Signing Up
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [uid, setUid] = useState('');
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (sessionStorage.getItem('uid')) {
-        // redirect to home page
-        navigate('/');
+      navigate('/');
     }
   }, [navigate]);
 
   async function handleSignUp(event) {
     event.preventDefault();
     if (password !== confirmPassword) {
-      console.log('Passwords do not match');
+      setError('Passwords do not match');
       return;
     }
 
-    setLoading(true); 
+    setLoading(true);
+    setError('');
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const userUid = userCredential.user.uid;
-      setUid(userUid); 
 
-      await saveUserToDatabase(userUid); 
+      await saveUserToDatabase(userUid);
     } catch (error) {
       console.log(error.message);
+      setError('Failed to sign up. Please try again.');
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   }
 
@@ -57,56 +55,66 @@ function SignUp() {
         }),
       });
 
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Server Error: ${errorText}`);
+      }
+
       const data = await response.json();
-      console.log(data); 
+      console.log(data);
 
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      sessionStorage.setItem('uid', userCredential.user.uid);
-      console.log(userCredential);
+      if (response.ok) {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        sessionStorage.setItem('uid', userCredential.user.uid);
+        console.log(userCredential);
 
-      navigate('/newuser');
+        navigate('/newuser');
+      } else {
+        setError('Failed to create user in the database');
+      }
     } catch (error) {
       console.log(error.message);
+      setError('Failed to create user in the database');
     }
   }
 
   return (
     <div className="auth-form-container">
-      <div className = "auth-form">
-    <form onSubmit={handleSignUp}>
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
-        disabled={loading}
-      />
-      <br />
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-        disabled={loading}
-      />
-      <br />
-      <input
-        type="password"
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
-        placeholder="Confirm Password"
-        disabled={loading}
-      />
-      <br/>
-      <div className="auth-form button">
-      <button type="submit" disabled={loading}>
-        {loading ? 'Signing Up...' : 'Register'}
-      </button>
+      <div className="auth-form">
+        <form onSubmit={handleSignUp}>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email"
+            disabled={loading}
+          />
+          <br />
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+            disabled={loading}
+          />
+          <br />
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            placeholder="Confirm Password"
+            disabled={loading}
+          />
+          <br />
+          {error && <p className="error">{error}</p>}
+          <div className="auth-form button">
+            <button type="submit" disabled={loading}>
+              {loading ? 'Signing Up...' : 'Register'}
+            </button>
+          </div>
+        </form>
       </div>
-    </form>
     </div>
-    </div>
-    
   );
 }
 
