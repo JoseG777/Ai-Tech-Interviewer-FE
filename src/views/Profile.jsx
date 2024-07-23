@@ -1,11 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Line, Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, LineElement, CategoryScale, LinearScale, PointElement, BarElement } from 'chart.js';
+import {
+  Chart as ChartJS,
+  LineElement,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  BarElement,
+  TimeScale
+} from 'chart.js';
+import 'chartjs-adapter-date-fns';
 import '../styles/main-content.css';
 import '../styles/Profile.css';
 
-ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, BarElement);
+ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, BarElement, TimeScale);
 
 function Profile() {
   const [userInfo, setUserInfo] = useState(null);
@@ -41,23 +50,57 @@ function Profile() {
     fetchUserInfo();
   }, []);
 
+  // Helper function to create a continuous date range
+  const createContinuousDateRange = (startDate, endDate) => {
+    const dateRange = [];
+    let currentDate = new Date(startDate);
+    while (currentDate <= new Date(endDate)) {
+      dateRange.push(new Date(currentDate).toISOString().split('T')[0]);
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    return dateRange;
+  };
+
   // Group attempts by date, ignoring time
   const groupedAttempts = attempts.reduce((acc, attempt) => {
     const date = new Date(attempt.saved_date).toISOString().split('T')[0];
-    if (!acc[date]) {
-      acc[date] = 0;
-    }
-    acc[date] += attempt.count;
+    acc[date] = (acc[date] || 0) + attempt.count;
     return acc;
   }, {});
 
-  // Prepare data for the bar graph (coding grades)
+  console.log('Grouped Attempts:', groupedAttempts);
+
+  const startDate = userInfo?.signup_date;
+  const endDate = new Date().toISOString().split('T')[0];
+  const dateRange = startDate ? createContinuousDateRange(startDate, endDate) : [];
+
+  console.log('Date Range:', dateRange);
+
+  const attemptsLineData = {
+    labels: dateRange,
+    datasets: [
+      {
+        label: 'Number of Attempts Per Date',
+        data: dateRange.map(date => groupedAttempts[date] || 0),
+        fill: false,
+        borderColor: 'rgba(255, 99, 132, 1)',
+        tension: 0.1,
+      },
+    ],
+  };
+
+  console.log('Attempts Line Data:', attemptsLineData);
+
+  const codeGradeCounts = Array.from({ length: 10 }, (_, i) => code_grades.filter(grade => grade.final_code_grade === i + 1).length);
+
+  const speechGradeCounts = Array.from({ length: 10 }, (_, i) => speech_grades.filter(grade => grade.final_speech_grade === i + 1).length);
+
   const codeBarData = {
     labels: Array.from({ length: 10 }, (_, i) => `Grade ${i + 1}`),
     datasets: [
       {
         label: 'Code Grades',
-        data: Array.from({ length: 10 }, (_, i) => code_grades[i]?.final_code_grade || 0),
+        data: codeGradeCounts,
         backgroundColor: 'rgba(54, 162, 235, 0.6)',
         borderColor: 'rgba(54, 162, 235, 1)',
         borderWidth: 1,
@@ -65,30 +108,15 @@ function Profile() {
     ],
   };
 
-  // Prepare data for the bar graph (speech grades)
   const speechBarData = {
     labels: Array.from({ length: 10 }, (_, i) => `Grade ${i + 1}`),
     datasets: [
       {
         label: 'Speech Grades',
-        data: Array.from({ length: 10 }, (_, i) => speech_grades[i]?.final_speech_grade || 0),
+        data: speechGradeCounts,
         backgroundColor: 'rgba(75, 192, 192, 0.6)',
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 1,
-      },
-    ],
-  };
-
-  // Prepare data for the line graph (coding attempts per date)
-  const attemptsLineData = {
-    labels: Object.keys(groupedAttempts),
-    datasets: [
-      {
-        label: 'Number of Attempts Per Date',
-        data: Object.values(groupedAttempts),
-        fill: false,
-        borderColor: 'rgba(255, 99, 132, 1)',
-        tension: 0.1,
       },
     ],
   };
@@ -130,14 +158,47 @@ function Profile() {
           <h3>Code Grades</h3>
           <Bar data={codeBarData} options={{ scales: { x: { ticks: { font: { size: 16 } } }, y: { ticks: { font: { size: 16 } } } } }} />
         </div>
+
+        <br />
+        <br />
+
         <div className="chart">
           <h3>Speech Grades</h3>
           <Bar data={speechBarData} options={{ scales: { x: { ticks: { font: { size: 16 } } }, y: { ticks: { font: { size: 16 } } } } }} />
         </div>
+
+        <br />
+        <br />
+
         <div className="chart">
           <h3>Coding Attempts Per Date</h3>
-          <Line data={attemptsLineData} options={{ scales: { x: { ticks: { font: { size: 16 } } }, y: { ticks: { font: { size: 16 } } } } }} />
+          <Line
+            data={attemptsLineData}
+            options={{
+              scales: {
+                x: {
+                  type: 'time',
+                  time: {
+                    unit: 'day', 
+                    tooltipFormat: 'yyyy-MM-dd', 
+                    displayFormats: {
+                      day: 'MMM d', 
+                    },
+                  },
+                  ticks: {
+                    font: { size: 16 },
+                  },
+                },
+                y: {
+                  ticks: { font: { size: 16 } },
+                },
+              },
+            }}
+          />
         </div>
+
+        <br />
+        <br />
       </div>
 
       <div className="profile-item">
