@@ -316,9 +316,9 @@ function Interview() {
                   sessionStorage.setItem('userResponse', e.target.value); 
                 }}
                 placeholder="Type your response here..."
-                disabled={isEvaluating || isSubmitted} // Disable when evaluating or submitted
+                disabled={isEvaluating || isSubmitted} 
               />
-              <button onClick={handleEvaluateResponse} disabled={isEvaluating || isSubmitted}>
+              <button id="start-btn" onClick={handleEvaluateResponse} disabled={isEvaluating || isSubmitted}>
                 {isEvaluating ? 'Evaluating...' : 'Submit'}
               </button>
             </div>
@@ -339,12 +339,16 @@ function Interview() {
               <p>Final Grade: {speechEvaluation.final_grade}</p>
             </div>
           )}
+          <div className="control-buttons">
           {!isSubmitted ? (
             <>
-              <button id="start-btn" onClick={() => recognition.start()}>Start Speaking</button>
-              <button id="stop-btn" onClick={() => speechSynthesis.cancel()}>Stop Speaking</button>
+                <div className="button-container">
+                  <button id="start-btn" onClick={() => recognition.start()}>Start Speaking</button>
+                  <button id="stop-btn" onClick={() => speechSynthesis.cancel()}>Stop Speaking</button>
+                </div>
             </>
           ) : ( <button id="start-btn" onClick={() => navigate('/main')}>Go to Main</button>)}
+        </div>
         </>
       )}
     </div>
