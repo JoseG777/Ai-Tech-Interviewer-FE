@@ -8,6 +8,7 @@ function SignUp() {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -23,6 +24,11 @@ function SignUp() {
     event.preventDefault();
     if (password !== confirmPassword) {
       setError('Passwords do not match');
+      return;
+    }
+
+    if (username.includes('@')) {
+      setError('Username cannot contain "@" symbol');
       return;
     }
 
@@ -50,13 +56,13 @@ function SignUp() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ uid, email }),
+        body: JSON.stringify({ uid, email, username }),
       });
   
       if (!response.ok) {
-        const errorText = await response.text(); // Read response as text
-        console.error('Server response was not OK:', errorText); // Log the HTML response
-        alert('An error occurred while creating your account. Please try again.');
+        const errorText = await response.text(); 
+        console.error('Server response was not OK:', errorText); 
+        alert('An error occurred while creating your account (DATABASE). Please try again.');
         return;
       }
   
@@ -85,29 +91,39 @@ function SignUp() {
       <div className="auth-form">
         <form onSubmit={handleSignUp}>
           <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
-            disabled={loading}
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
+              disabled={loading}
           />
-          <br />
+          <br/>
+          <p style={{ color: 'white' }}>Username must not contain the '@' symbol.</p>
           <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            disabled={loading}
+              type="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Username"
+              disabled={loading}
           />
-          <br />
+          <br/>
+          <p style={{ color: 'white' }}>Password must be at least 6 characters long.</p>
           <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            placeholder="Confirm Password"
-            disabled={loading}
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
+              disabled={loading}
           />
-          <br />
+          <br/>
+          <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Confirm Password"
+              disabled={loading}
+          />
+          <br/>
           {error && <p className="error">{error}</p>}
           <div className="auth-form button">
             <button type="submit" disabled={loading}>

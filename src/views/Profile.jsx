@@ -133,7 +133,7 @@ function Profile() {
     <div className="main-content">
       <div className="profile-container">
         <h1>Profile Page</h1>
-        <h2>Hello, {userInfo.username || 'User'}!</h2>
+        <h2>Hello, {userInfo.username}!</h2>
         <div className="profile-info">
           <div className="profile-item">
             <label>Level Description:</label>

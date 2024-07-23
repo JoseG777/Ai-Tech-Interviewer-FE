@@ -1,15 +1,14 @@
-// src/views/SignIn.jsx
-import React, { useState, useEffect } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
-import { auth } from '../firebaseConfig';
+import React, {useEffect, useState} from 'react';
+import {signInWithEmailAndPassword} from 'firebase/auth';
+import {useNavigate} from 'react-router-dom';
+import {auth} from '../firebaseConfig';
 import '../styles/authform.css';
 
 function SignIn() {
   const navigate = useNavigate();
 
   // Signing In
-  const [emailSignIn, setEmailSignIn] = useState('');
+  const [identifierSignIn, setIdentifierSignIn] = useState('');
   const [passwordSignIn, setPasswordSignIn] = useState('');
 
   useEffect(() => {
@@ -22,27 +21,54 @@ function SignIn() {
   async function handleSignIn(event) {
     event.preventDefault();
     try {
-      const user = await signInWithEmailAndPassword(auth, emailSignIn, passwordSignIn);
+
+      // user is logging in with username
+      let email = identifierSignIn
+      if (!identifierSignIn.includes('@')) {
+        // Fetch email based on username
+        const response = await fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username: identifierSignIn }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Username not found');
+        }
+
+        const data = await response.json();
+        if (!data.email) {
+          throw new Error('Email not found for the provided username');
+        }
+        email = data.email;
+      }
+
+      const user = await signInWithEmailAndPassword(auth, email, passwordSignIn);
       console.log(user);
 
       sessionStorage.setItem('uid', user.user.uid);
-      setEmailSignIn('');
+      setIdentifierSignIn('');
       setPasswordSignIn('');
       navigate('/main');
+
     } catch (error) {
       console.log(error.message);
     }
-  }
+
+    }
+
 
   return (
     <div className="auth-form-container">
       <div className = "auth-form">
     <form onSubmit={handleSignIn}>
       <input
-        type="email"
-        value={emailSignIn}
-        onChange={(e) => setEmailSignIn(e.target.value)}
-        placeholder="Email"
+        type="identifier"
+        value={identifierSignIn}
+        onChange={(e) => setIdentifierSignIn(e.target.value)}
+        placeholder="Email/Username"
       />
       <br />
       <input
