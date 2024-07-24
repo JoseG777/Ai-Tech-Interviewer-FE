@@ -1,6 +1,4 @@
-// src/Interview.js
-
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Camera from '../components/Camera';
 import '../styles/Interview.css';
@@ -9,47 +7,57 @@ function Interview() {
   const location = useLocation();
   const navigate = useNavigate();
   const leaveAttemptsRef = useRef(0);
-  const tabLeaveRef = useRef(0); // Ref to keep track of tab leaves
+  const tabLeaveRef = useRef(0); 
 
   const { language, time } = location.state || { language: 'python', time: 15 };
 
-  // State variables
+  //************************* State variables *************************
   const [problem, setProblem] = useState(null);
   const [userResponse, setUserResponse] = useState(sessionStorage.getItem('userResponse') || '');
   const [turnOffCamera, setTurnOffCamera] = useState(false);
 
-  // Speech Variables
+  //************************* Speech Variables ************************* 
   const [speechInput, setSpeechInput] = useState('');
   const [speechInputs, setSpeechInputs] = useState([]); 
   const [messages, setMessages] = useState([]);
   const [recognition, setRecognition] = useState(null);
   const [finalSpeech, setFinalSpeech] = useState('N/A');
-  const [userSpeechInputs, setUserSpeechInputs] = useState([]); // New state variable for user speech inputs
+  const [userSpeechInputs, setUserSpeechInputs] = useState([]); 
 
-  // Evaluation variables
+  //************************* Evaluation variables ************************* 
   const [codeEvaluation, setCodeEvaluation] = useState(null);
   const [speechEvaluation, setSpeechEvaluation] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isEvaluating, setIsEvaluating] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false); // New state to track submission
+  const [isSubmitted, setIsSubmitted] = useState(false); 
 
-  // Timer variables
+  //************************* Timer variables ************************* 
   const [timer, setTimer] = useState(time * 60);
   const countdownRef = useRef(null);
 
-  // Redirect to home if uid is not set
+  //************************* Redirect to home if uid is not set ************************* 
   useEffect(() => {
     if (!sessionStorage.getItem('uid')) {
       navigate('/');
     }
   }, [navigate]);
 
-  // Generate problem on component mount
+  //************************* Logging for debugging ************************* 
   useEffect(() => {
-    handleGenerateProblem();
+    console.log("Interview component mounted");
+
+    return () => {
+      console.log("Interview component unmounted");
+    };
   }, []);
 
-  // Initialize speech recognition
+  //************************* Generate problem on component mount ************************* 
+  useEffect(() => {
+    console.log("Generating problem on mount");
+    handleGenerateProblem();
+  }, []); 
+
+  //************************* Initialize speech recognition ************************* 
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
@@ -64,7 +72,7 @@ function Interview() {
       setMessages(prevMessages => [...prevMessages, { sender: 'User', text: speechResult }]);
       setSpeechInput(speechResult); 
       setSpeechInputs(prevInputs => [...prevInputs, speechResult]); 
-      setUserSpeechInputs(prevInputs => [...prevInputs, speechResult]); // Add user speech input to list
+      setUserSpeechInputs(prevInputs => [...prevInputs, speechResult]); 
 
       fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/chat`, {
         method: 'POST',
@@ -95,7 +103,7 @@ function Interview() {
     setRecognition(recognition);
   }, []);
 
-  // Combine user speech inputs into a single string whenever messages change
+  //************************* Combine user speech inputs into a single string whenever messages change ************************* 
   useEffect(() => {
     if (userSpeechInputs.length !== 0) {
       const combinedUserSpeech = userSpeechInputs.join(' ');
@@ -103,8 +111,9 @@ function Interview() {
     }
   }, [userSpeechInputs]);
 
-  // Generate a problem for the user to solve
-  async function handleGenerateProblem() {
+  //************************* Generate a problem for the user to solve ************************* 
+  const handleGenerateProblem = useCallback(async () => {
+    console.log("handleGenerateProblem called");
     const uid = sessionStorage.getItem('uid');
     try {
       const apiEndpoint = `${import.meta.env.VITE_APP_API_ENDPOINT}/api/generateProblem`;
@@ -125,16 +134,17 @@ function Interview() {
       const { formattedProblem, functionSignature } = parseProblem(data.problem);
       setProblem(formattedProblem);
       setUserResponse(functionSignature);
+
+      console.log("Problem generated and set");
       sessionStorage.setItem('problem', JSON.stringify(data.problem));
-      sessionStorage.setItem('userResponse', functionSignature); // Initialize user response in session storage
+      sessionStorage.setItem('userResponse', functionSignature);
+      setLoading(false); 
     } catch (error) {
       console.error('Error generating problem:', error);
-    } finally {
-      setLoading(false);
     }
-  }
+  }, [language]);
 
-  // Evaluate the user's response
+  //************************* Evaluate the user's response ************************* 
   async function handleEvaluateResponse() {
     console.log('Evaluating response...');
     setIsEvaluating(true);
@@ -186,11 +196,11 @@ function Interview() {
       setSpeechEvaluation('An error occurred during evaluation.');
     } finally {
       setIsEvaluating(false);
-      setIsSubmitted(true); // Mark as submitted
+      setIsSubmitted(true); 
     }
   }
 
-  // Timer function
+  //*************************  Timer function ************************* 
   useEffect(() => {
     if (!loading) {
       countdownRef.current = setInterval(() => {
@@ -212,7 +222,7 @@ function Interview() {
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  // Parse function
+  //*************************  Parse function ************************* 
   const parseProblem = (problem) => {
     if (!problem) return '';
 
@@ -232,7 +242,7 @@ function Interview() {
     return { formattedProblem, functionSignature: functionSignaturePart };
   };
 
-  // Navigation handler
+  //************************* Navigation handler ************************* 
   const handleNavigation = () => {
     leaveAttemptsRef.current += 1;
     console.log('Leave attempts:', leaveAttemptsRef.current);
@@ -260,12 +270,11 @@ function Interview() {
       if (document.visibilityState === 'hidden' && !isSubmitted) {
         console.log("You have navigated away from the page");
         if (leaveAttemptsRef.current === 1) {
-          // First leave attempt, show alert
           alert('Leaving this page will result in your work being automatically submitted! You will not be able to make changes to this submission');
         }
-        tabLeaveRef.current += 1; // Increment tab leave count
+        tabLeaveRef.current += 1;
       } else if (document.visibilityState === 'visible') {
-        tabLeaveRef.current = 0; // Reset tab leave count on return
+        tabLeaveRef.current = 0; 
       }
     };
 
@@ -278,7 +287,7 @@ function Interview() {
 
     const handleWindowFocus = () => {
       console.log("Window gained focus");
-      tabLeaveRef.current = 0; // Reset tab leave count on return
+      tabLeaveRef.current = 0; 
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);
@@ -297,9 +306,8 @@ function Interview() {
   return (
     <div className="generate-problems-container">
       <div className="camera-container">
-          
-          <Camera turnOff={turnOffCamera} />
-          </div>
+        <Camera turnOff={turnOffCamera} />
+      </div>
       {loading && (
         <div className="loading-container">
           <div className="spinner"></div>
@@ -307,12 +315,9 @@ function Interview() {
       )}
       {!loading && (
         <>
-          
           <div className="top-bar">
             <div className="timer">{formatTime(timer)}</div>
           </div>
-          
-         
           <div className="chat-box">
             {problem && (
               <div className="chat-message left">
@@ -334,7 +339,6 @@ function Interview() {
               </button>
             </div>
           </div>
-        
           {codeEvaluation && (
             <div className="evaluation-container">
               <h2>Code Evaluation</h2>
@@ -352,15 +356,19 @@ function Interview() {
             </div>
           )}
           <div className="control-buttons">
-          {!isSubmitted ? (
-            <>
+            {!isSubmitted ? (
+              <>
                 <div className="button-container">
                   <button id="start-btn" onClick={() => recognition.start()}>Start Speaking</button>
                   <button id="stop-btn" onClick={() => speechSynthesis.cancel()}>Stop Speaking</button>
                 </div>
-            </>
-          ) : ( <button id="start-btn" onClick={() => { setTurnOffCamera(true); navigate('/main'); }}>Go to Main</button>)}
-        </div>
+              </>
+            ) : (
+              <button id="start-btn" onClick={() => { setTurnOffCamera(true); navigate('/main', { replace: true }); window.location.reload(); }}>
+                Go to Main
+              </button>
+            )}
+          </div>
         </>
       )}
     </div>
