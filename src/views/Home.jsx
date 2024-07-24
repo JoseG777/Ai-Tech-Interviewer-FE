@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import '../styles/home.css'; 
 
 function Home() {
   const navigate = useNavigate(); 
+
+  useEffect(() => {
+    if (sessionStorage.getItem('uid')) {
+      navigate('/main');
+    }
+  }, []);
 
   const handleNavigate = (path) => {
     navigate(path);

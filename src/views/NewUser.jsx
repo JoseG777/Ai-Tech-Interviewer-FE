@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/NewUser.css';
+import logo from '../assets/EVE.png';
 
 function NewUser() {
     const [questionIndex, setQuestionIndex] = useState(0);
@@ -23,6 +24,13 @@ function NewUser() {
         setQuestionIndex(questionIndex + 1);
       }
     };
+
+    const handlePreviousClick = () => {
+      if (questionIndex > 0) {
+          setErrorMessage("");
+          setQuestionIndex(questionIndex - 1);
+      }
+    };
   
     const handleDoneClick = async () => {
       if (responses[questionIndex].trim() === "") {
@@ -36,7 +44,7 @@ function NewUser() {
       const goal = responses[2];
       const upcoming_interview = responses[3];
 
-      console.log(uid, leetcode_username, coding_level, goal, upcoming_interview);
+      // console.log(uid, leetcode_username, coding_level, goal, upcoming_interview);
 
       const response = await fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/newUser`, {
         method: 'POST',
@@ -62,36 +70,45 @@ function NewUser() {
       setResponses(newResponses);
     };
 
+    /*
     useEffect(() => {
       console.log(responses);
     },[responses]);
+    */
   
     return (
       <div className="new-user-container">
-        <div className="question-container">
-          <h2>{questions[questionIndex]}</h2>
-        </div>
-        <input
-          type="text"
-          value={responses[questionIndex]}
-          onChange={handleResponseChange}
-          className="response-input"
-          placeholder="Type your response here..."
-        />
-        {errorMessage && <p className="error-message">{errorMessage}</p>}
-        <div className="button-container">
-          {questionIndex < questions.length - 1 ? (
-            <button className="next-button" onClick={handleNextClick}>
-              Next
-            </button>
-          ) : (
-            <button className="done-button" onClick={handleDoneClick}>
-              Done
-            </button>
-          )}
-        </div>
+          <img src={logo} alt="Logo" className="logo" />
+          <div className="question-container">
+              <h2>{questions[questionIndex]}</h2>
+          </div>
+          <input
+              type="text"
+              value={responses[questionIndex]}
+              onChange={handleResponseChange}
+              className="response-input"
+              placeholder="Type your response here..."
+          />
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
+          <div className="button-container">
+              {questionIndex > 0 && (
+                  <button className="previous-button" onClick={handlePreviousClick}>
+                      Previous
+                  </button>
+              )}
+              {questionIndex < questions.length - 1 ? (
+                  <button className="next-button" onClick={handleNextClick}>
+                      Next
+                  </button>
+              ) : (
+                  <button className="done-button" onClick={handleDoneClick}>
+                      Done
+                  </button>
+              )}
+          </div>
       </div>
-    );
+  );
   }
   
   export default NewUser;
+
