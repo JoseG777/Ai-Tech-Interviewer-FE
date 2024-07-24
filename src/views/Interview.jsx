@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Camera from '../components/Camera';
+import LoadingTips from '../components/LoadingTips';
 import '../styles/Interview.css';
 
 function Interview() {
@@ -309,9 +310,7 @@ function Interview() {
         <Camera turnOff={turnOffCamera} />
       </div>
       {loading && (
-        <div className="loading-container">
-          <div className="spinner"></div>
-        </div>
+        <LoadingTips />
       )}
       {!loading && (
         <>
