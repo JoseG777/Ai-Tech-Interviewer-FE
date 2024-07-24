@@ -1,5 +1,8 @@
+// src/Interview.js
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import Camera from '../components/Camera';
 import '../styles/Interview.css';
 
 function Interview() {
@@ -10,9 +13,10 @@ function Interview() {
 
   const { language, time } = location.state || { language: 'python', time: 15 };
 
-  // ***************************** State variables *****************************
+  // State variables
   const [problem, setProblem] = useState(null);
   const [userResponse, setUserResponse] = useState(sessionStorage.getItem('userResponse') || '');
+  const [turnOffCamera, setTurnOffCamera] = useState(false);
 
   // Speech Variables
   const [speechInput, setSpeechInput] = useState('');
@@ -33,19 +37,19 @@ function Interview() {
   const [timer, setTimer] = useState(time * 60);
   const countdownRef = useRef(null);
 
-  // ***************************** Redirect to home if uid is not set *****************************
+  // Redirect to home if uid is not set
   useEffect(() => {
     if (!sessionStorage.getItem('uid')) {
       navigate('/');
     }
   }, [navigate]);
 
-  // ***************************** Generate problem on component mount *****************************
+  // Generate problem on component mount
   useEffect(() => {
     handleGenerateProblem();
   }, []);
 
-  // ***************************** Initialize speech recognition *****************************
+  // Initialize speech recognition
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
@@ -99,7 +103,7 @@ function Interview() {
     }
   }, [userSpeechInputs]);
 
-  // ***************************** Generate a problem for the user to solve *****************************
+  // Generate a problem for the user to solve
   async function handleGenerateProblem() {
     const uid = sessionStorage.getItem('uid');
     try {
@@ -130,7 +134,7 @@ function Interview() {
     }
   }
 
-  // ***************************** Evaluate the user's response *****************************
+  // Evaluate the user's response
   async function handleEvaluateResponse() {
     console.log('Evaluating response...');
     setIsEvaluating(true);
@@ -186,7 +190,7 @@ function Interview() {
     }
   }
 
-  // ***************************** Timer function *****************************
+  // Timer function
   useEffect(() => {
     if (!loading) {
       countdownRef.current = setInterval(() => {
@@ -208,7 +212,7 @@ function Interview() {
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  // ***************************** Parse function *****************************
+  // Parse function
   const parseProblem = (problem) => {
     if (!problem) return '';
 
@@ -228,7 +232,7 @@ function Interview() {
     return { formattedProblem, functionSignature: functionSignaturePart };
   };
 
-  // ***************************** Navigation handler *****************************
+  // Navigation handler
   const handleNavigation = () => {
     leaveAttemptsRef.current += 1;
     console.log('Leave attempts:', leaveAttemptsRef.current);
@@ -299,6 +303,7 @@ function Interview() {
       )}
       {!loading && (
         <>
+          <Camera turnOff={turnOffCamera} />
           <div className="top-bar">
             <div className="timer">{formatTime(timer)}</div>
           </div>
@@ -347,7 +352,7 @@ function Interview() {
                   <button id="stop-btn" onClick={() => speechSynthesis.cancel()}>Stop Speaking</button>
                 </div>
             </>
-          ) : ( <button id="start-btn" onClick={() => navigate('/main')}>Go to Main</button>)}
+          ) : ( <button id="start-btn" onClick={() => { setTurnOffCamera(true); navigate('/main'); }}>Go to Main</button>)}
         </div>
         </>
       )}

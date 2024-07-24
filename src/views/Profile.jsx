@@ -8,18 +8,21 @@ import {
   LinearScale,
   PointElement,
   BarElement,
-  TimeScale
+  TimeScale,
+  Title,
+  Tooltip,
+  Legend,
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import '../styles/main-content.css';
 import '../styles/Profile.css';
 
-ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, BarElement, TimeScale);
+ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, BarElement, TimeScale, Title, Tooltip, Legend);
 
 function Profile() {
   const [userInfo, setUserInfo] = useState(null);
-  const [code_grades, setCodeGrades] = useState([]);
-  const [speech_grades, setSpeechGrades] = useState([]);
+  const [codeGrades, setCodeGrades] = useState([]);
+  const [speechGrades, setSpeechGrades] = useState([]);
   const [attempts, setAttempts] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -50,38 +53,13 @@ function Profile() {
     fetchUserInfo();
   }, []);
 
-  // Helper function to create a continuous date range
-  const createContinuousDateRange = (startDate, endDate) => {
-    const dateRange = [];
-    let currentDate = new Date(startDate);
-    while (currentDate <= new Date(endDate)) {
-      dateRange.push(new Date(currentDate).toISOString().split('T')[0]);
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
-    return dateRange;
-  };
-
-  // Group attempts by date, ignoring time
-  const groupedAttempts = attempts.reduce((acc, attempt) => {
-    const date = new Date(attempt.saved_date).toISOString().split('T')[0];
-    acc[date] = (acc[date] || 0) + attempt.count;
-    return acc;
-  }, {});
-
-  console.log('Grouped Attempts:', groupedAttempts);
-
-  const startDate = userInfo?.signup_date;
-  const endDate = new Date().toISOString().split('T')[0];
-  const dateRange = startDate ? createContinuousDateRange(startDate, endDate) : [];
-
-  console.log('Date Range:', dateRange);
-
+  // Prepare data for the line chart
   const attemptsLineData = {
-    labels: dateRange,
+    labels: attempts.map(attempt => attempt.saved_date),
     datasets: [
       {
         label: 'Number of Attempts Per Date',
-        data: dateRange.map(date => groupedAttempts[date] || 0),
+        data: attempts.map(attempt => attempt.count),
         fill: false,
         borderColor: 'rgba(255, 99, 132, 1)',
         tension: 0.1,
@@ -89,11 +67,10 @@ function Profile() {
     ],
   };
 
-  console.log('Attempts Line Data:', attemptsLineData);
+  // console.log(attemptsLineData);
 
-  const codeGradeCounts = Array.from({ length: 10 }, (_, i) => code_grades.filter(grade => grade.final_code_grade === i + 1).length);
-
-  const speechGradeCounts = Array.from({ length: 10 }, (_, i) => speech_grades.filter(grade => grade.final_speech_grade === i + 1).length);
+  const codeGradeCounts = Array.from({ length: 10 }, (_, i) => codeGrades.filter(grade => grade.final_code_grade === i + 1).length);
+  const speechGradeCounts = Array.from({ length: 10 }, (_, i) => speechGrades.filter(grade => grade.final_speech_grade === i + 1).length);
 
   const codeBarData = {
     labels: Array.from({ length: 10 }, (_, i) => `Grade ${i + 1}`),

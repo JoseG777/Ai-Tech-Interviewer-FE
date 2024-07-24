@@ -1,9 +1,7 @@
-// src/Camera.js
-
 import React, { useEffect, useRef } from 'react';
 import '../styles/Camera.css';
 
-const Camera = () => {
+const Camera = ({ turnOff }) => {
   const videoRef = useRef(null);
 
   useEffect(() => {
@@ -24,10 +22,25 @@ const Camera = () => {
       if (videoRef.current && videoRef.current.srcObject) {
         const stream = videoRef.current.srcObject;
         const tracks = stream.getTracks();
-        tracks.forEach(track => track.stop());
+        tracks.forEach(track => {
+          console.log(`Stopping track: ${track.kind}`);
+          track.stop();
+        });
       }
+      console.log("Camera component unmounted and stream stopped.");
     };
   }, []);
+
+  useEffect(() => {
+    if (turnOff && videoRef.current && videoRef.current.srcObject) {
+      const stream = videoRef.current.srcObject;
+      const tracks = stream.getTracks();
+      tracks.forEach(track => {
+        console.log(`Stopping track: ${track.kind}`);
+        track.stop();
+      });
+    }
+  }, [turnOff]);
 
   return (
     <div className="camera-container">
