@@ -1,45 +1,42 @@
-/* Assuming this is in src/styles/App.css or src/styles/home.css */
-
 html, body, #root {
-  height: 100%; 
+  height: 100%;
   margin: 0;
-  padding: 0; 
-  background-color: #10201a; 
-  
+  padding: 0;
+  background-color: #f0e6d2; /* Darker beige background */
+  color: #2f4f4f; /* Dark sage green text */
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold; /* Bold text */
 }
 
 .App {
   display: flex;
   flex-direction: column;
-  justify-content: center; 
-  align-items: center; 
-  height: 100%; 
+  justify-content: center;
+  align-items: center;
+  height: 100%;
   text-align: center;
-  color: #f1eded; 
-  font-family: 'Courier New', Courier, monospace; 
-  font-size: 30px;
+  color: #2f4f4f; /* Dark sage green text */
 }
 
-
 .laptop {
-  width: 480px; 
+  width: 480px;
   height: 280px;
-  border: 3px solid #008080; 
-  border-radius: 10px; 
+  border: 3px solid #6b8e23; /* Sage green */
+  border-radius: 10px;
   position: relative;
   margin: 40px auto;
-  box-shadow: 0 4px 8px rgba(0, 128, 128, 0.2); 
+  box-shadow: 0 4px 8px rgba(107, 142, 35, 0.2); /* Sage green */
 }
 
 .laptop-screen {
-  background-color: #050101; 
-  width: 460px; 
+  background-color: #2f4f4f; /* Dark sage green */
+  width: 460px;
   height: 260px;
   position: absolute;
-  top: 10px; 
+  top: 10px;
   left: 10px;
-  border-bottom: none; 
-  border-radius: 5px 5px 0 0; 
+  border-bottom: none;
+  border-radius: 5px 5px 0 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -47,52 +44,50 @@ html, body, #root {
 }
 
 .laptop-connect {
-  background-color: #008080; 
+  background-color: #6b8e23; /* Sage green */
   width: 200px;
-  height: 20px; 
+  height: 20px;
   position: absolute;
-  bottom: -30px; 
+  bottom: -30px;
   right: 130px;
-  border-radius: 0 0 5px 5px; 
-  box-shadow: inset 0 -2px 4px rgba(255, 255, 255, 0.1); }
-
-.laptop-keyboard {
-  background-color: #008080; 
-  width: 480px; 
-  height: 100px;
-  position: absolute;
-  bottom: -150px; 
-  left: px; 
-  border-radius: 3px; 
-  box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.2); 
+  border-radius: 0 0 5px 5px;
+  box-shadow: inset 0 -2px 4px rgba(255, 255, 255, 0.1);
 }
 
-
-
+.laptop-keyboard {
+  background-color: #6b8e23; /* Sage green */
+  width: 480px;
+  height: 100px;
+  position: absolute;
+  bottom: -150px;
+  left: 0;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.2);
+}
 
 .screen-button {
-  max-width: 100%; 
-  background-color: #008080; 
+  max-width: 100%;
+  background-color: #6b8e23; /* Sage green */
   color: white;
   border: none;
   margin: 5px;
-  padding: 15px 30px; 
+  padding: 15px 30px;
   cursor: pointer;
-  border-radius: 5px; 
-  font-size: 22px; 
+  border-radius: 5px;
+  font-size: 22px;
   font-style: bold;
-  font-family: 'Courier New', Courier, monospace; 
+  font-family: 'Courier New', Courier, monospace;
 }
 
 .screen-button:hover {
-  background-color: #006666; 
+  background-color: #556b2f; /* Darker sage green */
 }
 
 /* Typing Animation */
 
 @keyframes typing {
   from { width: 0; }
-  to { width: 100%; }
+  to { width: 80%; }
 }
 
 @keyframes blink-caret {
@@ -102,17 +97,16 @@ html, body, #root {
 
 .p-typing {
   border-right: 2px solid white;
-  white-space: pre-wrap; 
+  white-space: pre-wrap; /* Allows text to wrap */
   overflow-wrap: break-word;
-  margin: 20px; 
+  margin: 10px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
-  width: auto;
-  animation: typing 4s steps(40, end) forwards, 
+  width: 300px; /* Smaller width to encourage wrapping */
+  animation: typing 4s steps(40, end) forwards,
              blink-caret 0.75s step-end infinite;
   font-family: 'Courier New', Courier, monospace;
-  color: #f1eded;
+  color: #2f4f4f; /* Dark sage green text */
 }
-
 
 /* Fly in */
 @keyframes fly-in {
@@ -130,4 +124,3 @@ html, body, #root {
   margin: 0.5em 0;
   animation: fly-in 1s ease-out forwards;
 }
-

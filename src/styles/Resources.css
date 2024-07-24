@@ -1,4 +1,3 @@
-/* src/styles/Resources.css */
 .resources-container {
     text-align: center;
     padding: 1rem;
@@ -8,83 +7,87 @@
     align-items: center;
     margin: 100px;
     font-size: 30px;
-    
-    
-}
-
-.resources-container h1 {
+    background-color: #f0e6d2; /* Darker beige background */
+    color: #2f4f4f; /* Dark sage green text */
+    font-weight: bold; /* Bold text */
+  }
+  
+  .resources-container h1 {
     margin-bottom: 2rem;
-}
-
-.resources-icons {
+    color: #2f4f4f; /* Dark sage green text */
+  }
+  
+  .resources-icons {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 1rem;
-}
-
-.resource-link {
+  }
+  
+  .resource-link {
     text-align: center;
     text-decoration: none;
     color: inherit;
     transition: transform 0.3s ease-in-out;
-}
-
-.resource-icon {
-    width: 200px; 
-    height: 200px; 
-    border-radius: 50%; 
-    object-fit: cover; 
+  }
+  
+  .resource-icon {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
     opacity: 0;
     animation: flyUp 1s ease-in-out forwards;
     transition: filter 0.3s ease-in-out;
-}
-
-.resources-icons a p {
-    font-family: 'Arial', sans-serif; 
-    font-size: 20px; 
-    color: white; 
-    font-weight: bold; 
-    margin-top: 0.5rem; 
-}
-
-.resource-link:hover .resource-icon {
+  }
+  
+  .resources-icons a p {
+    font-family: 'Arial', sans-serif;
+    font-size: 20px;
+    color: #2f4f4f; /* Dark sage green text */
+    font-weight: bold;
+    margin-top: 0.5rem;
+  }
+  
+  .resource-link:hover .resource-icon {
     filter: opacity();
-}
-
-.resource-link:nth-child(1) .resource-icon {
+  }
+  
+  .resource-link:nth-child(1) .resource-icon {
     animation-delay: 0s;
-}
-
-.resource-link:nth-child(2) .resource-icon {
+  }
+  
+  .resource-link:nth-child(2) .resource-icon {
     animation-delay: 0.2s;
-}
-
-.resource-link:nth-child(3) .resource-icon {
+  }
+  
+  .resource-link:nth-child(3) .resource-icon {
     animation-delay: 0.4s;
-}
-
-.resource-link:nth-child(4) .resource-icon {
+  }
+  
+  .resource-link:nth-child(4) .resource-icon {
     animation-delay: 0.6s;
-}
-
-.resource-link:nth-child(5) .resource-icon {
+  }
+  
+  .resource-link:nth-child(5) .resource-icon {
     animation-delay: 0.8s;
-}
-
-.resource-link p {
-    font-family: 'Arial', sans-serif; 
-    font-size: 1rem; 
-    color: #f5f2f2;
-    margin-top: 0.5rem; 
-}
-@keyframes flyUp {
+  }
+  
+  .resource-link p {
+    font-family: 'Arial', sans-serif;
+    font-size: 1rem;
+    color: #2f4f4f; /* Dark sage green text */
+    margin-top: 0.5rem;
+  }
+  
+  @keyframes flyUp {
     from {
-        transform: translateY(30px);
-        opacity: 0;
+      transform: translateY(30px);
+      opacity: 0;
     }
     to {
-        transform: translateY(0);
-        opacity: 1;
+      transform: translateY(0);
+      opacity: 1;
     }
-}
+  }
+  

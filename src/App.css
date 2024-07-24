@@ -1,10 +1,12 @@
-
 html, body {
-  height: 100%; /* Full viewport height */
-  width: 100%;  /* Full viewport width */
+  height: 100%;
+  width: 100%;
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* Prevent horizontal scroll */
+  overflow-x: hidden;
+  background-color: #f0e6d2; /* Darker beige background */
+  color: #2f4f4f; /* Dark sage green text */
+  font-weight: bold; /* Bold text */
 }
 
 #root {

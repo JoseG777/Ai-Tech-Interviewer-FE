@@ -5,7 +5,9 @@
   justify-content: center;
   height: calc(100vh - 50px);
   text-align: center;
-  background-color:#10201a;
+  background-color: #f0e6d2; /* Darker beige background */
+  color: #2f4f4f; /* Dark sage green text */
+  font-weight: bold; /* Bold text */
 }
 
 .start-button {
@@ -14,8 +16,8 @@
   justify-content: center;
   padding: 10px 20px;
   font-size: 22px;
-  color: #fff;
-  background-color: #60cd82; 
+  color: #f0e6d2; /* Beige text */
+  background-color: #6b8e23; /* Sage green background */
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -28,7 +30,7 @@
 }
 
 .start-button:hover {
-  background-color: #0056b3;
+  background-color: #556b2f; /* Darker sage green */
 }
 
 .difficulty-section {
@@ -48,13 +50,13 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  background-color: #008080; /* Blue background color */
-  color: white;
+  background-color: #6b8e23; /* Sage green background */
+  color: #f0e6d2; /* Beige text */
   transition: background-color 0.3s;
 }
 
 .difficulty-button:hover {
-  background-color: #005f7f; /* Darker blue on hover */
+  background-color: #556b2f; /* Darker sage green */
 }
 
 .custom-language {
@@ -62,15 +64,18 @@
 }
 
 .custom-language-input {
-  width: 300px; /* Increase the width of the input box */
-  padding: 15px; /* Increase padding for a larger input box */
+  width: 300px;
+  padding: 15px;
   font-size: 16px;
-  border: 2px solid #585e60;
+  border: 2px solid #2f4f4f;
   border-radius: 5px;
   outline: none;
   transition: border-color 0.3s;
+  background-color: #f0e6d2; /* Darker beige background */
+  color: #2f4f4f; /* Dark sage green text */
+  font-weight: bold; /* Bold text */
 }
 
 .custom-language-input:focus {
-  border-color: #005f7f; /* Darker blue on focus */
+  border-color: #556b2f; /* Darker sage green */
 }

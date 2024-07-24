@@ -1,156 +1,138 @@
-/* src/styles/UserHistory.css */
-
 .history-container {
-    display: flex;
-    flex-direction: column;
-    padding: 2rem;
-    margin-top: 5rem;
-    max-width: 100%;
-    margin: 50 auto;
-    color: white;
-    font-family: 'Courier New', Courier, monospace;
-    overflow-x: hidden;
-    position: relative;
-    height: calc(100vh - 50px);;
-    border-color: #fffdfd;
-  
-    
-    
-    
-  }
-  
-  .history-container h1 {
-    text-align: center;
-    margin-bottom: 1rem;
-    
-}
- 
-  button {
-    display: block;
-    margin: 20px auto;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    color: rgb(255, 255, 255);
-    background-color: #0f5a48;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    border-color: #c3c3c3;
-  }
-  
-  button:hover {
-    background-color: #0e8078;
-    border-color: #fffdfd;
-  }
-  
-  table {
-    width: 120%;
-    min-width: 1200px;
-    border-collapse: collapse;
-    margin-top: 1rem auto;
-    display: block; 
-    overflow-x: visible;
-    overflow-y: visible; /* Keep vertical scrolling normal */
-    margin-bottom: 50px;
-    border-color: #fffdfd
-    
-    
-    
-   
-  }
-  
-  .table-container {
-    overflow-x: auto;
-    max-height: 300%;  /* Example height */
-    padding-bottom: 20px; /* Space for scrollbar */
-    border: 1px;
-    border-color: 5px #fffdfd;
-    border-top: 5px solid white; 
-    border-bottom: 5px solid white;
-    
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  margin-top: 5rem;
+  max-width: 100%;
+  margin: 50 auto;
+  color: #2f4f4f; /* Dark sage green text */
+  font-family: 'Courier New', Courier, monospace;
+  overflow-x: hidden;
+  position: relative;
+  height: calc(100vh - 50px);
+  background-color: #f0e6d2; /* Darker beige background */
+  border-color: #2f4f4f;
+  font-weight: bold; /* Bold text */
 }
 
-  th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-    vertical-align: top;
-    word-wrap: break-word;
-    top: 0; 
-    z-index: 10; 
-    
-    
-  }
-  
-  th {
-    background-color: #081411;
-    color: white;
-    font-weight: bold;
-    position: sticky;
-    top: 0; 
-    z-index: 10; 
-    text-align: center;
-    
-    
-  }
-  
-  td {
-    background-color: #166347;
-    color: white;
-    word-wrap: break-word; 
-    text-align: center;
-  }
-  
-  tr:nth-child(even) td {
-    background-color: #0b3c3f;
-  }
-  
-  tr:hover td {
-    background-color: #3b9895;
-  }
-  
-  th, td {
-    border: 5px solid #fffdfd; 
-    
-  }
-  
-  .loading-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.8);
-    z-index: 10;
-    
-  }
-  
-  .spinner {
-    border: 4px solid rgba(0, 0, 0, 0.1);
-    border-left-color: #0c6b3f;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-    
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  } 
-  
-  .table-wrapper {
-    position: fixed;  /* Fixes the position relative to the viewport */
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: calc(100vh - 10rem); /* Same as container height */
-    overflow-x: auto; /* Horizontal scroll */
-    overflow-y: hidden; /* No vertical scroll here */
-    padding-bottom: 20px; /* Space for scrollbar */
-    
+.history-container h1 {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #2f4f4f; /* Dark sage green text */
+}
+
+button {
+  display: block;
+  margin: 20px auto;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  color: #f0e6d2; /* Beige text */
+  background-color: #6b8e23; /* Sage green background */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  border-color: #2f4f4f;
+}
+
+button:hover {
+  background-color: #556b2f; /* Darker sage green */
+  border-color: #2f4f4f;
+}
+
+table {
+  width: 120%;
+  min-width: 1200px;
+  border-collapse: collapse;
+  margin-top: 1rem auto;
+  display: block;
+  overflow-x: visible;
+  overflow-y: visible;
+  margin-bottom: 50px;
+  border-color: #2f4f4f;
+}
+
+.table-container {
+  overflow-x: auto;
+  max-height: 300%;
+  padding-bottom: 20px;
+  border: 1px solid #2f4f4f;
+  border-top: 5px solid #2f4f4f;
+  border-bottom: 5px solid #2f4f4f;
+}
+
+th, td {
+  border: 1px solid #2f4f4f;
+  padding: 8px;
+  text-align: left;
+  vertical-align: top;
+  word-wrap: break-word;
+  font-weight: bold; /* Bold text */
+}
+
+th {
+  background-color: #6b8e23; /* Sage green background */
+  color: #f0e6d2; /* Beige text */
+  font-weight: bold;
+  position: sticky;
+  top: 0;
+  text-align: center;
+}
+
+td {
+  background-color: #8fbc8f; /* Lighter sage green */
+  color: #2f4f4f; /* Dark sage green text */
+  word-wrap: break-word;
+  text-align: center;
+}
+
+tr:nth-child(even) td {
+  background-color: #a2d5c6; /* Lighter sage green */
+}
+
+tr:nth-child(odd) td {
+  background-color: #cde0c9; /* Slightly darker sage green */
+}
+
+tr:hover td {
+  background-color: #3cb371; /* Medium sea green */
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 10;
+}
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #6b8e23; /* Sage green */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.table-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: calc(100vh - 10rem);
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 20px;
+  border-top: 5px solid #2f4f4f;
+  border-bottom: 5px solid #2f4f4f;
 }
