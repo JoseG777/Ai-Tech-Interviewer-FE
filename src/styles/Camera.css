@@ -3,6 +3,12 @@
     justify-content: center;
     align-items: center;
     margin: 20px;
+    position: fixed;  /* Ensures visibility during scroll */
+    top: 0;           /* Positions at the top-left corner */
+    left: 0;          /* Positions at the top-left corner */
+    width: 200px;     /* Sets a specific size for the camera feed */
+    height: 150px;    /* Sets a specific size for the camera feed */
+    z-index: 100;     
   }
   
   .camera-video {
@@ -10,5 +16,19 @@
     height: 600px; 
     border: 2px solid #ccc;
     border-radius: 8px;
+    object-fit: cover;
   }
   
+  .camera-container {
+    display: flex;
+    position: fixed; 
+    top: 10px; 
+    left: -20px; 
+    width: 330px; 
+    height:500px; 
+    z-index: 100;
+    border: 2px solid #10201a; 
+    border-radius: 8px;
+    overflow: hidden; 
+    box-shadow: 0px 0px 10px rgba(30, 102, 102, 0.5); 
+  }

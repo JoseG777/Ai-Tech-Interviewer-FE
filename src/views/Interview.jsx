@@ -296,6 +296,10 @@ function Interview() {
 
   return (
     <div className="generate-problems-container">
+      <div className="camera-container">
+          
+          <Camera turnOff={turnOffCamera} />
+          </div>
       {loading && (
         <div className="loading-container">
           <div className="spinner"></div>
@@ -303,10 +307,12 @@ function Interview() {
       )}
       {!loading && (
         <>
-          <Camera turnOff={turnOffCamera} />
+          
           <div className="top-bar">
             <div className="timer">{formatTime(timer)}</div>
           </div>
+          
+         
           <div className="chat-box">
             {problem && (
               <div className="chat-message left">
@@ -328,6 +334,7 @@ function Interview() {
               </button>
             </div>
           </div>
+        
           {codeEvaluation && (
             <div className="evaluation-container">
               <h2>Code Evaluation</h2>

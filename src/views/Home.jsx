@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom'; 
-import '../styles/Home.css'; 
+import '../styles/home.css'; 
 
 function Home() {
   const navigate = useNavigate(); 
@@ -11,10 +11,11 @@ function Home() {
 
   return (
     <div className="App">
-      <h1>AI-Technical Interview</h1>
-      <h2 className="h2-fly-in">Welcome to your personal AI-technical Interview</h2>
+      <h1>EVE</h1>
+      <h2 className="h2-fly-in">Your Personal AI-Technical Interviewer awaits you</h2>
       <p className="p-typing">
-        This platform provides a unique way to prepare for your technical interviews with real-time feedback and AI-driven insights.
+        Eve provides a unique way to prepare for your technical interviews with real-time feedback and AI-driven insights.
+      
       </p>
       <div className="laptop">
         <div className="laptop-screen">

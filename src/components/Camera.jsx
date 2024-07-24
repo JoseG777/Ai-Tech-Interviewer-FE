@@ -6,6 +6,15 @@ const Camera = ({ turnOff }) => {
 
   useEffect(() => {
     const getVideo = async () => {
+      const constraints = {
+        video: {
+          width: { ideal: 1280 }, // Requesting higher resolution
+          height: { ideal: 720 },
+          // Attempt to control zoom, might not be supported by all devices
+          advanced: [{ zoom: { min: -10.0, ideal: -10.0, max: 10.0 } }]
+        }
+      };
+
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         if (videoRef.current) {
