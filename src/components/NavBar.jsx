@@ -18,7 +18,7 @@ function NavBar() {
   return (
     <nav>
       <div className="nav-left">
-        <Link to="/main">Home</Link> |
+        <Link to="/main">Interview</Link> |
         {isSignedIn ? (
           <>
             <Link to="/resources">Resources</Link> |
