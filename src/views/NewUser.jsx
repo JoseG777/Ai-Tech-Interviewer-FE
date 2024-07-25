@@ -8,6 +8,12 @@ function NewUser() {
     const [responses, setResponses] = useState(["", "", "", ""]); 
     const [errorMessage, setErrorMessage] = useState(""); 
     const navigate = useNavigate();
+
+    useEffect(() => {
+      if (!sessionStorage.getItem('uid')) {
+          navigate('/');
+      }
+    }, []);
   
     const questions = [
       "What is your LeetCode username? (If you don't have one, type 'N/A')",

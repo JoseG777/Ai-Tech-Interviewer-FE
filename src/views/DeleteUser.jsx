@@ -12,7 +12,7 @@ function DeleteAccount() {
         if (!sessionStorage.getItem('uid')) {
             navigate('/');
         }
-      }, [navigate]);
+      }, []);
       
     // make sures user exists
     const reauthenticate = (currentPassword) => {

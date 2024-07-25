@@ -7,6 +7,12 @@ function UpdateLevel() {
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if (!sessionStorage.getItem('uid')) {
+            navigate('/');
+        }
+      }, []);
+
     const handleUpdateLevelDescription = async () => {
         const uid = sessionStorage.getItem('uid');
         try {

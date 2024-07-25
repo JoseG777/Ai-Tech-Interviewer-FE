@@ -31,7 +31,7 @@ function Profile() {
     if (!sessionStorage.getItem('uid')) {
       navigate('/');
     }
-  }, [navigate]);
+  }, []);
 
   useEffect(() => {
     const fetchUserInfo = async () => {

@@ -11,6 +11,12 @@ function UpdatePassword() {
     const [success, setSuccess] = useState('');
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if (!sessionStorage.getItem('uid')) {
+            navigate('/');
+        }
+      }, []);
+
     const handlePasswordChange = async (event) => {
         event.preventDefault();
 

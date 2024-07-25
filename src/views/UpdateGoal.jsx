@@ -7,6 +7,12 @@ function UpdateGoal() {
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if (!sessionStorage.getItem('uid')) {
+            navigate('/');
+        }
+      }, []);
+
     const handleUpdateGoal = async () => {
         const uid = sessionStorage.getItem('uid');
         try {

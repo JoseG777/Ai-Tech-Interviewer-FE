@@ -7,7 +7,12 @@ function UserHistory() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  
+  useEffect(() => {
+    if (!sessionStorage.getItem('uid')) {
+        navigate('/');
+    }
+  }, []);
+
   useEffect(() => {
     const fetchUserHistory = async () => {
       const uid = sessionStorage.getItem('uid');

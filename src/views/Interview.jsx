@@ -41,7 +41,7 @@ function Interview() {
     if (!sessionStorage.getItem('uid')) {
       navigate('/');
     }
-  }, [navigate]);
+  }, []);
 
   //************************* Logging for debugging ************************* 
   useEffect(() => {

@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {signInWithEmailAndPassword} from 'firebase/auth';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, Link} from 'react-router-dom';
 import {auth} from '../firebaseConfig';
-import '../styles/authform.css';
+import '../styles/LoginSignUp.css'
+import logo from '../assets/EVE.png';
 
 function SignIn() {
   const navigate = useNavigate();
@@ -60,30 +61,39 @@ function SignIn() {
     }
 
 
-  return (
-    <div className="auth-form-container">
-      <div className = "auth-form">
-    <form onSubmit={handleSignIn}>
-      <input
-        type="identifier"
-        value={identifierSignIn}
-        onChange={(e) => setIdentifierSignIn(e.target.value)}
-        placeholder="Email/Username"
-      />
-      <br />
-      <input
-        type="password"
-        value={passwordSignIn}
-        onChange={(e) => setPasswordSignIn(e.target.value)}
-        placeholder="Password"
-      />
-      <br />
-      <div className="auth-form button">
-      <button type="submit">Login</button>
-    </div>  
-    </form>
-    </div>
-    </div>
+    return (
+      <div className="container">
+
+        <div className="header">
+          <img src={logo} alt="logo" id="logo"/>
+          <div className="text">Sign In</div>
+          <div className="underline"></div>
+        </div>
+        <form onSubmit={handleSignIn}>
+          <div className="inputs">
+            <div className="input">
+              <input
+                  type="text"
+                  value={identifierSignIn}
+                  onChange={(e) => setIdentifierSignIn(e.target.value)}
+                  placeholder="Email/Username"
+              />
+            </div>
+            <div className="input">
+              <input
+                  type="password"
+                  value={passwordSignIn}
+                  onChange={(e) => setPasswordSignIn(e.target.value)}
+                  placeholder="Password"
+              />
+            </div>
+          </div>
+          <div className="submit-container">
+            <button type="submit" className="submit">Login</button>
+          </div>
+        </form>
+        <p> Don't have an accout yet? <Link to="/signup"> Sign up! </Link> </p>
+      </div>
   );
 }
 

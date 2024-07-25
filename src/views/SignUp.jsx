@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { auth } from '../firebaseConfig';
-import '../styles/authform.css';
+import '../styles/LoginSignUp.css'
+import logo from '../assets/EVE.png';
 
 function SignUp() {
   const navigate = useNavigate();
@@ -89,51 +90,66 @@ function SignUp() {
   
 
   return (
-    <div className="auth-form-container">
-      <div className="auth-form">
-        <form onSubmit={handleSignUp}>
-          <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email"
-              disabled={loading}
-          />
-          <br/>
-          <p style={{ color: 'white' }}>Username must not contain the '@' symbol.</p>
-          <input
-              type="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Username"
-              disabled={loading}
-          />
-          <br/>
-          <p style={{ color: 'white' }}>Password must be at least 6 characters long.</p>
-          <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              disabled={loading}
-          />
-          <br/>
-          <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Confirm Password"
-              disabled={loading}
-          />
-          <br/>
-          {error && <p className="error">{error}</p>}
-          <div className="auth-form button">
-            <button type="submit" disabled={loading}>
-              {loading ? 'Signing Up...' : 'Register'}
-            </button>
-          </div>
-        </form>
+    <div className="container">
+
+      <div className="header">
+        <img src={logo} alt="Logo" id="logo" />
+        <div className="text">Sign Up</div>
+        <div className="underline"></div>
       </div>
+      <form onSubmit={handleSignUp}>
+        <div className="inputs">
+        <div className="input">
+            <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
+                disabled={loading}
+            />
+          </div>
+          <p style={{color: '#556b2f'}}>Username must not contain the '@' symbol.</p>
+          <div className="input">
+            <input
+                type="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Username"
+                disabled={loading}
+                className="input-field"
+            />
+          </div>
+          <p style={{color: '#556b2f'}}>Password must be at least 6 characters long.</p>
+          <div className="input">
+
+            <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                disabled={loading}
+                className="input-field"
+            />
+          </div>
+          <div className="input">
+            <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm Password"
+                disabled={loading}
+                className="input-field"
+            />
+          </div>
+        </div>
+
+        <div className="submit-container">
+          <button type="submit" className="submit" disabled={loading}>
+            {loading ? 'Signing Up...' : 'Register'}
+          </button>
+        </div>
+      </form>
+      <p>Already have an account? <Link to="/signin"> Sign in! </Link> </p>
     </div>
   );
 }

@@ -1,0 +1,94 @@
+/* holds entire sign/signup box*/
+.container{
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    margin: auto;
+    margin-top: 200px;
+    margin-bottom: 200px;
+    background: #fff;
+    padding-bottom: 30px;
+    border-radius: 25px;
+}
+
+
+.header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    margin-top: 30px;
+}
+
+.text{
+    color: #556b2f;
+    font-size: 48px;
+    font-weight: 700;
+}
+
+.underline{
+    width: 61px;
+    height: 6px;
+    background: #556b2f;
+    border-radius: 9px;
+}
+
+/*input boxes*/
+.inputs{
+    margin-top: 55px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+/*names for the input boxes*/
+.input{
+    display: flex;
+    align-items: center;
+    margin: auto;
+    width: 480px;
+    height: 80px;
+    background: #eaeaea;
+    border-radius: 6px;
+}
+
+/*.input img {
+}*/
+
+.input input{
+    height: 50px;
+    width: 400px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #797979;
+    font-size: 19px;
+
+}
+
+/*login/sign up box*/
+.submit-container{
+    display: flex;
+    gap: 30px;
+    margin: 60px auto;
+}
+
+.submit{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 220px;
+    height: 59px;
+    color: #fff;
+    background: #556b2f;
+    border-radius: 50px;
+    font-size: 19px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+#logo {
+    width: 200px;
+    height: 200px;
+}
