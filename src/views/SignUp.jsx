@@ -50,13 +50,15 @@ function SignUp() {
   }
 
   async function saveUserToDatabase(uid) {
+
+    const lowercasedUsername = username.toLowerCase();
     try {
       const response = await fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/createUser`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ uid, email, username }),
+        body: JSON.stringify({ uid, email, username: lowercasedUsername }),
       });
   
       if (!response.ok) {

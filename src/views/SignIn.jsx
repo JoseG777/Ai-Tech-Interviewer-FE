@@ -25,13 +25,13 @@ function SignIn() {
       // user is logging in with username
       let email = identifierSignIn
       if (!identifierSignIn.includes('@')) {
-        // Fetch email based on username
+        const lowercasedUsername = identifierSignIn.toLowerCase();
         const response = await fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ username: identifierSignIn }),
+          body: JSON.stringify({ username: lowercasedUsername }),
         });
 
         if (!response.ok) {
