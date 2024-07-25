@@ -26,8 +26,8 @@ button {
   margin: 20px auto;
   padding: 0.5rem 1rem;
   font-size: 1rem;
-  color: #f0e6d2; /* Beige text */
   background-color: #6b8e23; /* Sage green background */
+  color: #f0e6d2; /* Beige text */
   border: none;
   border-radius: 5px;
   cursor: pointer;
