@@ -18,6 +18,11 @@ html, body, #root {
   color: #2f4f4f; /* Dark sage green text */
 }
 
+#logo {
+  width: 200px;
+  height: 200px;
+}
+
 .laptop {
   width: 480px;
   height: 280px;
@@ -75,7 +80,7 @@ html, body, #root {
   cursor: pointer;
   border-radius: 5px;
   font-size: 22px;
-  font-style: bold;
+  font-weight: bold;
   font-family: 'Courier New', Courier, monospace;
 }
 
@@ -84,7 +89,6 @@ html, body, #root {
 }
 
 /* Typing Animation */
-
 @keyframes typing {
   from { width: 0; }
   to { width: 80%; }
