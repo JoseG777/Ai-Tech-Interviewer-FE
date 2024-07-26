@@ -1,0 +1,81 @@
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 50px);
+  text-align: center;
+  background-color: #f0e6d2; /* Darker beige background */
+  color: #2f4f4f; /* Dark sage green text */
+  font-weight: bold; /* Bold text */
+}
+
+.start-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  font-size: 22px;
+  color: #f0e6d2; /* Beige text */
+  background-color: #6b8e23; /* Sage green background */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 20px;
+}
+
+.start-button svg {
+  margin-right: 10px;
+}
+
+.start-button:hover {
+  background-color: #556b2f; /* Darker sage green */
+}
+
+.difficulty-section {
+  margin-top: 20px;
+}
+
+.difficulty-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.difficulty-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #6b8e23; 
+  color: #f0e6d2; 
+  transition: background-color 0.3s;
+}
+
+.difficulty-button:hover {
+  background-color: #556b2f; 
+}
+
+.custom-language {
+  margin-top: 20px;
+}
+
+.custom-language-input {
+  width: 300px;
+  padding: 15px;
+  font-size: 16px;
+  border: 2px solid #2f4f4f;
+  border-radius: 5px;
+  outline: none;
+  transition: border-color 0.3s;
+  background-color: #f0e6d2; 
+  color: #2f4f4f; 
+  font-weight: bold; 
+}
+
+.custom-language-input:focus {
+  border-color: #556b2f; 
+}

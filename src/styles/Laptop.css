@@ -1,0 +1,24 @@
+.laptop-canvas {
+  width: 100%;
+  height: 500px;
+  position: relative;
+}
+
+.sign-buttons {
+  position: absolute;
+  top: 50%;  
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.button {
+  margin: 5px;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
