@@ -7,14 +7,14 @@
     align-items: center;
     margin: 100px;
     font-size: 30px;
-    background-color: #f0e6d2; /* Darker beige background */
-    color: #2f4f4f; /* Dark sage green text */
-    font-weight: bold; /* Bold text */
+    background-color: #f0e6d2; 
+    color: #2f4f4f; 
+    font-weight: bold; 
 }
 
 .resources-container h1 {
     margin-bottom: 2rem;
-    color: #2f4f4f; /* Dark sage green text */
+    color: #2f4f4f; 
 }
 
 .resources-icons {
@@ -44,7 +44,7 @@
 .resources-icons a p {
     font-family: 'Arial', sans-serif;
     font-size: 20px;
-    color: #2f4f4f; /* Dark sage green text */
+    color: #2f4f4f; 
     font-weight: bold;
     margin-top: 0.5rem;
 }
@@ -76,7 +76,7 @@
 .resource-link p {
     font-family: 'Arial', sans-serif;
     font-size: 1rem;
-    color: #2f4f4f; /* Dark sage green text */
+    color: #2f4f4f; 
     margin-top: 0.5rem;
 }
 

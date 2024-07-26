@@ -50,13 +50,13 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  background-color: #6b8e23; /* Sage green background */
-  color: #f0e6d2; /* Beige text */
+  background-color: #6b8e23; 
+  color: #f0e6d2; 
   transition: background-color 0.3s;
 }
 
 .difficulty-button:hover {
-  background-color: #556b2f; /* Darker sage green */
+  background-color: #556b2f; 
 }
 
 .custom-language {
@@ -71,11 +71,11 @@
   border-radius: 5px;
   outline: none;
   transition: border-color 0.3s;
-  background-color: #f0e6d2; /* Darker beige background */
-  color: #2f4f4f; /* Dark sage green text */
-  font-weight: bold; /* Bold text */
+  background-color: #f0e6d2; 
+  color: #2f4f4f; 
+  font-weight: bold; 
 }
 
 .custom-language-input:focus {
-  border-color: #556b2f; /* Darker sage green */
+  border-color: #556b2f; 
 }

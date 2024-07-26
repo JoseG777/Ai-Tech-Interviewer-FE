@@ -5,15 +5,15 @@
   justify-content: center;
   height: 100vh;
   padding: 20px;
-  background-color: #f0e6d2; /* Darker beige background */
-  color: #2f4f4f; /* Dark sage green text */
-  font-weight: bold; /* Bold text */
+  background-color: #f0e6d2; 
+  color: #2f4f4f; 
+  font-weight: bold; 
 }
 
 .update-form-container h1 {
   margin-bottom: 20px;
   font-size: 24px;
-  color: #2f4f4f; /* Dark sage green text */
+  color: #2f4f4f;
 }
 
 .update-form-container input {
@@ -32,17 +32,17 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  background-color: #6b8e23; /* Sage green background */
-  color: #f0e6d2; /* Beige text */
+  background-color: #6b8e23; 
+  color: #f0e6d2; 
   transition: background-color 0.3s;
 }
 
 .update-form-container button:hover {
-  background-color: #556b2f; /* Darker sage green */
+  background-color: #556b2f;
 }
 
 .update-form-container p {
   margin-top: 20px;
   font-size: 16px;
-  color: #6b8e23; /* Sage green text */
+  color: #6b8e23; 
 }

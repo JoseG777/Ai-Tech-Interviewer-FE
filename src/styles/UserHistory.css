@@ -5,20 +5,20 @@
   margin-top: 5rem;
   max-width: 100%;
   margin: 50 auto;
-  color: #2f4f4f; /* Dark sage green text */
+  color: #2f4f4f; 
   font-family: 'Courier New', Courier, monospace;
   overflow-x: hidden;
   position: relative;
   height: calc(100vh - 50px);
-  background-color: #f0e6d2; /* Darker beige background */
+  background-color: #f0e6d2; 
   border-color: #2f4f4f;
-  font-weight: bold; /* Bold text */
+  font-weight: bold; 
 }
 
 .history-container h1 {
   text-align: center;
   margin-bottom: 1rem;
-  color: #2f4f4f; /* Dark sage green text */
+  color: #2f4f4f; 
 }
 
 button {
@@ -26,8 +26,8 @@ button {
   margin: 20px auto;
   padding: 0.5rem 1rem;
   font-size: 1rem;
-  background-color: #6b8e23; /* Sage green background */
-  color: #f0e6d2; /* Beige text */
+  background-color: #6b8e23; 
+  color: #f0e6d2; 
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -35,7 +35,7 @@ button {
 }
 
 button:hover {
-  background-color: #556b2f; /* Darker sage green */
+  background-color: #556b2f; 
   border-color: #2f4f4f;
 }
 
@@ -66,12 +66,12 @@ th, td {
   text-align: left;
   vertical-align: top;
   word-wrap: break-word;
-  font-weight: bold; /* Bold text */
+  font-weight: bold; 
 }
 
 th {
-  background-color: #6b8e23; /* Sage green background */
-  color: #f0e6d2; /* Beige text */
+  background-color: #6b8e23;
+  color: #f0e6d2; 
   font-weight: bold;
   position: sticky;
   top: 0;
@@ -79,18 +79,18 @@ th {
 }
 
 td {
-  background-color: #8fbc8f; /* Lighter sage green */
-  color: #2f4f4f; /* Dark sage green text */
+  background-color: #8fbc8f; 
+  color: #2f4f4f; 
   word-wrap: break-word;
   text-align: center;
 }
 
 tr:nth-child(even) td {
-  background-color: #a2d5c6; /* Lighter sage green */
+  background-color: #a2d5c6; 
 }
 
 tr:nth-child(odd) td {
-  background-color: #cde0c9; /* Slightly darker sage green */
+  background-color: #cde0c9; 
 }
 
 .loading-container {
@@ -108,7 +108,7 @@ tr:nth-child(odd) td {
 
 .spinner {
   border: 4px solid rgba(0, 0, 0, 0.1);
-  border-left-color: #6b8e23; /* Sage green */
+  border-left-color: #6b8e23; 
   border-radius: 50%;
   width: 40px;
   height: 40px;

@@ -3,11 +3,11 @@
     justify-content: center;
     align-items: center;
     margin: 20px;
-    position: fixed;  /* Ensures visibility during scroll */
-    top: 0;           /* Positions at the top-left corner */
-    left: 0;          /* Positions at the top-left corner */
-    width: 200px;     /* Sets a specific size for the camera feed */
-    height: 150px;    /* Sets a specific size for the camera feed */
+    position: fixed;  
+    top: 0;           
+    left: 0;         
+    width: 200px;   
+    height: 150px;   
     z-index: 100;     
   }
   

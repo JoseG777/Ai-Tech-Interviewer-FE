@@ -98,8 +98,8 @@ h2 {
   align-items: center;
   margin: 20px 0;
   padding: 10px;
-  background-color: #8fbc8f; /* Lighter sage green */
-  color: #2f4f4f; /* Dark sage green text */
+  background-color: #8fbc8f; 
+  color: #2f4f4f; 
   border: 1px solid #2f4f4f;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -114,5 +114,5 @@ h2 {
   display: block;
   font-size: 24px;
   margin-top: 5px;
-  color: #556b2f; /* Darker sage green */
+  color: #556b2f;
 }

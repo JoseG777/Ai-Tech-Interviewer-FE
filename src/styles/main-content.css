@@ -2,8 +2,8 @@
   margin-top: 50px;
   min-height: calc(100vh - 50px);
   padding: 20px;
-  background-color: #f0e6d2; /* Darker beige background */
-  color: #2f4f4f; /* Dark sage green text */
+  background-color: #f0e6d2;
+  color: #2f4f4f; 
   font-family: 'Courier New', Courier, monospace;
-  font-weight: bold; /* Bold text */
+  font-weight: bold;
 }
