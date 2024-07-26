@@ -16,7 +16,7 @@ function NewUser() {
     }, []);
   
     const questions = [
-      "What is your LeetCode username? (If you don't have one, type 'N/A')",
+      "What is your LeetCode username? (If you don't have one, leave this field blank)",
       "Describe your coding level",
       "Describe your goal",
       "Any upcoming interviews? If yes, which company? (If no, type 'N/A')"

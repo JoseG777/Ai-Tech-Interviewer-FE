@@ -24,6 +24,7 @@ function Profile() {
   const [codeGrades, setCodeGrades] = useState([]);
   const [speechGrades, setSpeechGrades] = useState([]);
   const [attempts, setAttempts] = useState([]);
+  const [leetcodeStats, setLeetcodeStats] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -43,6 +44,7 @@ function Profile() {
         setCodeGrades(data.code_grades);
         setSpeechGrades(data.speech_grades);
         setAttempts(data.attempts);
+        setLeetcodeStats(data.stats); // Updated to match the server response
       } catch (error) {
         console.error('Error fetching user info:', error);
       } finally {
@@ -66,8 +68,6 @@ function Profile() {
       },
     ],
   };
-
-  // console.log(attemptsLineData);
 
   const codeGradeCounts = Array.from({ length: 10 }, (_, i) => codeGrades.filter(grade => grade.final_code_grade === i + 1).length);
   const speechGradeCounts = Array.from({ length: 10 }, (_, i) => speechGrades.filter(grade => grade.final_speech_grade === i + 1).length);
@@ -110,18 +110,22 @@ function Profile() {
     <div className="main-content">
       <div className="profile-container">
         <h1>Profile Page</h1>
+
         <h2>Hello, {userInfo.username}!</h2>
+
         <div className="profile-info">
           <div className="profile-item">
             <label>Level Description:</label>
             <span>{userInfo.level_description}</span>
             <button onClick={() => navigate('/update-level-description')}>Update</button>
           </div>
+
           <div className="profile-item">
             <label>Goal:</label>
             <span>{userInfo.current_goal || 'Not set'}</span>
             <button onClick={() => navigate('/update-current-goal')}>Update</button>
           </div>
+
           <div className="profile-item">
             <label>Upcoming Interview:</label>
             <span>{userInfo.upcoming_interview || 'Not set'}</span>
@@ -129,6 +133,28 @@ function Profile() {
           </div>
         </div>
       </div>
+
+
+      {userInfo.leetcode_username && (
+        <div className="leetcode-stats">
+          <div>
+            <label>Overall Ratio</label>
+            <span>{leetcodeStats[0]}%</span>
+          </div>
+          <div>
+            <label>Easy Ratio</label>
+            <span>{leetcodeStats[1]}%</span>
+          </div>
+          <div>
+            <label>Medium Ratio</label>
+            <span>{leetcodeStats[2]}%</span>
+          </div>
+          <div>
+            <label>Hard Ratio</label>
+            <span>{leetcodeStats[3]}%</span>
+          </div>
+        </div>
+      )}
 
       <div className="charts-container">
         <div className="chart">
