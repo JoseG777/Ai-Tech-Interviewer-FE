@@ -1,5 +1,5 @@
 // src/views/ChangePassword.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
 import { auth } from '../firebaseConfig'; // Import auth from your firebase setup

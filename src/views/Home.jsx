@@ -19,7 +19,6 @@ function Home() {
   return (
     <div className="App">
       <img src={logo} alt="logo" id="logo" />
-      <h1>EVE</h1>
       <h2 className="h2-fly-in">Your Personal AI Technical Interviewer awaits you</h2>
       <p className="p-typing">
         Eve provides a unique way to prepare for your technical interviews with real-time feedback and AI-driven insights.

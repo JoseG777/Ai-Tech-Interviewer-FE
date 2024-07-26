@@ -338,22 +338,26 @@ function Interview() {
               </button>
             </div>
           </div>
-          {codeEvaluation && (
-            <div className="evaluation-container">
-              <h2>Code Evaluation</h2>
-              <p>Evaluation: {codeEvaluation.evaluation}</p>
-              <p>Feedback: {codeEvaluation.feedback}</p>
-              <p>Final Grade: {codeEvaluation.final_grade}</p>
-            </div>
-          )}
-          {speechEvaluation && (
-            <div className="evaluation-container">
-              <h2>Speech Evaluation</h2>
-              <p>Evaluation: {speechEvaluation.evaluation}</p>
-              <p>Feedback: {speechEvaluation.feedback}</p>
-              <p>Final Grade: {speechEvaluation.final_grade}</p>
-            </div>
-          )}
+
+          <div className={`evaluations-wrapper ${codeEvaluation && speechEvaluation ? 'evaluation-wrapper' : ''}`}>
+            {codeEvaluation && (
+              <div className="evaluation-container">
+                <h2>Code Evaluation</h2>
+                <p>Evaluation: {codeEvaluation.evaluation}</p>
+                <p>Feedback: {codeEvaluation.feedback}</p>
+                <p>Final Grade: {codeEvaluation.final_grade}</p>
+              </div>
+            )}
+            {speechEvaluation && (
+              <div className="evaluation-container">
+                <h2>Speech Evaluation</h2>
+                <p>Evaluation: {speechEvaluation.evaluation}</p>
+                <p>Feedback: {speechEvaluation.feedback}</p>
+                <p>Final Grade: {speechEvaluation.final_grade}</p>
+              </div>
+            )}
+          </div>
+
           <div className="control-buttons">
             {!isSubmitted ? (
               <>
