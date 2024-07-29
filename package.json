@@ -19,6 +19,7 @@
     "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1",
+    "react-resizable": "^3.0.5",
     "react-router-dom": "^6.25.0",
     "three": "^0.166.1"
   },
