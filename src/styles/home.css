@@ -85,7 +85,7 @@ html, body, #root {
 }
 
 .screen-button:hover {
-  background-color: #556b2f; /* Darker sage green */
+  background-color: #556b2f; 
 }
 
 /* Typing Animation */
