@@ -1,16 +1,23 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { ResizableBox } from 'react-resizable';
 import '../styles/Camera.css';
+import 'react-resizable/css/styles.css'; 
 
 const Camera = ({ turnOff }) => {
   const videoRef = useRef(null);
+  const containerRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false); 
+  const [isResizing, setIsResizing] = useState(false); 
+  const [position, setPosition] = useState({ top: 0, left: 0 }); 
+  const [size, setSize] = useState({ width: 330, height: 500 }); 
+  const [mouseStart, setMouseStart] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const getVideo = async () => {
       const constraints = {
         video: {
-          width: { ideal: 1280 }, // Requesting higher resolution
+          width: { ideal: 1280 },
           height: { ideal: 720 },
-          // Attempt to control zoom, might not be supported by all devices
           advanced: [{ zoom: { min: -10.0, ideal: -10.0, max: 10.0 } }]
         }
       };
@@ -51,9 +58,55 @@ const Camera = ({ turnOff }) => {
     }
   }, [turnOff]);
 
+  const handleMouseDown = (e) => {
+    if (e.target.classList.contains('resize-handle')) {
+      setIsResizing(true);
+    } else {
+      setIsDragging(true);
+      setMouseStart({ x: e.clientX, y: e.clientY });
+    }
+  };
+
+  const handleMouseMove = (e) => {
+    if (isDragging) {
+      const deltaX = e.clientX - mouseStart.x;
+      const deltaY = e.clientY - mouseStart.y;
+      setPosition((prevPosition) => ({
+        top: prevPosition.top + deltaY,
+        left: prevPosition.left + deltaX
+      }));
+      setMouseStart({ x: e.clientX, y: e.clientY });
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+    setIsResizing(false);
+  };
+
   return (
-    <div className="camera-container">
-      <video ref={videoRef} autoPlay className="camera-video" />
+    <div
+      ref={containerRef}
+      className="camera-container"
+      style={{ top: position.top, left: position.left, width: size.width, height: size.height }}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseUp}
+      onMouseDown={handleMouseDown}
+    >
+      <ResizableBox
+        width={size.width}
+        height={size.height}
+        minConstraints={[100, 100]}
+        maxConstraints={[800, 800]}
+        onResize={(e, data) => {
+          setSize({ width: data.size.width, height: data.size.height });
+        }}
+        handle={<span className="resize-handle" />}
+        resizeHandles={['se']}
+      >
+        <video ref={videoRef} autoPlay className="camera-video" />
+      </ResizableBox>
     </div>
   );
 };
