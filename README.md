@@ -24,6 +24,14 @@ Ensure you have the following in your environment variables:
 Then clone our backend repository [here](https://github.com/JoseG777/Ai-Tech-Interviewer-BE) and follow the instructions to run the backend.
 IMPORTANT: CLONE THE emergency_hosting BRANCH
 
+# What's next?
+- Implement caching
+- Add a better method of determining a users skill level
+- Create a static question bank for users to practice. These questions will be assigned levels and users will only be able to access questions of their level or higher. 
+- Create a system for users to raise their level
+- Improve system architecture
+
+
 # React + Vite
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
