@@ -10,7 +10,6 @@
     border-radius: 25px;
 }
 
-
 .header{
     display: flex;
     flex-direction: column;
@@ -21,7 +20,7 @@
 }
 
 .text{
-    color: #556b2f;
+    color: #0056b3;
     font-size: 48px;
     font-weight: 700;
 }
@@ -29,7 +28,7 @@
 .underline{
     width: 61px;
     height: 6px;
-    background: #556b2f;
+    background: #0056b3;
     border-radius: 9px;
 }
 
@@ -58,7 +57,6 @@
     outline: none;
     color: #797979;
     font-size: 19px;
-
 }
 
 .submit-container{
@@ -74,7 +72,7 @@
     width: 220px;
     height: 59px;
     color: #fff;
-    background: #556b2f;
+    background: #0056b3;
     border-radius: 50px;
     font-size: 19px;
     font-weight: 700;

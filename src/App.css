@@ -4,9 +4,9 @@ html, body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  background-color: #f0e6d2; /* Darker beige background */
-  color: #2f4f4f; /* Dark sage green text */
-  font-weight: bold; /* Bold text */
+  background-color: #e6f0ff; 
+  color: #004080; 
+  font-weight: bold; 
 }
 
 #root {
@@ -22,9 +22,11 @@ html, body {
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+  filter: drop-shadow(0 0 2em #007bffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }

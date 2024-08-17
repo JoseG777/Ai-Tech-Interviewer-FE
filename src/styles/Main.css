@@ -5,9 +5,9 @@
   justify-content: center;
   height: calc(100vh - 50px);
   text-align: center;
-  background-color: #f0e6d2; /* Darker beige background */
-  color: #2f4f4f; /* Dark sage green text */
-  font-weight: bold; /* Bold text */
+  background-color: #e6f0ff;
+  color: #004080;
+  font-weight: bold;
 }
 
 .start-button {
@@ -16,8 +16,8 @@
   justify-content: center;
   padding: 10px 20px;
   font-size: 22px;
-  color: #f0e6d2; /* Beige text */
-  background-color: #6b8e23; /* Sage green background */
+  color: #e6f0ff;
+  background-color: #007bff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -30,7 +30,7 @@
 }
 
 .start-button:hover {
-  background-color: #556b2f; /* Darker sage green */
+  background-color: #0056b3;
 }
 
 .difficulty-section {
@@ -50,13 +50,13 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  background-color: #6b8e23; 
-  color: #f0e6d2; 
+  background-color: #007bff; 
+  color: #e6f0ff; 
   transition: background-color 0.3s;
 }
 
 .difficulty-button:hover {
-  background-color: #556b2f; 
+  background-color: #0056b3; 
 }
 
 .custom-language {
@@ -67,15 +67,15 @@
   width: 300px;
   padding: 15px;
   font-size: 16px;
-  border: 2px solid #2f4f4f;
+  border: 2px solid #004080;
   border-radius: 5px;
   outline: none;
   transition: border-color 0.3s;
-  background-color: #f0e6d2; 
-  color: #2f4f4f; 
-  font-weight: bold; 
+  background-color: #e6f0ff;
+  color: #004080;
+  font-weight: bold;
 }
 
 .custom-language-input:focus {
-  border-color: #556b2f; 
+  border-color: #0056b3; 
 }

@@ -5,15 +5,15 @@
   justify-content: center;
   height: 100vh;
   padding: 20px;
-  background-color: #f0e6d2; 
-  color: #2f4f4f; 
+  background-color: #e6f0ff; 
+  color: #004080; 
   font-weight: bold; 
 }
 
 .update-form-container h1 {
   margin-bottom: 20px;
   font-size: 24px;
-  color: #2f4f4f;
+  color: #004080;
 }
 
 .update-form-container input {
@@ -21,7 +21,7 @@
   max-width: 400px;
   padding: 10px;
   margin-bottom: 20px;
-  border: 1px solid #2f4f4f;
+  border: 1px solid #004080;
   border-radius: 5px;
   font-size: 16px;
 }
@@ -32,17 +32,17 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  background-color: #6b8e23; 
-  color: #f0e6d2; 
+  background-color: #007bff; 
+  color: #ffffff; 
   transition: background-color 0.3s;
 }
 
 .update-form-container button:hover {
-  background-color: #556b2f;
+  background-color: #0056b3;
 }
 
 .update-form-container p {
   margin-top: 20px;
   font-size: 16px;
-  color: #6b8e23; 
+  color: #007bff; 
 }
