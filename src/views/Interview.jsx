@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Camera from '../components/Camera';
 import LoadingTips from '../components/LoadingTips';
+import SpeechRecognitionComponent from '../components/SpeechFunc';
 import '../styles/Interview.css';
 
 function Interview() {
@@ -12,158 +13,82 @@ function Interview() {
 
   const { language, time } = location.state || { language: 'python', time: 15 };
 
-  //************************* State variables *************************
   const [problem, setProblem] = useState(null);
   const [userResponse, setUserResponse] = useState(sessionStorage.getItem('userResponse') || '');
   const [turnOffCamera, setTurnOffCamera] = useState(false);
-
-  //************************* Speech Variables ************************* 
-  const [speechInput, setSpeechInput] = useState('');
-  const [speechInputs, setSpeechInputs] = useState([]); 
   const [messages, setMessages] = useState([]);
-  const [recognition, setRecognition] = useState(null);
-  const [finalSpeech, setFinalSpeech] = useState('N/A');
-  const [userSpeechInputs, setUserSpeechInputs] = useState([]); 
-
-  //************************* Evaluation variables ************************* 
-  const [codeEvaluation, setCodeEvaluation] = useState(null);
-  const [speechEvaluation, setSpeechEvaluation] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isEvaluating, setIsEvaluating] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false); 
-
-  //************************* Timer variables ************************* 
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [codeEvaluation, setCodeEvaluation] = useState(null);
+  const [speechEvaluation, setSpeechEvaluation] = useState(null);
   const [timer, setTimer] = useState(time * 60);
   const countdownRef = useRef(null);
 
-  //************************* Redirect to home if uid is not set ************************* 
   useEffect(() => {
     if (!sessionStorage.getItem('uid')) {
       navigate('/');
     }
   }, []);
 
-  //************************* Logging for debugging ************************* 
-  useEffect(() => {
-    console.log("Interview component mounted");
-
-    return () => {
-      console.log("Interview component unmounted");
-    };
-  }, []);
-
-  //************************* Generate problem on component mount ************************* 
   useEffect(() => {
     console.log("Generating problem on mount");
     handleGenerateProblem();
   }, []); 
 
-  //************************* Initialize speech recognition ************************* 
-  useEffect(() => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'en-US';
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-
-    recognition.onresult = (event) => {
-      const speechResult = event.results[0][0].transcript;
-      console.log('Speech received: ' + speechResult);
-
-      setMessages(prevMessages => [...prevMessages, { sender: 'User', text: speechResult }]);
-      setSpeechInput(speechResult); 
-      setSpeechInputs(prevInputs => [...prevInputs, speechResult]); 
-      setUserSpeechInputs(prevInputs => [...prevInputs, speechResult]); 
-
-      fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/chat`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ message: speechResult, problem: JSON.parse(sessionStorage.getItem('problem')) }),
-      })
-        .then(response => response.json())
-        .then(data => {
-          const aiResponse = data.ai_response;
-          setMessages(prevMessages => [...prevMessages, { sender: 'AI', text: aiResponse }]);
-
-          const utterance = new SpeechSynthesisUtterance(aiResponse);
-          speechSynthesis.speak(utterance);
-        })
-        .catch(error => console.error('Error:', error));
-    };
-
-    recognition.onspeechend = () => {
-      recognition.stop();
-    };
-
-    recognition.onerror = (event) => {
-      console.error('Error occurred in recognition: ' + event.error);
-    };
-
-    setRecognition(recognition);
-  }, []);
-
-  //************************* Combine user speech inputs into a single string whenever messages change ************************* 
-  useEffect(() => {
-    if (userSpeechInputs.length !== 0) {
-      const combinedUserSpeech = userSpeechInputs.join(' ');
-      setFinalSpeech(combinedUserSpeech);
-    }
-  }, [userSpeechInputs]);
-
-  //************************* Generate a problem for the user to solve ************************* 
+  // ************************************************************ GENERATE PROBLEM ************************************************************
   const handleGenerateProblem = useCallback(async () => {
     console.log("handleGenerateProblem called");
     const uid = sessionStorage.getItem('uid');
     try {
-      const apiEndpoint = `${import.meta.env.VITE_APP_API_ENDPOINT}/api/generateProblem`;
-      const response = await fetch(apiEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ uid, language }),
-      });
+        const apiEndpoint = `${import.meta.env.VITE_APP_API_ENDPOINT}/api/generateProblem`;
+        const response = await fetch(apiEndpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ uid, language }),
+        });
 
-      if (!response.ok) {
-        console.error(`HTTP error! status: ${response.status}`);
-        return;
-      }
+        if (!response.ok) {
+            console.error(`HTTP error! status: ${response.status}`);
+            return;
+        }
 
-      const data = await response.json();
-      const { formattedProblem, functionSignature } = parseProblem(data.problem);
-      setProblem(formattedProblem);
-      setUserResponse(functionSignature);
+        const data = await response.json();
+        const { formattedProblem, formattedProblemString, functionSignature } = parseProblem(data.problem);
 
-      console.log("Problem generated and set");
-      sessionStorage.setItem('problem', JSON.stringify(data.problem));
-      sessionStorage.setItem('userResponse', functionSignature);
-      setLoading(false); 
+        setProblem(formattedProblem);
+        setUserResponse(functionSignature);
+
+        sessionStorage.setItem('problem', formattedProblemString); 
+        sessionStorage.setItem('userResponse', functionSignature);
+        setLoading(false);
     } catch (error) {
-      console.error('Error generating problem:', error);
+        console.error('Error generating problem:', error);
     }
-  }, [language]);
+}, [language]);
+  
 
-  //************************* Evaluate the user's response ************************* 
+  // ************************************************************ EVALUATE RESPONSE ************************************************************
   async function handleEvaluateResponse() {
-    console.log('Evaluating response...');
+    // console.log('Evaluating response...');
     setIsEvaluating(true);
-
+  
     if (countdownRef.current) {
       clearInterval(countdownRef.current);
     }
-
+  
     const uid = sessionStorage.getItem('uid');
-    const problemFromSession = JSON.parse(sessionStorage.getItem('problem'));
+    const problemFromSession = sessionStorage.getItem('problem')
     const userResponseFromSession = sessionStorage.getItem('userResponse');
-
-    console.log(uid, problemFromSession, userResponseFromSession);
-
-    const combinedUserSpeech = userSpeechInputs.length > 0 
-    ? userSpeechInputs.map((input, index) => `${index + 1}. ${input}`).join(' ')
-    : 'N/A';
-
+    
+    const speechInput = messages.length > 0 
+      ? messages.map(msg => `${msg.sender}: ${msg.text}`).join(' ')
+      : 'N/A';
+  
+    console.log(uid, problemFromSession, "\n\n\n", userResponseFromSession, "\n\n\n", speechInput);
+  
     try {
       const apiEndpoint = `${import.meta.env.VITE_APP_API_ENDPOINT}/api/evaluateResponse`;
       const response = await fetch(apiEndpoint, {
@@ -175,10 +100,10 @@ function Interview() {
           problem: problemFromSession,
           userResponse: userResponseFromSession,
           uid,
-          speechInput: combinedUserSpeech,
+          speechInput, 
         }),
       });
-
+  
       if (!response.ok) {
         console.error(`HTTP error! status: ${response.status}`);
         setCodeEvaluation('An error occurred during evaluation.');
@@ -186,11 +111,12 @@ function Interview() {
         setIsEvaluating(false);
         return;
       }
-
+  
       const data = await response.json();
       setCodeEvaluation(data.code_evaluation);
       setSpeechEvaluation(data.speech_evaluation);
       console.log(data);
+
     } catch (error) {
       console.error('Error evaluating response:', error);
       setCodeEvaluation('An error occurred during evaluation.');
@@ -200,8 +126,18 @@ function Interview() {
       setIsSubmitted(true); 
     }
   }
+  
 
-  //*************************  Timer function ************************* 
+  // ************************************************************ SPEECH MESSAGE ************************************************************
+  const handleSpeechMessage = (userMessage, aiMessage) => {
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { sender: 'User', text: userMessage },
+      { sender: 'AI', text: aiMessage },
+    ]);
+  };
+
+  // ************************************************************ TIMER ************************************************************
   useEffect(() => {
     if (!loading) {
       countdownRef.current = setInterval(() => {
@@ -210,7 +146,7 @@ function Interview() {
     }
     return () => clearInterval(countdownRef.current);
   }, [loading]);
-  
+
   useEffect(() => {
     if (timer === 0) {
       handleEvaluateResponse();
@@ -223,7 +159,7 @@ function Interview() {
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  //*************************  Parse function ************************* 
+  // ************************************************************ Parser ************************************************************
   const parseProblem = (problem) => {
     if (!problem) return '';
 
@@ -240,10 +176,16 @@ function Interview() {
       </>
     );
 
-    return { formattedProblem, functionSignature: functionSignaturePart };
+    const formattedProblemString = `Problem Description:\n${descriptionPart}\n\n${examplesPart}\n\nConstraints:\n${constraintsPart}`;
+
+    return {
+        formattedProblem,
+        formattedProblemString,
+        functionSignature: functionSignaturePart
+    };
   };
 
-  //************************* Navigation handler ************************* 
+  // ************************************************************ NAVIGATION ************************************************************
   const handleNavigation = () => {
     leaveAttemptsRef.current += 1;
     console.log('Leave attempts:', leaveAttemptsRef.current);
@@ -358,19 +300,14 @@ function Interview() {
             )}
           </div>
 
+          <SpeechRecognitionComponent language={language} onMessageReceived={handleSpeechMessage} />
+
           <div className="control-buttons">
-            {!isSubmitted ? (
-              <>
-                <div className="button-container">
-                  <button id="start-btn" onClick={() => recognition.start()}>Start Speaking</button>
-                  <button id="stop-btn" onClick={() => speechSynthesis.cancel()}>Stop Speaking</button>
-                </div>
-              </>
-            ) : (
+            {isSubmitted ? (
               <button id="start-btn" onClick={() => { setTurnOffCamera(true); navigate('/main', { replace: true }); window.location.reload(); }}>
                 Go to Main
               </button>
-            )}
+            ) : null}
           </div>
         </>
       )}

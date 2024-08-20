@@ -1,4 +1,3 @@
-// src/components/Laptop.jsx
 import React from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, useGLTF } from '@react-three/drei';
@@ -7,7 +6,7 @@ import '../styles/Laptop.css';
 function LaptopModel() {
   const { scene } = useGLTF('src/assets/laptop/scene.gltf');
 
-  return <primitive object={scene} scale={0.5} />;  // Increase scale from 0.5 to 1.5 or more as needed
+  return <primitive object={scene} scale={0.5} />;  
 }
 
 function Laptop() {
