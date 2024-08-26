@@ -4,8 +4,8 @@ function SpeechRecognitionComponent({ language = 'en-US', onMessageReceived }) {
   const [recognition, setRecognition] = useState(null);
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  // const [previousAIResponse, setPreviousAIResponse] = useState('');
 
-  // Initialize speech recognition
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     
@@ -42,7 +42,6 @@ function SpeechRecognitionComponent({ language = 'en-US', onMessageReceived }) {
     };
   }, [language]);
 
-  // Toggle listening state
   const toggleListening = useCallback(() => {
     if (recognition) {
       if (isListening) {
@@ -55,9 +54,8 @@ function SpeechRecognitionComponent({ language = 'en-US', onMessageReceived }) {
     }
   }, [recognition, isListening]);
 
-  // Handle speech recognition completion
   const handleSpeechEnd = useCallback((speechResult) => {
-    speechSynthesis.cancel();  // Ensure any ongoing speech synthesis is canceled
+    speechSynthesis.cancel();
 
     fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/chat`, {
       method: 'POST',
@@ -65,11 +63,14 @@ function SpeechRecognitionComponent({ language = 'en-US', onMessageReceived }) {
       body: JSON.stringify({
         message: speechResult,
         problem: sessionStorage.getItem('problem'),
+        previousAIResponse: sessionStorage.getItem('previousAIResponse'),
       }),
     })
       .then((response) => response.json())
       .then((data) => {
         const aiResponse = data.ai_response;
+        sessionStorage.setItem('previousAIResponse', aiResponse);
+      
         onMessageReceived(speechResult, aiResponse);
         speakAIResponse(aiResponse);
       })
@@ -78,7 +79,6 @@ function SpeechRecognitionComponent({ language = 'en-US', onMessageReceived }) {
       });
   }, [onMessageReceived]);
 
-  // Handle AI response speaking
   const speakAIResponse = useCallback((aiResponse) => {
     if (!aiResponse) return;
 
@@ -93,7 +93,6 @@ function SpeechRecognitionComponent({ language = 'en-US', onMessageReceived }) {
     speechSynthesis.speak(utterance);
   }, []);
 
-  // Interrupt AI response
   const interruptAI = useCallback(() => {
     speechSynthesis.cancel();
     setIsSpeaking(false);

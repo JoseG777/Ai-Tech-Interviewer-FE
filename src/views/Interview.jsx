@@ -115,7 +115,12 @@ function Interview() {
       const data = await response.json();
       setCodeEvaluation(data.code_evaluation);
       setSpeechEvaluation(data.speech_evaluation);
-      console.log(data);
+      // console.log(data);
+
+      sessionStorage.removeItem('previousAIResponse');
+      sessionStorage.setItem('problem', '');
+      sessionStorage.setItem('userResponse', '');
+
 
     } catch (error) {
       console.error('Error evaluating response:', error);
@@ -300,14 +305,12 @@ function Interview() {
             )}
           </div>
 
-          <SpeechRecognitionComponent language={language} onMessageReceived={handleSpeechMessage} />
-
           <div className="control-buttons">
             {isSubmitted ? (
               <button id="start-btn" onClick={() => { setTurnOffCamera(true); navigate('/main', { replace: true }); window.location.reload(); }}>
                 Go to Main
               </button>
-            ) : null}
+            ) : <SpeechRecognitionComponent language={language} onMessageReceived={handleSpeechMessage} />}
           </div>
         </>
       )}
