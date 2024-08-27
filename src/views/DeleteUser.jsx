@@ -8,12 +8,6 @@ function DeleteAccount() {
     const navigate = useNavigate();
     const auth = getAuth();
 
-    useEffect(() => {
-        if (!sessionStorage.getItem('uid')) {
-            navigate('/');
-        }
-      }, []);
-      
     // make sures user exists
     const reauthenticate = (currentPassword) => {
         const user = auth.currentUser;

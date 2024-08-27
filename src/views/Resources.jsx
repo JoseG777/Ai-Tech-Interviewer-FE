@@ -11,12 +11,6 @@ import '../styles/Resources.css';
 function Resources() {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!sessionStorage.getItem('uid')) {
-        navigate('/');
-    }
-  }, []);
-
   return (
     <div className="main-content">
       <div className="resources-container">

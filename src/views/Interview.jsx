@@ -26,12 +26,6 @@ function Interview() {
   const countdownRef = useRef(null);
 
   useEffect(() => {
-    if (!sessionStorage.getItem('uid')) {
-      navigate('/');
-    }
-  }, []);
-
-  useEffect(() => {
     console.log("Generating problem on mount");
     handleGenerateProblem();
   }, []); 

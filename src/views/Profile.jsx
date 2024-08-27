@@ -29,12 +29,6 @@ function Profile() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!sessionStorage.getItem('uid')) {
-      navigate('/');
-    }
-  }, []);
-
-  useEffect(() => {
     const fetchUserInfo = async () => {
       try {
         const uid = sessionStorage.getItem('uid');

@@ -7,12 +7,6 @@ function UpdateInterview() {
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (!sessionStorage.getItem('uid')) {
-            navigate('/');
-        }
-      }, []);
-
     const handleUpdateInterview = async () => {
         const uid = sessionStorage.getItem('uid');
         try {

@@ -6,12 +6,6 @@ import logo from '../assets/EVE.png';
 function Home() {
   const navigate = useNavigate(); 
 
-  useEffect(() => {
-    if (sessionStorage.getItem('uid')) {
-      navigate('/main');
-    }
-  }, []);
-
   const handleNavigate = (path) => {
     navigate(path);
   };

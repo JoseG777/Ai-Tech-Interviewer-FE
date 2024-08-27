@@ -9,13 +9,6 @@ function Main() {
   const [customLanguage, setCustomLanguage] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
 
-
-  useEffect(() => {
-    if (!sessionStorage.getItem('uid')) {
-        navigate('/');
-    }
-  }, [navigate]);
-
   const languages = [
     'Python',
     'JavaScript',

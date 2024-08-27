@@ -15,20 +15,75 @@ import UpdateLevel from "./views/UpdateLevel.jsx";
 import UpdatePassword from "./views/UpdatePassword.jsx";
 import DeleteAccount from "./views/DeleteUser.jsx";
 import UserHistory from './views/UserHistory.jsx';
+import Exam from './views/UserExam.jsx';
+import withAuthAndExamCheck from './HOCs/CheckSignIn.jsx'; 
+import withNotSignedInCheck from './HOCs/CheckNotSignedIn.jsx';
 import './App.css';
 
-
 function App() {
+  // Wrapping components in proper HOC
+
+  // routes only for users who are signed in
+  const ProtectedMain = withAuthAndExamCheck(Main);
+  const ProtectedNewUser = withAuthAndExamCheck(NewUser);
+  const ProtectedInterview = withAuthAndExamCheck(Interview);
+  const ProtectedResources = withAuthAndExamCheck(Resources);
+  const ProtectedProfile = withAuthAndExamCheck(Profile);
+  const ProtectedUpdateGoal = withAuthAndExamCheck(UpdateGoal);
+  const ProtectedUpdateInterview = withAuthAndExamCheck(UpdateInterview);
+  const ProtectedUpdateLevel = withAuthAndExamCheck(UpdateLevel);
+  const ProtectedUpdatePassword = withAuthAndExamCheck(UpdatePassword);
+  const ProtectedDeleteAccount = withAuthAndExamCheck(DeleteAccount);
+  const ProtectedUserHistory = withAuthAndExamCheck(UserHistory);
+  const ProtectedExam = withAuthAndExamCheck(Exam);
+
+  // routes only for users who are not signed in
+  const HomeWithCheck = withNotSignedInCheck(Home);
+  const SignUpWithCheck = withNotSignedInCheck(SignUp);
+  const SignInWithCheck = withNotSignedInCheck(SignIn);
+
   return (
     <Router>
-      <MainLayout />
+      <MainLayout
+        ProtectedMain={ProtectedMain}
+        ProtectedNewUser={ProtectedNewUser}
+        ProtectedInterview={ProtectedInterview}
+        ProtectedResources={ProtectedResources}
+        ProtectedProfile={ProtectedProfile}
+        ProtectedUpdateGoal={ProtectedUpdateGoal}
+        ProtectedUpdateInterview={ProtectedUpdateInterview}
+        ProtectedUpdateLevel={ProtectedUpdateLevel}
+        ProtectedUpdatePassword={ProtectedUpdatePassword}
+        ProtectedDeleteAccount={ProtectedDeleteAccount}
+        ProtectedUserHistory={ProtectedUserHistory}
+        ProtectedExam={ProtectedExam}
+        HomeWithCheck={HomeWithCheck}
+        SignUpWithCheck={SignUpWithCheck}
+        SignInWithCheck={SignInWithCheck}
+      />
     </Router>
   );
 }
 
-function MainLayout() {
+function MainLayout({
+  ProtectedMain,
+  ProtectedNewUser,
+  ProtectedInterview,
+  ProtectedResources,
+  ProtectedProfile,
+  ProtectedUpdateGoal,
+  ProtectedUpdateInterview,
+  ProtectedUpdateLevel,
+  ProtectedUpdatePassword,
+  ProtectedDeleteAccount,
+  ProtectedUserHistory,
+  ProtectedExam,
+  HomeWithCheck,
+  SignUpWithCheck,
+  SignInWithCheck,
+}) {
   const location = useLocation();
-  const hideNavBarRoutes = ['/','/signin', '/signup', '/newuser', '/interview'];
+  const hideNavBarRoutes = ['/', '/signin', '/signup', '/newuser', '/interview', '/exam'];
 
   const shouldHideNavBar = hideNavBarRoutes.includes(location.pathname);
 
@@ -36,20 +91,21 @@ function MainLayout() {
     <>
       {!shouldHideNavBar && <NavBar />}
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/main" element={<Main />} />
-        <Route path="/newuser" element={<NewUser />} />
-        <Route path="/interview" element={<Interview />} />
-        <Route path="/resources" element={<Resources />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/update-password" element={<UpdatePassword />} />
-        <Route path="/update-current-goal" element={<UpdateGoal />} />
-        <Route path="/update-upcoming-interview" element={<UpdateInterview />} />
-        <Route path="/update-level-description" element={<UpdateLevel />} />
-        <Route path="/delete-account" element={<DeleteAccount />} />
-        <Route path="/history" element={<UserHistory />} />
+        <Route path="/" element={<HomeWithCheck />} />
+        <Route path="/signup" element={<SignUpWithCheck />} />
+        <Route path="/signin" element={<SignInWithCheck />} />
+        <Route path="/main" element={<ProtectedMain />} />
+        <Route path="/newuser" element={<ProtectedNewUser />} />
+        <Route path="/interview" element={<ProtectedInterview />} />
+        <Route path="/resources" element={<ProtectedResources />} />
+        <Route path="/profile" element={<ProtectedProfile />} />
+        <Route path="/update-password" element={<ProtectedUpdatePassword />} />
+        <Route path="/update-current-goal" element={<ProtectedUpdateGoal />} />
+        <Route path="/update-upcoming-interview" element={<ProtectedUpdateInterview />} />
+        <Route path="/update-level-description" element={<ProtectedUpdateLevel />} />
+        <Route path="/delete-account" element={<ProtectedDeleteAccount />} />
+        <Route path="/history" element={<ProtectedUserHistory />} />
+        <Route path="/exam" element={<ProtectedExam />} />
       </Routes>
     </>
   );

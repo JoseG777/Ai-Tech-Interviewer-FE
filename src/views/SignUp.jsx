@@ -15,12 +15,6 @@ function SignUp() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    if (sessionStorage.getItem('uid')) {
-      navigate('/');
-    }
-  }, [navigate]);
-
   async function handleSignUp(event) {
     event.preventDefault();
     if (password !== confirmPassword) {

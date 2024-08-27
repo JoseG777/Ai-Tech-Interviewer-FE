@@ -1,8 +1,7 @@
-// src/views/ChangePassword.jsx
 import React, { useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
-import { auth } from '../firebaseConfig'; // Import auth from your firebase setup
+import { auth } from '../firebaseConfig'; 
 
 function UpdatePassword() {
     const [currentPassword, setCurrentPassword] = useState('');
@@ -10,12 +9,6 @@ function UpdatePassword() {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const navigate = useNavigate();
-
-    useEffect(() => {
-        if (!sessionStorage.getItem('uid')) {
-            navigate('/');
-        }
-      }, []);
 
     const handlePasswordChange = async (event) => {
         event.preventDefault();
