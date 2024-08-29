@@ -24,7 +24,7 @@ function Profile() {
   const [codeGrades, setCodeGrades] = useState([]);
   const [speechGrades, setSpeechGrades] = useState([]);
   const [attempts, setAttempts] = useState([]);
-  const [leetcodeStats, setLeetcodeStats] = useState([]);
+  const [leetcodeStats, setLeetcodeStats] = useState([null, null, null, null]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -33,14 +33,14 @@ function Profile() {
         try {
             const response = await fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/getUsers`, {
                 method: 'GET',
-                credentials: 'include'  // Include credentials
+                credentials: 'include'  
             });
             const data = await response.json();
             setUserInfo(data.user);
-            setCodeGrades(data.code_grades);
-            setSpeechGrades(data.speech_grades);
-            setAttempts(data.attempts);
-            setLeetcodeStats(data.stats);
+            setCodeGrades(data.code_grades || []);
+            setSpeechGrades(data.speech_grades || []);
+            setAttempts(data.attempts || []);
+            setLeetcodeStats(data.stats || [null, null, null, null]);
         } catch (error) {
             console.error('Error fetching user info:', error);
         } finally {
@@ -49,10 +49,8 @@ function Profile() {
     };
 
     fetchUserInfo();
-}, []);
+  }, []);
 
-
-  // Prepare data for the line chart
   const attemptsLineData = {
     labels: attempts.map(attempt => attempt.saved_date),
     datasets: [
@@ -112,12 +110,6 @@ function Profile() {
 
         <div className="profile-info">
           <div className="profile-item">
-            <label>Level Description:</label>
-            <span>{userInfo.level_description}</span>
-            <button onClick={() => navigate('/update-level-description')}>Update</button>
-          </div>
-
-          <div className="profile-item">
             <label>Goal:</label>
             <span>{userInfo.current_goal || 'Not set'}</span>
             <button onClick={() => navigate('/update-current-goal')}>Update</button>
@@ -131,25 +123,35 @@ function Profile() {
         </div>
       </div>
 
-
-      {userInfo.leetcode_username && (
+      {userInfo.leetcode_username ? (
+        <>
         <div className="leetcode-stats">
           <div>
             <label>Overall Ratio</label>
-            <span>{leetcodeStats[0]}%</span>
+            <span>{leetcodeStats[0] !== null ? `${leetcodeStats[0]}%` : 'N/A'}</span>
           </div>
           <div>
             <label>Easy Ratio</label>
-            <span>{leetcodeStats[1]}%</span>
+            <span>{leetcodeStats[1] !== null ? `${leetcodeStats[1]}%` : 'N/A'}</span>
           </div>
           <div>
             <label>Medium Ratio</label>
-            <span>{leetcodeStats[2]}%</span>
+            <span>{leetcodeStats[2] !== null ? `${leetcodeStats[2]}%` : 'N/A'}</span>
           </div>
           <div>
             <label>Hard Ratio</label>
-            <span>{leetcodeStats[3]}%</span>
+            <span>{leetcodeStats[3] !== null ? `${leetcodeStats[3]}%` : 'N/A'}</span>
           </div>
+        </div>
+        <div className="profile-item">
+          <button onClick={() => navigate('/add-leetcode')}>Update LeetCode Username</button>
+        </div>
+        </>
+      ) : (
+        <div className="profile-item">
+          <p>LeetCode stats are not available. Please link your LeetCode account through username.</p>
+          <br/>
+          <button onClick={() => navigate('/add-leetcode')}>Add LeetCode Username</button>
         </div>
       )}
 

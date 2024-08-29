@@ -156,7 +156,6 @@ const sampleQuestions = [
 ];
 
 
-
 function Exam() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState({});
@@ -174,6 +173,22 @@ function Exam() {
     }));
   };
 
+  const handleNextQuestion = () => {
+    if (currentQuestionIndex < sampleQuestions.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+    }
+  };
+
+  const handlePreviousQuestion = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(currentQuestionIndex - 1);
+    }
+  };
+
+  const handleStartExam = () => {
+    setShowIntro(false);
+  };
+
   const handleSubmit = () => {
     fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/grade_exam`, {
       method: 'POST',
@@ -186,21 +201,10 @@ function Exam() {
     .then(response => response.json())
     .then(data => {
       console.log('Exam Results:', data);
-      sessionStorage.setItem("exam_taken", "1")
+      sessionStorage.setItem("exam_taken", "1");
       navigate('/main'); 
     })
     .catch(error => console.error('Error grading exam:', error));
-  };
-  
-
-  const handlePreviousQuestion = () => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(currentQuestionIndex - 1);
-    }
-  };
-
-  const handleStartExam = () => {
-    setShowIntro(false);
   };
 
   return (

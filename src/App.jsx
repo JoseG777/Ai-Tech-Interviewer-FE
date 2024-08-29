@@ -11,11 +11,11 @@ import Resources from './views/Resources';
 import Profile from './views/Profile';
 import UpdateGoal from "./views/UpdateGoal.jsx";
 import UpdateInterview from "./views/UpdateInterview.jsx";
-import UpdateLevel from "./views/UpdateLevel.jsx";
 import UpdatePassword from "./views/UpdatePassword.jsx";
 import DeleteAccount from "./views/DeleteUser.jsx";
 import UserHistory from './views/UserHistory.jsx';
 import Exam from './views/UserExam.jsx';
+import AddLeetCode from './views/AddLeetCode.jsx';
 import withAuthAndExamCheck from './HOCs/CheckSignIn.jsx'; 
 import withNotSignedInCheck from './HOCs/CheckNotSignedIn.jsx';
 import './App.css';
@@ -31,7 +31,7 @@ function App() {
   const ProtectedProfile = withAuthAndExamCheck(Profile);
   const ProtectedUpdateGoal = withAuthAndExamCheck(UpdateGoal);
   const ProtectedUpdateInterview = withAuthAndExamCheck(UpdateInterview);
-  const ProtectedUpdateLevel = withAuthAndExamCheck(UpdateLevel);
+  const ProtectedAddLeetCode = withAuthAndExamCheck(AddLeetCode);
   const ProtectedUpdatePassword = withAuthAndExamCheck(UpdatePassword);
   const ProtectedDeleteAccount = withAuthAndExamCheck(DeleteAccount);
   const ProtectedUserHistory = withAuthAndExamCheck(UserHistory);
@@ -52,7 +52,7 @@ function App() {
         ProtectedProfile={ProtectedProfile}
         ProtectedUpdateGoal={ProtectedUpdateGoal}
         ProtectedUpdateInterview={ProtectedUpdateInterview}
-        ProtectedUpdateLevel={ProtectedUpdateLevel}
+        ProtectedAddLeetCode={ProtectedAddLeetCode}
         ProtectedUpdatePassword={ProtectedUpdatePassword}
         ProtectedDeleteAccount={ProtectedDeleteAccount}
         ProtectedUserHistory={ProtectedUserHistory}
@@ -73,7 +73,7 @@ function MainLayout({
   ProtectedProfile,
   ProtectedUpdateGoal,
   ProtectedUpdateInterview,
-  ProtectedUpdateLevel,
+  ProtectedAddLeetCode,
   ProtectedUpdatePassword,
   ProtectedDeleteAccount,
   ProtectedUserHistory,
@@ -97,12 +97,12 @@ function MainLayout({
         <Route path="/main" element={<ProtectedMain />} />
         <Route path="/newuser" element={<ProtectedNewUser />} />
         <Route path="/interview" element={<ProtectedInterview />} />
+        <Route path="/add-leetcode" element={<ProtectedAddLeetCode />} />
         <Route path="/resources" element={<ProtectedResources />} />
         <Route path="/profile" element={<ProtectedProfile />} />
         <Route path="/update-password" element={<ProtectedUpdatePassword />} />
         <Route path="/update-current-goal" element={<ProtectedUpdateGoal />} />
         <Route path="/update-upcoming-interview" element={<ProtectedUpdateInterview />} />
-        <Route path="/update-level-description" element={<ProtectedUpdateLevel />} />
         <Route path="/delete-account" element={<ProtectedDeleteAccount />} />
         <Route path="/history" element={<ProtectedUserHistory />} />
         <Route path="/exam" element={<ProtectedExam />} />
