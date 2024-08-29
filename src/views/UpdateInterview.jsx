@@ -8,12 +8,12 @@ function UpdateInterview() {
     const navigate = useNavigate();
 
     const handleUpdateInterview = async () => {
-        const uid = sessionStorage.getItem('uid');
         try {
             const response = await fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/updateInterview`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ uid, upcoming_interview: interview })
+                body: JSON.stringify({ upcoming_interview: interview }),
+                credentials: 'include' 
             });
             const data = await response.json();
             setMessage(data.message);
@@ -22,6 +22,7 @@ function UpdateInterview() {
             console.error('Error updating interview:', error);
         }
     };
+    
 
     return (
         <div className="update-form-container">

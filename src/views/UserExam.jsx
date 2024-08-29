@@ -160,7 +160,7 @@ const sampleQuestions = [
 function Exam() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState({});
-  const [showIntro, setShowIntro] = useState(true); // State to handle showing the introduction
+  const [showIntro, setShowIntro] = useState(true); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -175,14 +175,13 @@ function Exam() {
   };
 
   const handleSubmit = () => {
-    const uid = sessionStorage.getItem('uid');
-
     fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/grade_exam`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ answers: userAnswers, uid: uid }),
+      body: JSON.stringify({ answers: userAnswers }),
+      credentials: 'include',  
     })
     .then(response => response.json())
     .then(data => {
@@ -192,12 +191,7 @@ function Exam() {
     })
     .catch(error => console.error('Error grading exam:', error));
   };
-
-  const handleNextQuestion = () => {
-    if (currentQuestionIndex < sampleQuestions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-    }
-  };
+  
 
   const handlePreviousQuestion = () => {
     if (currentQuestionIndex > 0) {
@@ -206,7 +200,7 @@ function Exam() {
   };
 
   const handleStartExam = () => {
-    setShowIntro(false); // Hide the introduction and show the exam
+    setShowIntro(false);
   };
 
   return (

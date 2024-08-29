@@ -14,55 +14,75 @@ function SignIn() {
   async function handleSignIn(event) {
     event.preventDefault();
     try {
-      let email = identifierSignIn;
-      if (!identifierSignIn.includes('@')) {
-        const lowercasedUsername = identifierSignIn.toLowerCase();
-        const response = await fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/login`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ username: lowercasedUsername }),
+        let email = identifierSignIn;
+        if (!identifierSignIn.includes('@')) {
+            const lowercasedUsername = identifierSignIn.toLowerCase();
+            const response = await fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username: lowercasedUsername }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Username not found');
+            }
+
+            const data = await response.json();
+            if (!data.email) {
+                throw new Error('Email not found for the provided username');
+            }
+            email = data.email;
+        }
+
+        const userCredential = await signInWithEmailAndPassword(auth, email, passwordSignIn);
+        console.log('User signed in.');
+        const uid = userCredential.user.uid;
+
+        const jwtResponse = await fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/authenticate`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ uid }),
+            credentials: 'include' 
         });
 
-        if (!response.ok) {
-          throw new Error('Username not found');
+        if (!jwtResponse.ok) {
+            throw new Error('Failed to authenticate with backend');
         }
 
-        const data = await response.json();
-        if (!data.email) {
-          throw new Error('Email not found for the provided username');
+        console.log('JWT authentication successful: ', jwtResponse);
+
+        const examStatusResponse = await fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/get_exam_status`, {
+          method: 'GET',
+          credentials: 'include',
+        });
+        
+
+        if (!examStatusResponse.ok) {
+            throw new Error('Failed to retrieve exam status');
         }
-        email = data.email;
-      }
 
-      const user = await signInWithEmailAndPassword(auth, email, passwordSignIn);
-      console.log(user);
+        const examStatusData = await examStatusResponse.json();
+        const examTaken = examStatusData.exam_status;
 
-      sessionStorage.setItem('uid', user.user.uid);
-      const examStatusResponse = await fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/get_exam_status`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ uid: user.user.uid }),
-      });
+        if (examTaken === "0") {
+            navigate('/exam');
+        } else {
+            navigate('/main');
+        }
 
-      if (!examStatusResponse.ok) {
-        throw new Error('Failed to retrieve exam status');
-      }
-
-      const examStatusData = await examStatusResponse.json();
-      sessionStorage.setItem('exam_taken', examStatusData.exam_status);
-
-      setIdentifierSignIn('');
-      setPasswordSignIn('');
-      navigate('/main');
+        setIdentifierSignIn('');
+        setPasswordSignIn('');
 
     } catch (error) {
-      console.log(error.message);
+        console.log(error.message);
     }
-  }
+}
+
+  
 
   return (
     <div className="container">

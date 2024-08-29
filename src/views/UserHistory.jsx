@@ -9,9 +9,10 @@ function UserHistory() {
 
   useEffect(() => {
     const fetchUserHistory = async () => {
-      const uid = sessionStorage.getItem('uid');
       try {
-        const response = await fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/getUserHistory?uid=${uid}`);
+        const response = await fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/getUserHistory`, {
+          credentials: 'include', 
+        });
         const data = await response.json();
         if (data.history) {
           setHistory(data.history);
@@ -22,6 +23,7 @@ function UserHistory() {
         setLoading(false);
       }
     };
+    
 
     fetchUserHistory();
   }, []);

@@ -65,6 +65,7 @@ function SpeechRecognitionComponent({ language = 'en-US', onMessageReceived }) {
         problem: sessionStorage.getItem('problem'),
         previousAIResponse: sessionStorage.getItem('previousAIResponse'),
       }),
+      credentials: 'include',
     })
       .then((response) => response.json())
       .then((data) => {

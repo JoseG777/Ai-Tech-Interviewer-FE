@@ -18,44 +18,40 @@ function DeleteAccount() {
     const handleDeleteAccount = () => {
         reauthenticate(password).then(() => {
             const user = auth.currentUser;
-            // Send user ID to backend before deleting the account from Firebase
+    
             fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/deleteUser`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.accessToken}`,
                 },
-                body: JSON.stringify({ uid: user.uid })
             })
-                .then(response => response.json())
-                .then(data => {
-
-                    // delete account from firebase
-                    if (data.success) {
-                        deleteUser(user).then(() => {
-                            sessionStorage.removeItem("accessToken");
-                            navigate('/');
-                            location.reload();
-                            alert("Account deleted successfully!");
-                        }).catch((error) => {
-                            console.error("Error deleting account", error);
-                            alert("Error deleting account. Please try again.");
-                        });
-                    } else {
-
-                        // error handling for database (should never pop up since user must be logged in to del acct
-                        console.error("Error deleting user data from backend", data.error);
-                        alert("Error deleting user data from backend. Please try again.");
-                    }
-                })
-                .catch((error) => {
-                    console.error("Error sending user ID to backend:", error);
-                    alert("Error communicating with backend. Please try again.");
-                });
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    deleteUser(user).then(() => {
+                        navigate('/');
+                        location.reload();
+                        alert("Account deleted successfully!");
+                    }).catch((error) => {
+                        console.error("Error deleting account", error);
+                        alert("Error deleting account. Please try again.");
+                    });
+                } else {
+                    console.error("Error deleting user data from backend", data.error);
+                    alert("Error deleting user data from backend. Please try again.");
+                }
+            })
+            .catch((error) => {
+                console.error("Error sending user ID to backend:", error);
+                alert("Error communicating with backend. Please try again.");
+            });
         }).catch((error) => {
             console.error("Reauthentication failed", error);
             alert("Reauthentication failed. Please check your password and try again.");
         });
     };
+    
 
     // styling
     return (

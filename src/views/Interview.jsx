@@ -32,16 +32,16 @@ function Interview() {
 
   // ************************************************************ GENERATE PROBLEM ************************************************************
   const handleGenerateProblem = useCallback(async () => {
-    console.log("handleGenerateProblem called");
-    const uid = sessionStorage.getItem('uid');
     try {
         const apiEndpoint = `${import.meta.env.VITE_APP_API_ENDPOINT}/api/generateProblem`;
         const response = await fetch(apiEndpoint, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, "$1")}`, 
             },
-            body: JSON.stringify({ uid, language }),
+            body: JSON.stringify({ language }),
+            credentials: 'include',
         });
 
         if (!response.ok) {
@@ -61,70 +61,67 @@ function Interview() {
     } catch (error) {
         console.error('Error generating problem:', error);
     }
-}, [language]);
+  }, [language]);
+
   
 
   // ************************************************************ EVALUATE RESPONSE ************************************************************
   async function handleEvaluateResponse() {
-    // console.log('Evaluating response...');
     setIsEvaluating(true);
   
     if (countdownRef.current) {
-      clearInterval(countdownRef.current);
+        clearInterval(countdownRef.current);
     }
-  
-    const uid = sessionStorage.getItem('uid');
+
     const problemFromSession = sessionStorage.getItem('problem')
     const userResponseFromSession = sessionStorage.getItem('userResponse');
     
     const speechInput = messages.length > 0 
-      ? messages.map(msg => `${msg.sender}: ${msg.text}`).join(' ')
-      : 'N/A';
-  
-    console.log(uid, problemFromSession, "\n\n\n", userResponseFromSession, "\n\n\n", speechInput);
+        ? messages.map(msg => `${msg.sender}: ${msg.text}`).join(' ')
+        : 'N/A';
   
     try {
-      const apiEndpoint = `${import.meta.env.VITE_APP_API_ENDPOINT}/api/evaluateResponse`;
-      const response = await fetch(apiEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          problem: problemFromSession,
-          userResponse: userResponseFromSession,
-          uid,
-          speechInput, 
-        }),
-      });
-  
-      if (!response.ok) {
-        console.error(`HTTP error! status: ${response.status}`);
-        setCodeEvaluation('An error occurred during evaluation.');
-        setSpeechEvaluation('An error occurred during evaluation.');
-        setIsEvaluating(false);
-        return;
-      }
-  
-      const data = await response.json();
-      setCodeEvaluation(data.code_evaluation);
-      setSpeechEvaluation(data.speech_evaluation);
-      // console.log(data);
+        const apiEndpoint = `${import.meta.env.VITE_APP_API_ENDPOINT}/api/evaluateResponse`;
+        const response = await fetch(apiEndpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, "$1")}`,
+            },
+            body: JSON.stringify({
+                problem: problemFromSession,
+                userResponse: userResponseFromSession,
+                speechInput, 
+            }),
+            credentials: 'include',
+        });
 
-      sessionStorage.removeItem('previousAIResponse');
-      sessionStorage.setItem('problem', '');
-      sessionStorage.setItem('userResponse', '');
+        if (!response.ok) {
+            console.error(`HTTP error! status: ${response.status}`);
+            setCodeEvaluation('An error occurred during evaluation.');
+            setSpeechEvaluation('An error occurred during evaluation.');
+            setIsEvaluating(false);
+            return;
+        }
 
+        const data = await response.json();
+        setCodeEvaluation(data.code_evaluation);
+        setSpeechEvaluation(data.speech_evaluation);
+
+        sessionStorage.removeItem('previousAIResponse');
+        sessionStorage.setItem('problem', '');
+        sessionStorage.setItem('userResponse', '');
 
     } catch (error) {
-      console.error('Error evaluating response:', error);
-      setCodeEvaluation('An error occurred during evaluation.');
-      setSpeechEvaluation('An error occurred during evaluation.');
+        console.error('Error evaluating response:', error);
+        setCodeEvaluation('An error occurred during evaluation.');
+        setSpeechEvaluation('An error occurred during evaluation.');
     } finally {
-      setIsEvaluating(false);
-      setIsSubmitted(true); 
+        setIsEvaluating(false);
+        setIsSubmitted(true); 
     }
   }
+
   
 
   // ************************************************************ SPEECH MESSAGE ************************************************************

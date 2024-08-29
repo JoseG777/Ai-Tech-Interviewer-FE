@@ -8,16 +8,16 @@ function UpdateGoal() {
     const navigate = useNavigate();
 
     const handleUpdateGoal = async () => {
-        const uid = sessionStorage.getItem('uid');
         try {
             const response = await fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/updateGoal`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ uid, current_goal: goal })
+                body: JSON.stringify({ current_goal: goal }),
+                credentials: 'include'  
             });
             const data = await response.json();
             setMessage(data.message);
-            navigate('/profile')
+            navigate('/profile');
         } catch (error) {
             console.error('Error updating goal:', error);
         }

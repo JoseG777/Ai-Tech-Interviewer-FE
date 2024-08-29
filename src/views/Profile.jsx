@@ -30,24 +30,27 @@ function Profile() {
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-      try {
-        const uid = sessionStorage.getItem('uid');
-        const response = await fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/getUsers?uid=${uid}`);
-        const data = await response.json();
-        setUserInfo(data.user);
-        setCodeGrades(data.code_grades);
-        setSpeechGrades(data.speech_grades);
-        setAttempts(data.attempts);
-        setLeetcodeStats(data.stats); // Updated to match the server response
-      } catch (error) {
-        console.error('Error fetching user info:', error);
-      } finally {
-        setLoading(false);
-      }
+        try {
+            const response = await fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/getUsers`, {
+                method: 'GET',
+                credentials: 'include'  // Include credentials
+            });
+            const data = await response.json();
+            setUserInfo(data.user);
+            setCodeGrades(data.code_grades);
+            setSpeechGrades(data.speech_grades);
+            setAttempts(data.attempts);
+            setLeetcodeStats(data.stats);
+        } catch (error) {
+            console.error('Error fetching user info:', error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     fetchUserInfo();
-  }, []);
+}, []);
+
 
   // Prepare data for the line chart
   const attemptsLineData = {

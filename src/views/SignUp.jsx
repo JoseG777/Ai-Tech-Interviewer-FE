@@ -45,7 +45,6 @@ function SignUp() {
   }
 
   async function saveUserToDatabase(uid) {
-
     const lowercasedUsername = username.toLowerCase();
     try {
       const response = await fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/createUser`, {
@@ -54,23 +53,23 @@ function SignUp() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ uid, email, username: lowercasedUsername }),
+        credentials: 'include' 
       });
-  
+
       if (!response.ok) {
         const errorText = await response.text(); 
         console.error('Server response was not OK:', errorText); 
         alert('An error occurred while creating your account (DATABASE). Please try again.');
         return;
       }
-  
+
       const data = await response.json();
       console.log('Response from server:', data);
-  
+
       if (data.message === 'User created successfully') {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        sessionStorage.setItem('uid', userCredential.user.uid);
-        console.log('User signed in:', userCredential.user.uid);
-  
+        await signInWithEmailAndPassword(auth, email, password);
+        console.log('User signed in.');
+
         navigate('/newuser');
       } else {
         console.error('Server error:', data.message);
@@ -79,7 +78,8 @@ function SignUp() {
       console.error('Error saving user to database:', error.message);
       alert('An error occurred while creating your account. Please try again.');
     }
-  }
+}
+
   
   
 

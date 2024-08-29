@@ -32,33 +32,34 @@ function NewUser() {
     };
 
     const handleDoneClick = async () => {
-        if (responses[questionIndex].trim() === "") {
-            setErrorMessage("This field is required.");
-            return;
-        }
-
-        const uid = sessionStorage.getItem('uid');
-        const leetcode_username = responses[0];
-        const goal = responses[1];
-        const upcoming_interview = responses[2];
-
-        const coding_level = "Beginner"; 
-
-        const response = await fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/newUser`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ uid, leetcode_username, coding_level, goal, upcoming_interview }),
-        });
-
-        const data = await response.json();
-        console.log(data);
-
-        setResponses(["", "", ""]);
-        setQuestionIndex(0);
-        navigate('/exam');
-    };
+      if (responses[questionIndex].trim() === "") {
+          setErrorMessage("This field is required.");
+          return;
+      }
+  
+      const leetcode_username = responses[0];
+      const goal = responses[1];
+      const upcoming_interview = responses[2];
+  
+      const coding_level = "Beginner"; 
+  
+      const response = await fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/newUser`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ leetcode_username, coding_level, goal, upcoming_interview }),
+          credentials: 'include'  
+      });
+  
+      const data = await response.json();
+      console.log(data);
+  
+      setResponses(["", "", ""]);
+      setQuestionIndex(0);
+      navigate('/exam');
+  };
+  
 
     const handleResponseChange = (event) => {
         const newResponses = [...responses];

@@ -6,10 +6,22 @@ function withNotSignedInCheck(WrappedComponent) {
     const navigate = useNavigate();
 
     useEffect(() => {
-      const uid = sessionStorage.getItem('uid');
-      if (uid) {
-        navigate('/main'); 
-      }
+      const checkAuth = async () => {
+        try {
+          const response = await fetch(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/check_auth`, {
+            method: 'GET',
+            credentials: 'include',
+          });
+
+          if (response.status === 200) {
+            navigate('/main');
+          }
+        } catch (error) {
+          console.error('Error during authentication check:', error);
+        }
+      };
+
+      checkAuth();
     }, [navigate]);
 
     return <WrappedComponent {...props} />;
