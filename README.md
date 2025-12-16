@@ -1,9 +1,7 @@
 # Welcome To Eve
 Eve is your personal Ai Technical Interviewer. 
 
-
-Check out the live version [here](https://ai-technical-interviewer.web.app/)
-If this isn't working (which would only be due to API costs), you can run Eve locally on your machine.
+CURRENTLY NOT HOSTED (DEC 15, 2026)
 
 ## To run this project:
 Ensure you have Node.js installed on your machine. If not, you can download it [here](https://nodejs.org/en/download/).
